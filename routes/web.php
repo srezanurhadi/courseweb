@@ -1,10 +1,14 @@
 <?php
 
+use App\Http\Controllers\homecontroller;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('/',[homecontroller::class, 'index']);
 
 Route::get('/hello', function () {
     return 'Hello Guys';
