@@ -1,20 +1,25 @@
-@import 'tailwindcss';
+@import "tailwindcss"; /* Biarkan ini di paling atas */
 
+/* @source directives Anda biarkan saja di sini */
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    
+    --color-primary: #fe2157;
+    --color-dark: #11192c;
+    --color-secondary: oklch(0.279 0.041 260.031);
+    
 }
-// <weight>: Use a value from 300 to 900
-// <uniquifier>: Use a unique and descriptive class name
 
-.figtree {
-    font-family: "Figtree", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: <weight>;
-    font-style: normal;
-  }
+/* === PERUBAHAN UTAMA DI SINI === */
+@layer base {
+    body {
+        font-family: "Figtree", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 400; /* Pastikan Figtree dimuat dengan weight ini */
+        font-style: normal;
+    }
+}
