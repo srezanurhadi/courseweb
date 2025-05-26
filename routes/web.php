@@ -17,3 +17,7 @@ Route::get('/hello', function () {
 Route::get('/sidebar', function () {
     return view('components.sidebar');
 });
+
+Route::get('/test', function () {
+    return 'test';
+});
