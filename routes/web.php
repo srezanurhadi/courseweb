@@ -9,3 +9,7 @@ Route::get('/', function () {
 Route::get('/hello', function () {
     return 'Hello Guys';
 });
+
+Route::get('/sidebar', function () {
+    return view('components.sidebar');
+});
