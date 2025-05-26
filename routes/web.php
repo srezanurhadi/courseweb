@@ -4,7 +4,7 @@ use App\Http\Controllers\homecontroller;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/',[homecontroller::class, 'index']);
+Route::get('/', [homecontroller::class, 'index']);
 
 Route::get('/hello', function () {
     return 'Hello Guys';
@@ -14,6 +14,6 @@ Route::get('/sidebar', function () {
     return view('components.sidebar');
 });
 
-Route::get('/test', function () {
-    return 'test';
+Route::get('/home', function () {
+    return view('user.index');
 });
