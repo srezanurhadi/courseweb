@@ -17,3 +17,7 @@ Route::get('/sidebar', function () {
 Route::get('/home', function () {
     return view('user.index');
 });
+
+Route::get('/login', function() {
+    return view('index');
+});
