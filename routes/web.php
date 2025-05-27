@@ -6,12 +6,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/',[homecontroller::class, 'index']);
 
-Route::get('/hello', function () {
+Route::get('/admin', function () {
     return 'Hello Guys';
 });
 
-Route::get('/sidebar', function () {
-    return view('components.sidebar');
+Route::get('/admin', function () {
+    return view('author.content.index');
 });
 
 Route::get('/test', function () {
