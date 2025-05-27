@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [homecontroller::class, 'index']);
 
-Route::get('/hello', function () {
+Route::get('/admin', function () {
     return 'Hello Guys';
 });
 
