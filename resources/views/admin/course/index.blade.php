@@ -29,7 +29,7 @@
                         class="border-l-4 border-indigo-700 bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl w-84 flex justify-between items-center pl-2">
                         <div class="p-2 flex flex-col font-semibold ">
                             <div class="text-base text-gray-800">All Course</div>
-                            <div class="text-3xl text-indigo-700 pl-4">24</div>
+                            <div class="text-3xl text-indigo-700">24</div>
                         </div>
                         <div
                             class="rounded-full text-indigo-200 justify-center flex items-center bg-gray-300 h-10 w-10 m-4">
@@ -58,6 +58,9 @@
                             <i class="fas fa-pencil text-2xl text-amber-500"></i>
                         </div>
                     </div>
+                </div>
+                <div class="p-4 flex flex-cols-3 justify-around">
+                    <div class="p-4 border-2 border-amber-400"></div>
                 </div>
             </div>
         </div>
