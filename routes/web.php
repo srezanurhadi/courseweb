@@ -10,9 +10,14 @@ Route::get('/admin', function () {
     return 'Hello Guys';
 });
 
+//admin
 Route::get('/admin', function () {
     return view('admin.course.index');
 });
+Route::get('/admincreate', function () {
+    return view('admin.course.create');
+});
+//admin
 
 Route::get('/home', function () {
     return view('user.index');
