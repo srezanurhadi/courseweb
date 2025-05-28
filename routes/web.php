@@ -11,7 +11,7 @@ Route::get('/admin', function () {
 });
 
 Route::get('/admin', function () {
-    return view('admin.index');
+    return view('admin.course.index');
 });
 Route::get('/coba', function () {
     return view('author.content.show');
