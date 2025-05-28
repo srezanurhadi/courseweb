@@ -1,4 +1,4 @@
-<div class="h-screen flex sticky top-0">
+<div class="h-screen flex sticky top-0 left-0">
     <aside class="bg-gradient-to-b from-sky-600 to-indigo-900 w-54 flex flex-col space-y-1">
         <div class="text-white text-3xl mt-4 pl-6 font-bold">R. DOSEN</div>
         <a href="" class="m-6 mr-2 p-2 rounded-lg border-l-8 border-white bg-white/20 shadow-lg">
@@ -27,7 +27,5 @@
         <a href="" class="ml-6 p-2 rounded-lg border-l-8 border-white/30">
             <i class="fas fa-user text-white pl-1"></i>
             <span class="text-white pl-1 font-semibold text-20">My Profile</span></a>
-
-
     </aside>
 </div>

@@ -18,6 +18,9 @@ Route::get('/admincreate', function () {
     return view('admin.course.create');
 });
 //admin
+Route::get('/coba', function () {
+    return view('author.content.show');
+}); 
 
 Route::get('/home', function () {
     return view('user.index');
