@@ -6,18 +6,29 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [homecontroller::class, 'index']);
 
-Route::get('/hello', function () {
+Route::get('/admin', function () {
     return 'Hello Guys';
 });
 
-Route::get('/sidebar', function () {
-    return view('components.sidebar');
+//admin
+Route::get('/admin', function () {
+    return view('admin.course.index');
 });
+Route::get('/admincreate', function () {
+    return view('admin.course.create');
+});
+//admin
+Route::get('/coba', function () {
+    return view('author.content.show');
+}); 
 
 Route::get('/home', function () {
     return view('user.index');
 });
+<<<<<<< HEAD
 
 Route::get('/login', function () {
     return view('user.index');
 });
+=======
+>>>>>>> 14828cae12fadd007efc3221ab2beaf3109051a2
