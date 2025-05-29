@@ -8,7 +8,6 @@
     <title>Document</title>
     <x-headcomponent></x-headcomponent>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <style>
         /* swiper header */
         .swiper-button-next::after,
