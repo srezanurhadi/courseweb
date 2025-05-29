@@ -15,5 +15,5 @@ Route::get('/sidebar', function () {
 });
 
 Route::get('/home', function () {
-    return view('user.index');
+    return view('user.home');
 });
