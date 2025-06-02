@@ -19,16 +19,17 @@ Route::get('/admincreate', function () {
 });
 //admin
 Route::get('/coba', function () {
-    return view('author.content.show');
-}); 
+    return view('author.content.index');
+});
 
 Route::get('/home', function () {
-    return view('user.index');
+    return view('user.home');
 });
 
 Route::get('/login', function () {
     return view('user.index');
 });
+<<<<<<< HEAD
 
 Route::get('/register', function () {
     return view('user.register');
@@ -37,3 +38,5 @@ Route::get('/register', function () {
 Route::get('/profile', function () {
     return view('user.myprofile.index');
 });
+=======
+>>>>>>> f28f7b04935e3d25ce181a70c60f2bd54753b900
