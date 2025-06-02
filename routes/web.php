@@ -19,7 +19,7 @@ Route::get('/admincreate', function () {
 });
 //admin
 Route::get('/coba', function () {
-    return view('author.content.show');
+    return view('admin.users.index');
 }); 
 
 Route::get('/home', function () {
