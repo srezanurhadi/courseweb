@@ -25,10 +25,15 @@ Route::get('/coba', function () {
 Route::get('/home', function () {
     return view('user.index');
 });
-<<<<<<< HEAD
 
 Route::get('/login', function () {
     return view('user.index');
 });
-=======
->>>>>>> 14828cae12fadd007efc3221ab2beaf3109051a2
+
+Route::get('/register', function () {
+    return view('user.register');
+});
+
+Route::get('/profile', function () {
+    return view('user.myprofile.index');
+});
