@@ -19,9 +19,13 @@ Route::get('/admincreate', function () {
 });
 //admin
 Route::get('/coba', function () {
-    return view('admin.users.index');
-}); 
+    return view('author.content.index');
+});
 
 Route::get('/home', function () {
+    return view('user.home');
+});
+
+Route::get('/login', function () {
     return view('user.index');
 });
