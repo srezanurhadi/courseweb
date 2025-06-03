@@ -32,6 +32,12 @@ Route::get('/authorcourseshow', function () {
     return view('admin.course.show');
 });
 
+Route::get('/adminindex', function () {
+    return view('admin.content.index');
+});
+Route::get('/deepseek', function () {
+    return view('admin.course.deepseek');
+});
 //BAGUSSS PUNYAAA DO NOT TOCHHH PLSS, THANKS b(^_^)d//
 
 //admin
