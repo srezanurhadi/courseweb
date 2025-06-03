@@ -10,7 +10,7 @@
     </head>
 
     <body>
-        <div class="flex flex-1">
+        <div class="flex flex-1 ">
             <x-sidebar></x-sidebar>
             <div class="w-full bg-gray-50 flex flex-col p-4">
                 <form action="">

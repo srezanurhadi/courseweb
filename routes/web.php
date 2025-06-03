@@ -23,9 +23,25 @@ Route::get('/admincourseshow', function () {
 
 //admin
 Route::get('/coba', function () {
-    return view('author.content.show');
-}); 
+    return view('author.content.index');
+});
 
 Route::get('/home', function () {
+    return view('user.home');
+});
+
+Route::get('/course', function () {
+    return view('user.course.index');
+});
+
+Route::get('/login', function () {
     return view('user.index');
+});
+
+Route::get('/register', function () {
+    return view('user.register');
+});
+
+Route::get('/profile', function () {
+    return view('user.myprofile.index');
 });
