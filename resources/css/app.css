@@ -23,3 +23,26 @@
         font-style: normal;
     }
 }
+
+/* Kustomisasi Scrollbar Anda di sini */
+.course-created-scrollable {
+  scrollbar-width: thin; /* Untuk Firefox */
+  scrollbar-color: #6c6c6c #e0e0e0; /* thumb track - Untuk Firefox */
+}
+
+.course-created-scrollable::-webkit-scrollbar {
+  width: 6px;
+}
+
+.course-created-scrollable::-webkit-scrollbar-track {
+  background: #e0e0e0;
+}
+
+.course-created-scrollable::-webkit-scrollbar-thumb {
+  background-color: #6c6c6c;
+  border-radius: 6px;
+}
+
+.course-created-scrollable::-webkit-scrollbar-thumb:hover {
+  background-color: #4a4a4a;
+}

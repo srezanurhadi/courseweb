@@ -26,8 +26,8 @@
             <div class="w-full flex pt-8 px-4 justify-between">
                 <div class="w-full flex flex-wrap gap-2 font-semibold">
                     <div class="w-full flex gap-2 items-center p-2">
-                        <div class="  text-indigo-700"> <i class="fa-solid fa-play rotate-180"></i><span
-                                class="pl-2">Back</span>
+                        <div class="  text-indigo-700"> <a href="#"><i class="fa-solid fa-play rotate-180"></i><span
+                            class="pl-2">Back</span></a>
                         </div>
                         <div class=" py-0.5 px-3 border-amber-500 text-amber-500 bg-amber-100 rounded-sm border-2">
                             <i class="fas fa-pencil-alt"></i> <span class="pl-2">Edit</span>
@@ -37,7 +37,7 @@
                         </div>
                     </div>
                     <div
-                        class="w-full p-4 bg-gray-100 rounded-lg shadow-[0px_1px_2px_1px_rgba(0,0,0,0.4)] flex flex-wrap gep-2 border h-200">
+                        class="w-full p-4 bg-gray-100 rounded-lg shadow-[0px_1px_2px_1px_rgba(0,0,0,0.4)] flex flex-wrap gep-2">
                         <p>
                             1. Content 1
                         </p>
