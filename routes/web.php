@@ -10,7 +10,7 @@ Route::get('/admin', function () {
     return 'Hello Guys';
 });
 
-//admin
+//BAGUSSS PUNYAAA DO NOT TOCHHH PLSS, THANKS b(^_^)d//
 Route::get('/admin', function () {
     return view('admin.course.index');
 });
@@ -20,6 +20,18 @@ Route::get('/admincoursecreate', function () {
 Route::get('/admincourseshow', function () {
     return view('admin.course.show');
 });
+
+Route::get('/author', function () {
+    return view('author.course.index');
+});
+Route::get('/authorcoursecreate', function () {
+    return view('admin.course.create');
+});
+Route::get('/authorcourseshow', function () {
+    return view('admin.course.show');
+});
+
+//BAGUSSS PUNYAAA DO NOT TOCHHH PLSS, THANKS b(^_^)d//
 
 //admin
 Route::get('/coba', function () {
