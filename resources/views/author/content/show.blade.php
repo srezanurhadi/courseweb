@@ -37,7 +37,7 @@
                         </div>
                     </div>
                     <div
-                        class="w-full p-4 bg-gray-100 rounded-lg shadow-[0px_1px_2px_1px_rgba(0,0,0,0.4)] flex flex-wrap gep-2">
+                        class="w-full h-200 p-4 bg-gray-100 rounded-lg shadow-[0px_1px_2px_1px_rgba(0,0,0,0.4)] flex flex-wrap gep-2">
                         <p>
                             1. Content 1
                         </p>

@@ -12,10 +12,10 @@
     <body>
         <div class="flex flex-1">
             <x-sidebar></x-sidebar>
-            <div class="w-full bg-gray-50 flex flex-col">
+            <div class="w-full bg-gray-50 flex flex-col p-4">
                 <form action="">
                     <div
-                        class="bg-gray-100 h-full m-4 p-4 pl-6 rounded-lg shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] flex flex-col gap-2">
+                        class="bg-gray-100 h-full p-4 pl-6 rounded-lg shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] flex flex-col gap-2">
                         <h1 class="font-bold text-3xl pt-2">Create New Course</h1>
                         <div class="mb-4">
                             <label for="title" class="text-sm">Course Title<span

@@ -14,9 +14,13 @@ Route::get('/admin', function () {
 Route::get('/admin', function () {
     return view('admin.course.index');
 });
-Route::get('/admincreate', function () {
+Route::get('/admincoursecreate', function () {
     return view('admin.course.create');
 });
+Route::get('/admincourseshow', function () {
+    return view('admin.course.show');
+});
+
 //admin
 Route::get('/coba', function () {
     return view('author.content.show');
