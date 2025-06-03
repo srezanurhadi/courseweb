@@ -30,6 +30,14 @@ Route::get('/course', function () {
     return view('user.course.index');
 });
 
+Route::get('/content', function () {
+    return view('user.course.content');
+});
+
+Route::get('/overview', function () {
+    return view('user.course.overview');
+});
+
 Route::get('/login', function () {
     return view('user.index');
 });
