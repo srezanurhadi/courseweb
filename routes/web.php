@@ -55,6 +55,10 @@ Route::get('/content', function () {
 Route::get('/overview', function () {
     return view('user.course.overview');
 });
+
+Route::get('/mycourse', function () {
+    return view('user.mycourse.index');
+});
 // AUDENA PUNYA
 
 Route::get('/login', function () {
