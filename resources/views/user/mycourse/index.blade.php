@@ -18,7 +18,7 @@
                 <div class="px-6 py-0.5">
                     <div class="flex items-center justify-between h-16">
                         <div class="flex items-center px-4">
-                            <h1 class="text-3xl font-bold text-gray-800">Course</h1>
+                            <h1 class="text-3xl font-bold text-gray-800">MyCourse</h1>
                         </div>
                         <div class="flex items-center space-x-4 px-4">
                             <button>
@@ -39,11 +39,8 @@
             {{-- - Content Area - --}}
             <div class="relative">
                 <header
-                    class="bg-indigo-100 h-[50px] rounded-b-3xl mb-4 flex justify-center items-center relative overflow-hidden">
-                </header>
-
-                <div class="absolute top-[25px] left-1/2 transform -translate-x-1/2">
-                    <div class="bg-white rounded-3xl shadow-md py-3 px-5 flex items-center">
+                    class="bg-indigo-100 h-[540px] rounded-b-3xl flex flex-col justify-center items-center relative overflow-hidden">
+                    <div class="bg-white rounded-3xl shadow-md py-3 px-5">
                         <div class="flex items-center gap-3">
                             <form class="flex items-center gap-2">
                                 <div class=" flex gap-1 items-center rounded-3xl border-gray-300 border-2 pl-2">
@@ -74,7 +71,58 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                    <div>
+                        <p class="text-indigo-700 text-xl font-bold mx-10 px-4">Last Seen</p>
+                        <div class="mx-10 p-4 grid grid-cols-4 gap-10">
+                            <div
+                                class=" bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden">
+                                <div
+                                    class="p-2 h-30 w-full items-start flex justify-between  bg-[url('https://picsum.photos/900/600')] bg-cover bg-center">
+                                    <div class="rounded-4xl bg-indigo-200/60 py-1 px-2 text-xs text-indigo-700">12 Month
+                                        Ago
+                                    </div>
+                                    <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-indigo-700">12 Pages
+                                    </div>
+                                </div>
+                                <div class="w-full p-2 flex flex-col mt-2">
+                                    <div class="self-start">
+                                        <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-gray-900"> Web
+                                            Development
+                                        </div>
+                                    </div>
+                                    <div href="/overview"
+                                        class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900 hover:text-indigo-900 cursor-pointer">
+                                        Tutorial Laravel 12
+                                        100% work no debat dan pasti berhasil realllllll pasti bisa yakn betul html dan
+                                        lain
+                                        lain</div>
+                                    <div class="pl-2 pt-2 text-sm text-gray-500 line-clamp-2">Pelajari laravel 12 dengan
+                                        sungguh-sungguh
+                                        maka anda akan aman dan sehat sentosa</div>
+                                    <div class="flex-col space-y-2 m-2">
+                                        <div class="flex items-center space-x-2">
+                                            <i class="fas fa-users-line text-indigo-700"></i>
+                                            <div class="text-sm text-gray-600">30 Participant</div>
+                                        </div>
+                                        <div class="flex items-center space-x-1">
+                                            <div
+                                                class="rounded-full h-6 w-6 bg-indigo-700 text-indigo-200 justify-center flex items-center">
+                                                P</div>
+                                            <div class="text-sm text-gray-600">Prawowo</div>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex-1 bg-gray-200 rounded-full h-2 mr-3">
+                                                <div class="bg-indigo-700 h-2 rounded-full" style="width: 20%"></div>
+                                            </div>
+                                            <span class="text-sm font-bold text-gray-900">20%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </header>
 
                 <div class="m-10 p-4 grid grid-cols-4 gap-10 justify-around">
                     <div
@@ -111,9 +159,9 @@
                                 </div>
                                 <div class="flex items-center justify-between">
                                     <div class="flex-1 bg-gray-200 rounded-full h-2 mr-3">
-                                        <div class="bg-indigo-700 h-2 rounded-full" style="width: 0%"></div>
+                                        <div class="bg-indigo-700 h-2 rounded-full" style="width: 50%"></div>
                                     </div>
-                                    <span class="text-sm font-bold text-gray-900">0%</span>
+                                    <span class="text-sm font-bold text-gray-900">50%</span>
                                 </div>
                             </div>
                         </div>
@@ -152,9 +200,9 @@
                                 </div>
                                 <div class="flex items-center justify-between">
                                     <div class="flex-1 bg-gray-200 rounded-full h-2 mr-3">
-                                        <div class="bg-indigo-700 h-2 rounded-full" style="width: 0%"></div>
+                                        <div class="bg-indigo-700 h-2 rounded-full" style="width: 5%"></div>
                                     </div>
-                                    <span class="text-sm font-bold text-gray-900">0%</span>
+                                    <span class="text-sm font-bold text-gray-900">5%</span>
                                 </div>
                             </div>
                         </div>
@@ -193,9 +241,9 @@
                                 </div>
                                 <div class="flex items-center justify-between">
                                     <div class="flex-1 bg-gray-200 rounded-full h-2 mr-3">
-                                        <div class="bg-indigo-700 h-2 rounded-full" style="width: 0%"></div>
+                                        <div class="bg-indigo-700 h-2 rounded-full" style="width: 8%"></div>
                                     </div>
-                                    <span class="text-sm font-bold text-gray-900">0%</span>
+                                    <span class="text-sm font-bold text-gray-900">8%</span>
                                 </div>
                             </div>
                         </div>
@@ -234,173 +282,9 @@
                                 </div>
                                 <div class="flex items-center justify-between">
                                     <div class="flex-1 bg-gray-200 rounded-full h-2 mr-3">
-                                        <div class="bg-indigo-700 h-2 rounded-full" style="width: 0%"></div>
+                                        <div class="bg-indigo-700 h-2 rounded-full" style="width: 5%"></div>
                                     </div>
-                                    <span class="text-sm font-bold text-gray-900">0%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div
-                        class=" bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden">
-                        <div
-                            class="p-2 h-40 w-full items-start flex justify-between  bg-[url('https://picsum.photos/900/600')] bg-cover bg-center">
-                            <div class="rounded-4xl bg-indigo-200/60 py-1 px-2 text-xs text-indigo-700">12 Month Ago
-                            </div>
-                            <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-indigo-700">12 Pages</div>
-                        </div>
-                        <div class="w-full p-2 flex flex-col mt-2">
-                            <div class="self-start">
-                                <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-gray-900"> Web Development
-                                </div>
-                            </div>
-                            <div href="/overview"
-                                class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900 hover:text-indigo-900 cursor-pointer">
-                                Tutorial Laravel 12
-                                100% work no debat dan pasti berhasil realllllll pasti bisa yakn betul html dan lain
-                                lain</div>
-                            <div class="pl-2 pt-2 text-sm text-gray-500 line-clamp-2">Pelajari laravel 12 dengan
-                                sungguh-sungguh
-                                maka anda akan aman dan sehat sentosa</div>
-                            <div class="flex-col space-y-2 m-2">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-users-line text-indigo-700"></i>
-                                    <div class="text-sm text-gray-600">30 Participant</div>
-                                </div>
-                                <div class="flex items-center space-x-1">
-                                    <div
-                                        class="rounded-full h-6 w-6 bg-indigo-700 text-indigo-200 justify-center flex items-center">
-                                        P</div>
-                                    <div class="text-sm text-gray-600">Prawowo</div>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex-1 bg-gray-200 rounded-full h-2 mr-3">
-                                        <div class="bg-indigo-700 h-2 rounded-full" style="width: 0%"></div>
-                                    </div>
-                                    <span class="text-sm font-bold text-gray-900">0%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div
-                        class=" bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden">
-                        <div
-                            class="p-2 h-40 w-full items-start flex justify-between  bg-[url('https://picsum.photos/900/600')] bg-cover bg-center">
-                            <div class="rounded-4xl bg-indigo-200/60 py-1 px-2 text-xs text-indigo-700">12 Month Ago
-                            </div>
-                            <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-indigo-700">12 Pages</div>
-                        </div>
-                        <div class="w-full p-2 flex flex-col mt-2">
-                            <div class="self-start">
-                                <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-gray-900"> Web Development
-                                </div>
-                            </div>
-                            <div href="/overview"
-                                class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900 hover:text-indigo-900 cursor-pointer">
-                                Tutorial Laravel 12
-                                100% work no debat dan pasti berhasil realllllll pasti bisa yakn betul html dan lain
-                                lain</div>
-                            <div class="pl-2 pt-2 text-sm text-gray-500 line-clamp-2">Pelajari laravel 12 dengan
-                                sungguh-sungguh
-                                maka anda akan aman dan sehat sentosa</div>
-                            <div class="flex-col space-y-2 m-2">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-users-line text-indigo-700"></i>
-                                    <div class="text-sm text-gray-600">30 Participant</div>
-                                </div>
-                                <div class="flex items-center space-x-1">
-                                    <div
-                                        class="rounded-full h-6 w-6 bg-indigo-700 text-indigo-200 justify-center flex items-center">
-                                        P</div>
-                                    <div class="text-sm text-gray-600">Prawowo</div>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex-1 bg-gray-200 rounded-full h-2 mr-3">
-                                        <div class="bg-indigo-700 h-2 rounded-full" style="width: 0%"></div>
-                                    </div>
-                                    <span class="text-sm font-bold text-gray-900">0%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div
-                        class=" bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden">
-                        <div
-                            class="p-2 h-40 w-full items-start flex justify-between  bg-[url('https://picsum.photos/900/600')] bg-cover bg-center">
-                            <div class="rounded-4xl bg-indigo-200/60 py-1 px-2 text-xs text-indigo-700">12 Month Ago
-                            </div>
-                            <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-indigo-700">12 Pages</div>
-                        </div>
-                        <div class="w-full p-2 flex flex-col mt-2">
-                            <div class="self-start">
-                                <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-gray-900"> Web Development
-                                </div>
-                            </div>
-                            <div href="/overview"
-                                class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900 hover:text-indigo-900 cursor-pointer">
-                                Tutorial Laravel 12
-                                100% work no debat dan pasti berhasil realllllll pasti bisa yakn betul html dan lain
-                                lain</div>
-                            <div class="pl-2 pt-2 text-sm text-gray-500 line-clamp-2">Pelajari laravel 12 dengan
-                                sungguh-sungguh
-                                maka anda akan aman dan sehat sentosa</div>
-                            <div class="flex-col space-y-2 m-2">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-users-line text-indigo-700"></i>
-                                    <div class="text-sm text-gray-600">30 Participant</div>
-                                </div>
-                                <div class="flex items-center space-x-1">
-                                    <div
-                                        class="rounded-full h-6 w-6 bg-indigo-700 text-indigo-200 justify-center flex items-center">
-                                        P</div>
-                                    <div class="text-sm text-gray-600">Prawowo</div>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex-1 bg-gray-200 rounded-full h-2 mr-3">
-                                        <div class="bg-indigo-700 h-2 rounded-full" style="width: 0%"></div>
-                                    </div>
-                                    <span class="text-sm font-bold text-gray-900">0%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div
-                        class=" bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden">
-                        <div
-                            class="p-2 h-40 w-full items-start flex justify-between  bg-[url('https://picsum.photos/900/600')] bg-cover bg-center">
-                            <div class="rounded-4xl bg-indigo-200/60 py-1 px-2 text-xs text-indigo-700">12 Month Ago
-                            </div>
-                            <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-indigo-700">12 Pages</div>
-                        </div>
-                        <div class="w-full p-2 flex flex-col mt-2">
-                            <div class="self-start">
-                                <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-gray-900"> Web Development
-                                </div>
-                            </div>
-                            <div href="/overview"
-                                class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900 hover:text-indigo-900 cursor-pointer">
-                                Tutorial Laravel 12
-                                100% work no debat dan pasti berhasil realllllll pasti bisa yakn betul html dan lain
-                                lain</div>
-                            <div class="pl-2 pt-2 text-sm text-gray-500 line-clamp-2">Pelajari laravel 12 dengan
-                                sungguh-sungguh
-                                maka anda akan aman dan sehat sentosa</div>
-                            <div class="flex-col space-y-2 m-2">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-users-line text-indigo-700"></i>
-                                    <div class="text-sm text-gray-600">30 Participant</div>
-                                </div>
-                                <div class="flex items-center space-x-1">
-                                    <div
-                                        class="rounded-full h-6 w-6 bg-indigo-700 text-indigo-200 justify-center flex items-center">
-                                        P</div>
-                                    <div class="text-sm text-gray-600">Prawowo</div>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex-1 bg-gray-200 rounded-full h-2 mr-3">
-                                        <div class="bg-indigo-700 h-2 rounded-full" style="width: 0%"></div>
-                                    </div>
-                                    <span class="text-sm font-bold text-gray-900">0%</span>
+                                    <span class="text-sm font-bold text-gray-900">5%</span>
                                 </div>
                             </div>
                         </div>
