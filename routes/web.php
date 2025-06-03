@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', [homecontroller::class, 'index']);
-Route::resource('/users',usersController::class);
+Route::resource('/users', usersController::class);
 Route::get('/admin', function () {
     return 'Hello Guys';
 });
@@ -39,6 +39,7 @@ Route::get('/coba', function () {
     return view('admin.users.index');
 });
 
+// AUDENA PUNYA
 Route::get('/home', function () {
     return view('user.home');
 });
@@ -54,6 +55,7 @@ Route::get('/content', function () {
 Route::get('/overview', function () {
     return view('user.course.overview');
 });
+// AUDENA PUNYA
 
 Route::get('/login', function () {
     return view('user.index');
