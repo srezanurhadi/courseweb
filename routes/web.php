@@ -1,8 +1,9 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\homecontroller;
 use App\Http\Controllers\usersController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\courseController;
 
 
 Route::get('/', [homecontroller::class, 'index']);
@@ -12,15 +13,8 @@ Route::get('/admin', function () {
 });
 
 //BAGUSSS PUNYAAA DO NOT TOCHHH PLSS, THANKS b(^_^)d//
-Route::get('/admin', function () {
-    return view('admin.course.index');
-});
-Route::get('/admincoursecreate', function () {
-    return view('admin.course.create');
-});
-Route::get('/admincourseshow', function () {
-    return view('admin.course.show');
-});
+
+Route::resource('/admincourse', courseController::class);
 
 Route::get('/author', function () {
     return view('author.course.index');
