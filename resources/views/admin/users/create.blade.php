@@ -12,14 +12,16 @@
 <body>
     <div class="flex flex-1 ">
         <x-sidebar></x-sidebar>
-        <div class="w-full bg-gray-50 flex flex-col px-8">
-            <form action="">
+        <div class="w-full bg-gray-50 flex flex-col px-8 py-4">
+            <form action="/users" method="post">
+                @csrf
                 <div
-                    class="bg-gray-100 h-full m-4 p-4 pl-6 rounded-lg shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] flex flex-col gap-2">
+                    class="bg-gray-100 h-full p-4 pl-6 rounded-lg shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] flex flex-col gap-2">
                     <h1 class="font-bold text-3xl pt-2 text-center">Create New User</h1>
-                    
-                    <div class="mb-4 items-center">
-                        <label for="image" class="block text-sm font-medium text-gray-700 mb-1">Upload Profile Picture <span class="text-red-500">*</span></label>
+
+                    <div class="mb-2 items-center  mx-auto">
+                        <label for="image" class="block text-sm font-medium text-gray-700 mb-1">Upload Profile
+                            Picture <span class="text-red-500">*</span></label>
                         <div
                             class="mt-1 w-100 h-75 flex justify-center items-center px-6 pt-5 pb-6 border-2 bg-gray-50 border-gray-300 border-dashed rounded-md">
                             <div class="space-y-1 text-center">
@@ -35,11 +37,11 @@
                                         class="pl-2relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
                                         <span>click to upload</span>
                                         <input id="image" name="image" type="file" class="sr-only"
-                                            accept="image/*" required>
+                                            accept="image/*">
                                     </label>
                                 </div>
                                 <p class="text-xs text-gray-500">
-                                    PNG, JPG, GIF hingga 2MB
+                                    PNG, JPG hingga 2MB
                                 </p>
                             </div>
                         </div>
@@ -50,47 +52,79 @@
                                 alt="Image preview" />
                         </div>
                     </div>
-                    <div class="mb-4">
-                        <label for="description" class="text-sm">Course Description<span
-                                class="text-red-500">*</span></label>
-                        <textarea name="description" id="description" rows="4"
-                            class="w-full bg-gray-50 border-2 border-gray-300 rounded-lg" placeholder=""></textarea>
+                    <div class="mb-2 font-semibold">
+                        <label for="name" class="text-sm">Full Name<span class="text-red-500">*</span></label>
+                        <input type="text" name="name" id="name" placeholder="Full Name ..."
+                            class="w-full
+                            px-3 py-2 border-2 border-gray-300 bg-gray-50 rounded-md focus:outline-none focus:border-indigo-500">
                     </div>
-                    <div class="mb-4">
-                        <div
-                            class="w-full bg-gray-50 border-2 border-gray-300 rounded-lg flex flex-col justify-center items-center p-4">
-                            <div class="flex flex-row justify-between w-full">
-                                <label for="course-content" class="text-sm">Course Content<span
-                                        class="text-red-500">*</span></label>
-                                <div class="text-sm rounded-lg bg-indigo-700 text-gray-50 p-2">+ add course</div>
+                    <div class="mb-2 font-semibold">
+                        <label for="email" class="text-sm">Email<span class="text-red-500">*</span></label>
+                        <input type="text" name="email" id="email" placeholder="Email Address..."
+                            class="w-full
+                             p-2 border-2 border-gray-300 bg-gray-50 rounded-md focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div class="mb-2 font-semibold">
+                        <label for="Role" class="text-sm font-medium text-gray-700 block mb-1">Role<span
+                                class="text-red-500">*</span></label>
+                        <div class="relative">
+                            <select name="Role" id="Role"
+                                class="w-full bg-gray-50 border-2 border-gray-300 rounded-lg p-2 text-sm text-gray-500 focus:outline-none focus:border-indigo-500 appearance-none pr-8"
+                                required aria-required="true">
+                                <option value="" hidden selected>Select Role</option>
+                                <option value="admin">Admin</option>
+                                <option value="author">Author</option>
+                                <option value="user">User</option>
+                            </select>
+
+                            <div
+                                class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700">
+                                <i class="fas fa-chevron-down fa-xs"></i>
                             </div>
-                            <div class="text-sm text-gray-700 p-4">No content add yet. click "Add Content" to Add
-                                course materials</div>
                         </div>
                     </div>
-                    <div class="mb-4">
-                        <label for="category" class="text-sm">Course Category<span
-                                class="text-red-500">*</span></label>
-                        <select name="category" id="category"
-                            class="w-full bg-gray-50 border-2 border-gray-300 rounded-lg p-2 text-sm text-gray-700">
-                            <option value="">Choose Category
-                            </option>
-                        </select>
+                    <div class="mb-2 font-semibold">
+                        <label for="phone" class="text-sm">Phone Number</label>
+                        <input type="number" name="phone" id="phone" placeholder="Optional"
+                            class="w-full
+                            px-3 py-2 border-2 border-gray-300 bg-gray-50 rounded-md focus:outline-none text-gray-500 focus:border-indigo-500 text-sm">
                     </div>
-                    <div class="mb-4">
-                        <input type="hidden" name="status" value="0">
-                        <label class="inline-flex items-center">
-                            <input type="checkbox" name="status" value="1" checked
-                                class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 h-4 w-4">
-                            <span class="ml-2 text-sm text-gray-700">Publish Now</span>
+                    <div class="mb-2 font-semibold">
+                        <label for="password" class="block text-sm ">
+                            password<span class="text-red-500">*</span>
                         </label>
-                        <p class="text-sm text-gray-500 mt-1">Check to publish, if not checked the course will be
-                            saved as a draft.</p>
+                        <div class="relative mt-1">
+                            <input id="password" name="password" type="password" required placeholder="password"
+                                class="block w-full appearance-none rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm pr-10">
+                            <button type="button" id="toggle-title-visibility"
+                                class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700 focus:outline-none transition duration-200">
+                                <i id="password-icon" class="fas fa-eye-slash"></i>
+                            </button>
+                        </div>
                     </div>
-                    <div class="mb-4">
+                    <div class="mb-2 font-semibold">
+                        <label for="confirm" class="block text-sm ">
+                            confirm password<span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative mt-1">
+                            <input id="password" name="confirm" type="password" required
+                                placeholder="Confirm Password"
+                                class="block w-full appearance-none rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm pr-10">
+                            <button type="button" id="toggle-title-visibility"
+                                class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700 focus:outline-none transition duration-200">
+                                <i id="password-icon" class="fas fa-eye-slash"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mb-2">
                         <div class="flex flex-row justify-end gap-4">
-                            <div class="py-2 w-34 text-indigo-700 bg-gray-50 border-2 border-indigo-700 rounded-lg text-center">Cancel</div>
-                            <div class="py-2 w-34 text-gray-50 bg-indigo-700 border-2 border-indigo-700 rounded-lg text-center">Save</div>
+                            <a href="javascript:history.back()"
+                                class="py-2 w-34 text-indigo-700 bg-gray-50 border-2 border-indigo-700 rounded-lg text-center">
+                                Cancel</a>
+                            <button type="submit"
+                                class="py-2 w-34 text-gray-50 bg-indigo-700 border-2 border-indigo-700 rounded-lg text-center">
+                                Save</button>
                         </div>
                     </div>
                 </div>
@@ -98,3 +132,4 @@
         </div>
     </div>
 </body>
+

@@ -7,7 +7,14 @@ use App\Http\Controllers\courseController;
 
 
 Route::get('/', [homecontroller::class, 'index']);
-Route::resource('/users', usersController::class);
+
+Route::prefix('/admin')->group(function () {
+    Route::get('/', [homecontroller::class, 'index']);
+    Route::resource('/users', usersController::class);
+});
+
+
+
 Route::get('/admin', function () {
     return 'Hello Guys';
 });
