@@ -15,10 +15,11 @@ Route::prefix('/admin')->group(function () {
     Route::resource('/course', courseController::class);
     Route::resource('/content', contentController::class);
     Route::get('/anggota', function () {
-    return view('admin.myParticipant.index');
+        return view('admin.myParticipant.index');
+    });
     Route::get('/anggotalihat', function () {
-    return view('admin.myParticipant.show');
-});
+        return view('admin.myParticipant.show');
+    });
 });
 
 Route::prefix('/author')->group(function () {
