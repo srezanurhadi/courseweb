@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\homecontroller;
 use App\Http\Controllers\usersController;
 use App\Http\Controllers\courseController;
+use App\Http\Controllers\contentController;
 
 
 Route::get('/', [homecontroller::class, 'index']);
@@ -12,8 +13,20 @@ Route::prefix('/admin')->group(function () {
     Route::get('/', [homecontroller::class, 'index']);
     Route::resource('/users', usersController::class);
     Route::resource('/course', courseController::class);
+    Route::resource('/content', contentController::class);
+    Route::get('/anggota', function () {
+    return view('admin.myParticipant.index');
+    Route::get('/anggotalihat', function () {
+    return view('admin.myParticipant.show');
+});
 });
 
+Route::prefix('/author')->group(function () {
+    Route::get('/', [homecontroller::class, 'index']);
+    Route::resource('/users', usersController::class);
+    Route::resource('/course', courseController::class);
+    Route::resource('/content', contentController::class);
+});
 
 
 Route::get('/admin', function () {
@@ -21,6 +34,7 @@ Route::get('/admin', function () {
 });
 
 //BAGUSSS PUNYAAA DO NOT TOCHHH PLSS, THANKS b(^_^)d//
+
 
 Route::get('/author', function () {
     return view('author.course.index');
