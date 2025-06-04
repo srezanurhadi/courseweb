@@ -68,19 +68,19 @@ Route::get('/usercourse', function () {
     return view('user.course.index');
 });
 
-Route::get('/content', function () {
+Route::get('/usercontentcourse', function () {
     return view('user.course.content');
 });
 
-Route::get('/overview', function () {
+Route::get('/useroverviewcourse', function () {
     return view('user.course.overview');
 });
 
-Route::get('/mycourse', function () {
+Route::get('/usermycourse', function () {
     return view('user.mycourse.index');
 });
 
-Route::get('/history', function () {
+Route::get('/userhistory', function () {
     return view('user.history');
 });
 // AUDENA PUNYA
