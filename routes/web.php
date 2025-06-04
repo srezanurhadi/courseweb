@@ -20,8 +20,6 @@ Route::prefix('/admin')->group(function () {
     Route::get('/anggotalihat', function () {
         return view('admin.myParticipant.show');
     });
-    
-    
 });
 
 
@@ -87,6 +85,14 @@ Route::prefix('/user')->name('user.')->group(function () {
     Route::get('/profile', function () {
         return view('user.myprofile.index');
     })->name('profile');
+
+    Route::get('/profile/edit', function () {
+        return view('user.myprofile.edit');
+    })->name('profile.edit');
+
+    Route::get('/profile/course/{id}', function ($id) {
+        return view('user.myprofile.detail', ['courseId' => $id]);
+    })->name('course.detail');
 });
 
 // AUDENA PUNYA
