@@ -134,8 +134,6 @@
                                             class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
                                     </li>
                                 </ul>
-
-
                             </div>
                             <button
                                 class="w-full mt-6 bg-indigo-100 hover:bg-indigo-300 text-gray-700 font-semibold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
@@ -160,18 +158,18 @@
                             </div>
                             <div class="flex items-center justify-center gap-63 mt-8">
                                 <button
-                                    class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg transition-colors">
+                                    class="bg-indigo-700 hover:bg-indigo-800 text-white font-semibold px-6 py-2 rounded-lg transition-colors">
                                     Previous
                                 </button>
 
                                 <div class="flex items-center gap-2">
-                                    <button class="w-6 h-6 bg-blue-600 text-white rounded-lg font-medium">1</button>
+                                    <button class="w-6 h-6 bg-indigo-700 text-white rounded-lg font-medium">1</button>
                                     <button
-                                        class="w-6 h-6 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition-colors">2</button>
+                                        class="w-6 h-6 text-indigo-700 rounded-lg font-medium hover:bg-gray-300 transition-colors">2</button>
                                 </div>
 
                                 <button
-                                    class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg transition-colors">
+                                    class="bg-indigo-700 hover:bg-indigo-800 text-white font-semibold px-6 py-2 rounded-lg transition-colors">
                                     Next
                                 </button>
                             </div>
