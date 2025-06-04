@@ -12,7 +12,7 @@
 <body>
     <div class="h-screen flex">
         <!-- Sidebar dengan fixed position -->
-        <div class="fixed top-0 left-0 h-full w-64"> <!-- Sesuaikan lebar (w-64) dengan lebar sidebar Anda -->
+        <div class="fixed top-0 left-0 h-full w-64">
             <x-sidebar></x-sidebar>
         </div>
 

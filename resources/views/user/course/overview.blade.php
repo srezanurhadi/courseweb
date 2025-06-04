@@ -19,9 +19,9 @@
                     <div class="flex items-center justify-between h-16">
                         <div class="flex items-center px-4">
                             <h1 class="text-3xl font-bold text-gray-800">
-                                <a href="/usercourse" class="hover:text-indigo-900">Course</a>
+                                <a href="{{ route('user.course.index') }}" class="hover:text-indigo-900">Course</a>
                                 <i class="fa-solid fa-chevron-right mx-1 text-2xl"></i>
-                                <a href="/useroverviewcourse" class="hover:text-indigo-900">Title</a>
+                                <a href="{{ route('user.course.overview') }}" class="hover:text-indigo-900">Title</a>
                             </h1>
                         </div>
                         <div class="flex
@@ -92,42 +92,42 @@
                                 <h3 class="text-2xl font-bold text-gray-900 mb-3">Content</h3>
                                 <ul class="">
                                     <li class="flex items-center justify-between py-2">
-                                        <a href="/usercontentcourse"
+                                        <a href="{{ route('user.course.content') }}"
                                             class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">1. Content
                                             1</a>
                                         <i
                                             class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
                                     </li>
                                     <li class="flex items-center justify-between py-2">
-                                        <a href="/usercontentcourse"
+                                        <a href="{{ route('user.course.content') }}"
                                             class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">2. Content
                                             2</a>
                                         <i
                                             class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
                                     </li>
                                     <li class="flex items-center justify-between py-2">
-                                        <a href="/usercontentcourse"
+                                        <a href="{{ route('user.course.content') }}"
                                             class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">3. Content
                                             3</a>
                                         <i
                                             class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
                                     </li>
                                     <li class="flex items-center justify-between py-2">
-                                        <a href="/usercontentcourse"
+                                        <a href="{{ route('user.course.content') }}"
                                             class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">4. Content
                                             4</a>
                                         <i
                                             class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
                                     </li>
                                     <li class="flex items-center justify-between py-2">
-                                        <a href="/usercontentcourse"
+                                        <a href="{{ route('user.course.content') }}"
                                             class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">5. Content
                                             5</a>
                                         <i
                                             class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
                                     </li>
                                     <li class="flex items-center justify-between py-2">
-                                        <a href="/usercontentcourse"
+                                        <a href="{{ route('user.course.content') }}"
                                             class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">6. Content
                                             6</a>
                                         <i
