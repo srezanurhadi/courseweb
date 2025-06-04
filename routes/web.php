@@ -13,11 +13,6 @@ Route::prefix('/admin')->group(function () {
 });
 
 
-
-Route::get('/admin', function () {
-    return 'Hello Guys';
-});
-
 //BAGUSSS PUNYAAA DO NOT TOCHHH PLSS, THANKS b(^_^)d//
 Route::get('/admin', function () {
     return view('admin.course.index');

@@ -13,7 +13,7 @@
     <div class="flex flex-1 ">
         <x-sidebar></x-sidebar>
         <div class="w-full bg-gray-50 flex flex-col px-8 py-4">
-            <form action="/users" method="post">
+            <form action="/admin/users" method="post" enctype="multipart/form-data">
                 @csrf
                 <div
                     class="bg-gray-100 h-full p-4 pl-6 rounded-lg shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] flex flex-col gap-2">
@@ -51,30 +51,41 @@
                                 class="w-2xs h-64 object-cover object-center border-2 border-gray-400 rounded-md"
                                 alt="Image preview" />
                         </div>
+                        @error('image')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="mb-2 font-semibold">
                         <label for="name" class="text-sm">Full Name<span class="text-red-500">*</span></label>
-                        <input type="text" name="name" id="name" placeholder="Full Name ..."
+                        <input type="text" name="name" id="name" placeholder="Full Name ..." value="{{ old('name') }}"
                             class="w-full
-                            px-3 py-2 border-2 border-gray-300 bg-gray-50 rounded-md focus:outline-none focus:border-indigo-500">
+                            px-3 py-2 border-2 border-gray-300 bg-gray-50 rounded-md focus:outline-none text-gray-700 focus:border-indigo-500"
+                            required>
+                        @error('name')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="mb-2 font-semibold">
                         <label for="email" class="text-sm">Email<span class="text-red-500">*</span></label>
-                        <input type="text" name="email" id="email" placeholder="Email Address..."
+                        <input type="email" name="email" id="email" placeholder="Email Address..." value="{{ old('email') }}"
                             class="w-full
-                             p-2 border-2 border-gray-300 bg-gray-50 rounded-md focus:outline-none focus:border-indigo-500">
+                             p-2 border-2 border-gray-300 bg-gray-50 rounded-md focus:outline-none text-gray-700 focus:border-indigo-500"
+                            required>
+                        @error('email')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="mb-2 font-semibold">
-                        <label for="Role" class="text-sm font-medium text-gray-700 block mb-1">Role<span
+                        <label for="role" class="text-sm font-medium text-gray-700 block mb-1">Role<span
                                 class="text-red-500">*</span></label>
                         <div class="relative">
-                            <select name="Role" id="Role"
+                            <select name="role" id="role"
                                 class="w-full bg-gray-50 border-2 border-gray-300 rounded-lg p-2 text-sm text-gray-500 focus:outline-none focus:border-indigo-500 appearance-none pr-8"
                                 required aria-required="true">
                                 <option value="" hidden selected>Select Role</option>
-                                <option value="admin">Admin</option>
-                                <option value="author">Author</option>
-                                <option value="user">User</option>
+                                <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                                <option value="author" {{ old('role') == 'author' ? 'selected' : '' }}>Author</option>
+                                <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>User</option>
                             </select>
 
                             <div
@@ -82,12 +93,18 @@
                                 <i class="fas fa-chevron-down fa-xs"></i>
                             </div>
                         </div>
+                        @error('role')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="mb-2 font-semibold">
-                        <label for="phone" class="text-sm">Phone Number</label>
-                        <input type="number" name="phone" id="phone" placeholder="Optional"
+                        <label for="no_telp" class="text-sm">Phone Number</label>
+                        <input type="number" name="no_telp" id="no_telp" placeholder="Optional" value="{{ old('no_telp') }}"
                             class="w-full
-                            px-3 py-2 border-2 border-gray-300 bg-gray-50 rounded-md focus:outline-none text-gray-500 focus:border-indigo-500 text-sm">
+                            px-3 py-2 border-2 border-gray-300 bg-gray-50 rounded-md focus:outline-none text-gray-700 focus:border-indigo-500 text-sm">
+                        @error('no_telp')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="mb-2 font-semibold">
                         <label for="password" class="block text-sm ">
@@ -95,26 +112,34 @@
                         </label>
                         <div class="relative mt-1">
                             <input id="password" name="password" type="password" required placeholder="password"
-                                class="block w-full appearance-none rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm pr-10">
-                            <button type="button" id="toggle-title-visibility"
+                                class="block w-full appearance-none rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm pr-10"
+                                required>
+                            <button type="button" id="toggle-pass-visibility"
                                 class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700 focus:outline-none transition duration-200">
                                 <i id="password-icon" class="fas fa-eye-slash"></i>
                             </button>
                         </div>
+                        @error('password')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="mb-2 font-semibold">
-                        <label for="confirm" class="block text-sm ">
+                        <label for="password_confirmation" class="block text-sm ">
                             confirm password<span class="text-red-500">*</span>
                         </label>
                         <div class="relative mt-1">
-                            <input id="password" name="confirm" type="password" required
+                            <input id="password" name="password_confirmation" type="password" required
                                 placeholder="Confirm Password"
-                                class="block w-full appearance-none rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm pr-10">
-                            <button type="button" id="toggle-title-visibility"
+                                class="block w-full appearance-none rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm pr-10"
+                                required>
+                            <button type="button" id="toggle-pass-visibility"
                                 class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700 focus:outline-none transition duration-200">
                                 <i id="password-icon" class="fas fa-eye-slash"></i>
                             </button>
                         </div>
+                        @error('password_confirmation')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div class="mb-2">
@@ -132,4 +157,31 @@
         </div>
     </div>
 </body>
+<script>
+    const hideButtons = document.querySelectorAll(
+        '#toggle-pass-visibility');
+    const passwordFields = document.querySelectorAll('#password');
+    const loopCount = Math.min(hideButtons.length, passwordFields.length);
 
+    for (let i = 0; i < loopCount; i++) {
+        hideButtons[i].addEventListener('click', () => {
+
+            const currentPasswordField = passwordFields[i];
+            const icon = hideButtons[i].querySelector('i');
+
+            if (currentPasswordField.type === 'password') {
+                currentPasswordField.type = 'text';
+                if (icon) {
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            } else {
+                currentPasswordField.type = 'password';
+                if (icon) {
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                }
+            }
+        });
+    }
+</script>
