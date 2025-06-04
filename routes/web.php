@@ -20,7 +20,10 @@ Route::prefix('/admin')->group(function () {
     Route::get('/anggotalihat', function () {
         return view('admin.myParticipant.show');
     });
+    
+    
 });
+
 
 Route::prefix('/author')->group(function () {
     Route::get('/', [homecontroller::class, 'index']);
