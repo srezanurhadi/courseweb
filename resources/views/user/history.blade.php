@@ -90,7 +90,7 @@
                                 <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-gray-900"> Web Development
                                 </div>
                             </div>
-                            <a href="/overview"
+                            <a href="/useroverviewcourse"
                                 class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900 hover:text-indigo-900 cursor-pointer">
                                 Tutorial Laravel 12
                                 100% work no debat dan pasti berhasil realllllll pasti bisa yakn betul html dan lain
@@ -131,7 +131,7 @@
                                 <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-gray-900"> Web Development
                                 </div>
                             </div>
-                            <a href="/overview"
+                            <a href="/useroverviewcourse"
                                 class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900 hover:text-indigo-900 cursor-pointer">
                                 Tutorial Laravel 12
                                 100% work no debat dan pasti berhasil realllllll pasti bisa yakn betul html dan lain
@@ -172,7 +172,7 @@
                                 <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-gray-900"> Web Development
                                 </div>
                             </div>
-                            <a href="/overview"
+                            <a href="/useroverviewcourse"
                                 class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900 hover:text-indigo-900 cursor-pointer">
                                 Tutorial Laravel 12
                                 100% work no debat dan pasti berhasil realllllll pasti bisa yakn betul html dan lain
@@ -213,7 +213,7 @@
                                 <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-gray-900"> Web Development
                                 </div>
                             </div>
-                            <a href="/overview"
+                            <a href="/useroverviewcourse"
                                 class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900 hover:text-indigo-900 cursor-pointer">
                                 Tutorial Laravel 12
                                 100% work no debat dan pasti berhasil realllllll pasti bisa yakn betul html dan lain
@@ -254,7 +254,7 @@
                                 <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-gray-900"> Web Development
                                 </div>
                             </div>
-                            <a href="/overview"
+                            <a href="/useroverviewcourse"
                                 class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900 hover:text-indigo-900 cursor-pointer">
                                 Tutorial Laravel 12
                                 100% work no debat dan pasti berhasil realllllll pasti bisa yakn betul html dan lain
@@ -295,7 +295,7 @@
                                 <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-gray-900"> Web Development
                                 </div>
                             </div>
-                            <a href="/overview"
+                            <a href="/useroverviewcourse"
                                 class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900 hover:text-indigo-900 cursor-pointer">
                                 Tutorial Laravel 12
                                 100% work no debat dan pasti berhasil realllllll pasti bisa yakn betul html dan lain
