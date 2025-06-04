@@ -56,29 +56,36 @@ Route::get('/coba', function () {
 });
 
 // AUDENA PUNYA
-Route::get('/home', function () {
-    return view('user.home');
+Route::prefix('/user')->name('user.')->group(function () {
+    Route::get('/', function () {
+        return view('user.home');
+    })->name('home');
+
+    Route::get('/course', function () {
+        return view('user.course.index');
+    })->name('course.index');
+
+    Route::get('/course/content', function () {
+        return view('user.course.content');
+    })->name('course.content');
+
+    Route::get('/course/overview', function () {
+        return view('user.course.overview');
+    })->name('course.overview');
+
+    Route::get('/mycourse', function () {
+        return view('user.mycourse.index');
+    })->name('mycourse.index');
+
+    Route::get('/history', function () {
+        return view('user.history');
+    })->name('history');
+
+    Route::get('/profile', function () {
+        return view('user.myprofile.index');
+    })->name('profile');
 });
 
-Route::get('/usercourse', function () {
-    return view('user.course.index');
-});
-
-Route::get('/usercontentcourse', function () {
-    return view('user.course.content');
-});
-
-Route::get('/useroverviewcourse', function () {
-    return view('user.course.overview');
-});
-
-Route::get('/usermycourse', function () {
-    return view('user.mycourse.index');
-});
-
-Route::get('/userhistory', function () {
-    return view('user.history');
-});
 // AUDENA PUNYA
 
 Route::get('/login', function () {
@@ -89,6 +96,6 @@ Route::get('/register', function () {
     return view('user.register');
 });
 
-Route::get('/profile', function () {
-    return view('user.myprofile.index');
-});
+// Route::get('/profile', function () {
+//     return view('user.myprofile.index');
+// });

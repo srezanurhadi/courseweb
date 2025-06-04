@@ -15,7 +15,7 @@
             </div>
 
             <div>
-                <h3 class="text-lg font-semibold mb-2">Quick Links</h3>
+                <h3 class="text-lg font-semibold mb-1">Quick Links</h3>
                 <ul class="text-sm">
                     <li><a href="/usercourse" class="hover:underline">Courses</a></li>
                     <li><a href="#" class="hover:underline">About Us</a></li>
@@ -26,13 +26,13 @@
             </div>
 
             <div>
-                <h3 class="text-lg font-semibold mb-2">Customer Support Hours</h3>
+                <h3 class="text-lg font-semibold mb-1">Customer Support Hours</h3>
                 <p class="text-sm">Monday - Friday</p>
                 <p class="text-sm">08:00 AM - 05:00 PM</p>
             </div>
 
             <div>
-                <h3 class="text-lg font-semibold mb-3">Follow Us</h3>
+                <h3 class="text-lg font-semibold mb-1">Follow Us</h3>
                 <div class="flex space-x-4">
                     {{-- Ganti '#' dengan link sosial media Anda --}}
                     <a href="#" aria-label="Facebook" class="text-white hover:text-gray-300">

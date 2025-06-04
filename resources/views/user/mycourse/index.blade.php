@@ -14,7 +14,7 @@
         <x-sidebar></x-sidebar>
         <div class="flex-1">
             {{-- - Navbar - --}}
-            <nav class="bg-white shadow-md z-10 sticky top-0">
+            <nav class="bg-white shadow-md z-50 sticky top-0">
                 <div class="px-6 py-0.5">
                     <div class="flex items-center justify-between h-16">
                         <div class="flex items-center px-4">

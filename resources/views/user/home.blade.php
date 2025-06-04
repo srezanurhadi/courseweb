@@ -109,7 +109,7 @@
         <x-sidebar></x-sidebar>
         <div class="flex-1">
             {{-- - Navbar - --}}
-            <nav class="bg-white shadow-md z-10 sticky top-0">
+            <nav class="bg-white shadow-md z-50 sticky top-0">
                 <div class="px-6 py-0.5">
                     <div class="flex items-center justify-between h-16">
                         <div class="flex items-center px-4">
@@ -168,11 +168,11 @@
                         </div>
 
                         <div
-                            class="swiper-button-prev absolute left-4 top-1/2 transform -translate-y-1/2 z-20 transition-all duration-200 hover:scale-110 cursor-pointer">
+                            class="swiper-button-prev absolute left-4 top-1/2 transform -translate-y-1/2 transition-all duration-200 hover:scale-110 cursor-pointer">
                             <i class="fa-solid fa-caret-left text-6xl text-white/80 hover:text-white"></i>
                         </div>
                         <div
-                            class="swiper-button-next absolute right-4 top-1/2 transform -translate-y-1/2 z-20 transition-all duration-200 hover:scale-110 cursor-pointer">
+                            class="swiper-button-next absolute right-4 top-1/2 transform -translate-y-1/2 transition-all duration-200 hover:scale-110 cursor-pointer">
                             <i class="fa-solid fa-caret-right text-6xl text-white/80 hover:text-white"></i>
                         </div>
                     </div>
