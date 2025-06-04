@@ -24,10 +24,10 @@
                                 px-3 py-2 border-2 border-gray-300 bg-gray-50 rounded-md focus:outline-none focus:border-indigo-500">
                     </div>
                     <div class="mb-4">
-                        <label for="image" class="block text-sm font-medium text-gray-700 mb-1">Upload Gambar
+                        <label for="image" lass="block text-sm font-medium text-gray-700 mb-1">Upload Gambar
                             Galeri <span class="text-red-500">*</span></label>
                         <div
-                            class="mt-1 w-100 h-75 flex justify-center items-center px-6 pt-5 pb-6 border-2 bg-gray-50 border-gray-300 border-dashed rounded-md">
+                            class="mt-1 w-100 aspect-4/3 flex justify-center items-center px-6 pt-5 pb-6 border-2 bg-gray-50 border-gray-300 border-dashed rounded-md">
                             <div class="space-y-1 text-center">
                                 <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none"
                                     viewBox="0 0 48 48" aria-hidden="true">
@@ -50,9 +50,9 @@
                             </div>
                         </div>
                         <div id="image-preview" class="mt-4 hidden">
-                            <p class="text-sm font-medium text-gray-700 mb-2">Pratinjau Gambar:</p>
+                            <p class="text-sm font-medium text-gray-700 mb-2">Preview Image:</p>
                             <img id="preview-img"
-                                class="w-2xs h-64 object-cover object-center border-2 border-gray-400 rounded-md"
+                                class="w-100 aspect-4/3 object-cover object-center border-2 border-gray-400 rounded-md"
                                 alt="Image preview" />
                         </div>
                     </div>
@@ -175,7 +175,7 @@
                     </div>
                     <div class="mb-4">
                         <div class="flex flex-row justify-end gap-4">
-                            <div
+                            <div onclick="window.location.href='{{ url('/admin/course') }}'"
                                 class="py-2 w-34 text-indigo-700 bg-gray-50 border-2 border-indigo-700 rounded-lg text-center">
                                 Cancel</div>
                             <div
@@ -521,8 +521,8 @@
         </div>
     </div>
 
-</body>
 
+</body>
 <script>
     const modalOpen = document.querySelectorAll('#add_content');
     const modal = document.querySelectorAll('#modal');
@@ -545,26 +545,66 @@
         })
     }
 
-    const modalOpen2 = document.querySelectorAll('#lihat');
-    const modal2 = document.querySelectorAll('#modal2');
-    const modalClose2 = document.querySelectorAll('#closeModal2');
 
-    for (let i = 0; i < modalOpen2.length; i++) {
-        modalOpen2[i].addEventListener('click', () => {
-            modal2[i].classList.remove('hidden');
-            setTimeout(() => {
-                modal2[i].classList.remove('opacity-0')
-            }, 10);
+    const modalOpenTriggers = document.querySelectorAll('#lihat');
+    const modalElement = document.querySelector('#modal2');
+    const modalCloseButton = document.querySelector('#closeModal2');
 
-
+    if (modalElement && modalCloseButton) {
+        modalOpenTriggers.forEach(triggerButton => {
+            triggerButton.addEventListener('click', () => {
+                modalElement.classList.remove('hidden');
+                setTimeout(() => {
+                    modalElement.classList.remove('opacity-0');
+                }, 10);
+            });
         });
-        modalClose2[i].addEventListener('click', () => {
-            modal2[i].classList.add('opacity-0');
+
+
+        modalCloseButton.addEventListener('click', () => {
+            modalElement.classList.add('opacity-0');
             setTimeout(() => {
-                modal2[i].classList.add('hidden')
+                modalElement.classList.add('hidden');
             }, 500);
-        })
+        });
+
+    } else {
+
+        if (!modalElement) {
+            console.error("Error: The modal element with ID 'modal2' was not found.");
+        }
+        if (!modalCloseButton) {
+            console.error("Error: The modal close button with ID 'closeModal2' was not found.");
+        }
     }
+
+
+
+    const imageInput = document.getElementById('image');
+    const imagePreviewDiv = document.getElementById('image-preview');
+    const previewImage = document.getElementById('preview-img');
+
+    imageInput.addEventListener('change', function() {
+        const file = this.files[0];
+
+        if (file) {
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    imagePreviewDiv.classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            } else {
+                previewImage.src = '#';
+                imagePreviewDiv.classList.add('hidden');
+                alert('Harap pilih file gambar (PNG, JPG, GIF).');
+            }
+        } else {
+            previewImage.src = '#';
+            imagePreviewDiv.classList.add('hidden');
+        }
+    });
 </script>
 
 </html>
