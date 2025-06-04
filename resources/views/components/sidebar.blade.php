@@ -8,10 +8,12 @@
         <a href="" class="ml-6 p-2 rounded-lg border-l-8 border-white/30">
             <i class="fas fa-list text-white pl-1"></i>
             <span class="text-white pl-1 font-semibold text-20">Content</span></a>
-        <a href="" class="ml-6 p-2 rounded-lg border-l-8 border-white/30">
+        <a href="{{ url('/admin/course') }}"
+            class="{{ Request::is('admin/course*') ? 'border-white bg-white/20 shadow-lg' : '' }} ml-6 p-2 rounded-lg border-l-8 border-white/30">
             <i class="fas fa-book-open-reader  text-white pl-1"></i>
             <span class="text-white pl-1 font-semibold text-20">Course</span></a>
-        <a href="" class="ml-6 p-2 rounded-lg border-l-8 border-white/30">
+        <a href="{{ url('/admin/users') }}"
+            class="{{ Request::is('admin/users*') ? 'border-white bg-white/20 shadow-lg' : '' }} ml-6 p-2 rounded-lg border-l-8 border-white/30">
             <i class="fas fa-users-gear text-white pl-1"></i>
             <span class="text-white pl-1 font-semibold text-20">User</span></a>
         <div class="text-xs text-white pl-8 mt-4 border-t-1 border-white/50">Area Saya</div>

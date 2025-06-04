@@ -11,6 +11,7 @@ Route::get('/', [homecontroller::class, 'index']);
 Route::prefix('/admin')->group(function () {
     Route::get('/', [homecontroller::class, 'index']);
     Route::resource('/users', usersController::class);
+    Route::resource('/course', courseController::class);
 });
 
 
@@ -20,8 +21,6 @@ Route::get('/admin', function () {
 });
 
 //BAGUSSS PUNYAAA DO NOT TOCHHH PLSS, THANKS b(^_^)d//
-
-Route::resource('/admincourse', courseController::class);
 
 Route::get('/author', function () {
     return view('author.course.index');
@@ -51,7 +50,7 @@ Route::get('/home', function () {
     return view('user.home');
 });
 
-Route::get('/course', function () {
+Route::get('/usercourse', function () {
     return view('user.course.index');
 });
 
