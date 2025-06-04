@@ -35,5 +35,21 @@
                 <i class="fas fa-user text-white pl-1"></i>
                 <span class="text-white pl-1 font-semibold text-20">My Profile</span></a>
         @endif
+
+        @if (Request::is('user*'))
+            <div class="text-xs text-white pl-8 border-t-1 border-white/50"></div>
+            <a href="{{ url('/user/course') }}" class="ml-6 p-2 rounded-lg border-l-8 border-white/30">
+                <i class="fas fa-book-open-reader  text-white pl-1"></i>
+                <span class="text-white pl-1 font-semibold text-20">Courses</span></a>
+            <a href="{{ url('/user/mycourse') }}" class="ml-6 p-2 rounded-lg border-l-8 border-white/30">
+                <i class="fas fa-book text-white pl-1"></i>
+                <span class="text-white pl-1 font-semibold text-20">My Course</span></a>
+            <a href="{{ url('/user/history') }}" class="ml-6 p-2 rounded-lg border-l-8 border-white/30">
+                <i class="fa-solid fa-clock-rotate-left text-white pl-1"></i>
+                <span class="text-white pl-1 font-semibold text-20">History</span></a>
+            <a href="{{ url('/user/profile') }}" class="ml-6 p-2 rounded-lg border-l-8 border-white/30">
+                <i class="fas fa-user text-white pl-1"></i>
+                <span class="text-white pl-1 font-semibold text-20">My Profile</span></a>
+        @endif
     </aside>
 </div>
