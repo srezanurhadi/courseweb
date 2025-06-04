@@ -13,7 +13,7 @@
         <div class="flex flex-1">
             <x-sidebar></x-sidebar>
             <div class="w-full bg-gray-50 flex flex-col">
-                <div class="p-4 shadow-lg font-bold flex bg-gray-100 flex-row justify-between sticky top-0">
+                <div class="p-4 shadow-[0px_0px_4px_1px_rgba(0,0,0,0.4)] font-bold flex bg-gray-100 flex-row justify-between sticky top-0">
                     <div class="text-3xl font-bold pl-4">Management Course</div>
                     <div class="profile flex items-center gap-2 pr-4">
                         <i class="fas fa-bell text-xl"></i>
@@ -57,7 +57,7 @@
                         </div>
                     </div>
                     <div class="">
-                        <a href="" class="px-2 py-1 bg-sky-500 rounded-lg text-white font-semibold"><i
+                        <a href="course/create" class="px-2 py-1 bg-sky-500 rounded-lg text-white font-semibold"><i
                                 class="fas fa-plus text-gray-50"></i> Add Content</a>
                     </div>
 
