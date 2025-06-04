@@ -32,11 +32,6 @@ Route::prefix('/author')->group(function () {
     Route::resource('/content', contentController::class);
 });
 
-
-Route::get('/admin', function () {
-    return 'Hello Guys';
-});
-
 //BAGUSSS PUNYAAA DO NOT TOCHHH PLSS, THANKS b(^_^)d//
 
 

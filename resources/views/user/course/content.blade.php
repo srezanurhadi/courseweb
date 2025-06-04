@@ -104,6 +104,7 @@
             </div>
             <div class="relative">
             </div>
+            <x-footer></x-footer>
         </div>
     </div>
 </body>

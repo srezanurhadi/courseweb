@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class usersController extends Controller
 {
@@ -11,7 +13,8 @@ class usersController extends Controller
      */
     public function index()
     {
-        return view('admin.users.index');
+        $users = User::all();
+        return view('admin.users.index', compact('users'));
     }
 
     /**
@@ -27,7 +30,22 @@ class usersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email:dns|unique:users',
+            'password' => 'required|min:8|max:255|same:password_confirmation',
+            'role' => 'required',
+            'no_telp' => 'required',
+            'image' => 'image|file|max:1024'
+        ]);
+        if ($request->file('image')) {
+            $validatedData['image'] = $request->file('image')->store('profile-picture');
+        }
+        $validatedData['password'] = Hash::make($validatedData['password']);
+        User::create($validatedData);
+
+
+        return redirect("/admin/users")->with('success', 'User Berhasil Ditambahkan');
     }
 
     /**
