@@ -29,7 +29,6 @@ Route::get('/home', function () {
 Route::get('/login', function () {
     return view('user.index');
 });
-<<<<<<< HEAD
 
 Route::get('/register', function () {
     return view('user.register');
@@ -38,5 +37,11 @@ Route::get('/register', function () {
 Route::get('/profile', function () {
     return view('user.myprofile.index');
 });
-=======
->>>>>>> f28f7b04935e3d25ce181a70c60f2bd54753b900
+
+Route::get('/profile/edit', function () {
+    return view('user.myprofile.edit');
+})->name('profile.edit');
+
+Route::get('/profile/course/{id}', function ($id) {
+    return view('user.myprofile.detail', ['courseId' => $id]);
+})->name('course.detail');
