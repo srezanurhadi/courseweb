@@ -17,11 +17,13 @@ Route::prefix('/admin')->group(function () {
     Route::get('/anggota', function () {
         return view('admin.myParticipant.index');
     });
+    Route::get('/anggotalihat', function () {
+        return view('admin.myParticipant.show');
+    });
+    
     
 });
-Route::get('/anggotalihat', function () {
-        return view('admin.myParticipant.lihat');
-    });
+
 
 Route::prefix('/author')->group(function () {
     Route::get('/', [homecontroller::class, 'index']);
