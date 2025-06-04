@@ -104,15 +104,3 @@ Route::get('/login', function () {
 Route::get('/register', function () {
     return view('user.register');
 });
-
-Route::get('/userprofile', function () {
-    return view('user.myprofile.index');
-});
-
-Route::get('/userprofile/edit', function () {
-    return view('user.myprofile.edit');
-})->name('profile.edit');
-
-Route::get('/userprofile/course/{id}', function ($id) {
-    return view('user.myprofile.detail', ['courseId' => $id]);
-})->name('course.detail');
