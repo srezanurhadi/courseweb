@@ -99,7 +99,6 @@ Route::get('/register', function () {
     return view('user.register');
 });
 
-<<<<<<< HEAD
 Route::get('/userprofile', function () {
     return view('user.myprofile.index');
 });
@@ -111,8 +110,3 @@ Route::get('/userprofile/edit', function () {
 Route::get('/userprofile/course/{id}', function ($id) {
     return view('user.myprofile.detail', ['courseId' => $id]);
 })->name('course.detail');
-=======
-// Route::get('/profile', function () {
-//     return view('user.myprofile.index');
-// });
->>>>>>> baa73dac1bc005f7ebf75029ed913e2afc748c1f
