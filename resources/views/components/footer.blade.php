@@ -17,7 +17,7 @@
             <div>
                 <h3 class="text-lg font-semibold mb-1">Quick Links</h3>
                 <ul class="text-sm">
-                    <li><a href="/usercourse" class="hover:underline">Courses</a></li>
+                    <li><a href="{{ url('/user/course') }}" class="hover:underline">Courses</a></li>
                     <li><a href="#" class="hover:underline">About Us</a></li>
                     <li><a href="#" class="hover:underline">Help Center</a></li>
                     <li><a href="#" class="hover:underline">Privacy Policy</a></li>
@@ -34,7 +34,6 @@
             <div>
                 <h3 class="text-lg font-semibold mb-1">Follow Us</h3>
                 <div class="flex space-x-4">
-                    {{-- Ganti '#' dengan link sosial media Anda --}}
                     <a href="#" aria-label="Facebook" class="text-white hover:text-gray-300">
                         <img src="https://cdn-icons-png.flaticon.com/256/124/124010.png" alt="Facebook" class="w-8 h-8">
                     </a>

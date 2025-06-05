@@ -58,7 +58,7 @@ Route::get('/coba', function () {
 
 // AUDENA PUNYA
 Route::prefix('/user')->name('user.')->group(function () {
-    Route::get('/', function () {
+    Route::get('/home', function () {
         return view('user.home');
     })->name('home');
 

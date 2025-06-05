@@ -1,9 +1,18 @@
 <div class="h-screen flex sticky top-0 left-0 z-999">
     <aside class="bg-gradient-to-b from-sky-600 to-indigo-900 w-54 flex flex-col space-y-1">
         <div class="text-white text-3xl mt-4 pl-6 font-bold">R. DOSEN</div>
-        <a href="" class="m-6 mr-2 p-2 rounded-lg border-l-8 border-white bg-white/20 shadow-lg">
-            <i class="fas fa-gauge text-white pl-1"></i>
-            <span class="text-white pl-1 font-semibold text-20">Dashboard</span></a>
+
+        @if (Request::is('admin*') || Request::is('author*'))
+            <a href="" class="m-6 mr-2 p-2 rounded-lg border-l-8 border-white bg-white/20 shadow-lg">
+                <i class="fas fa-gauge text-white pl-1"></i>
+                <span class="text-white pl-1 font-semibold text-20">Dashboard</span></a>
+        @elseif (Request::is('user*'))
+            <a href="{{ url('/user/home') }}"
+                class="{{ Request::is('user/home*') ? 'border-white bg-white/20 shadow-lg' : '' }} m-6 mr-2 p-2 rounded-lg border-l-8 border-white/30">
+                <i class="fas fa-house text-white pl-1"></i>
+                <span class="text-white pl-1 font-semibold text-20">Home</span></a>
+        @endif
+
         @if (Request::is('admin*'))
             <div class="text-xs text-white pl-8 border-t-1 border-white/50">Area Admin</div>
             <a href="{{ url('/admin/content') }}"
@@ -38,16 +47,20 @@
 
         @if (Request::is('user*'))
             <div class="text-xs text-white pl-8 border-t-1 border-white/50"></div>
-            <a href="{{ url('/user/course') }}" class="ml-6 p-2 rounded-lg border-l-8 border-white/30">
+            <a href="{{ url('/user/course') }}"
+                class=" {{ Request::is('user/course*') ? 'border-white bg-white/20 shadow-lg' : '' }} ml-6 mr-2 p-2 rounded-lg border-l-8 border-white/30">
                 <i class="fas fa-book-open-reader  text-white pl-1"></i>
                 <span class="text-white pl-1 font-semibold text-20">Courses</span></a>
-            <a href="{{ url('/user/mycourse') }}" class="ml-6 p-2 rounded-lg border-l-8 border-white/30">
+            <a href="{{ url('/user/mycourse') }}"
+                class="{{ Request::is('user/mycourse*') ? 'border-white bg-white/20 shadow-lg' : '' }} ml-6 mr-2 p-2 rounded-lg border-l-8 border-white/30">
                 <i class="fas fa-book text-white pl-1"></i>
                 <span class="text-white pl-1 font-semibold text-20">My Course</span></a>
-            <a href="{{ url('/user/history') }}" class="ml-6 p-2 rounded-lg border-l-8 border-white/30">
+            <a href="{{ url('/user/history') }}"
+                class="{{ Request::is('user/history*') ? 'border-white bg-white/20 shadow-lg' : '' }} ml-6 mr-2 p-2 rounded-lg border-l-8 border-white/30">
                 <i class="fa-solid fa-clock-rotate-left text-white pl-1"></i>
                 <span class="text-white pl-1 font-semibold text-20">History</span></a>
-            <a href="{{ url('/user/profile') }}" class="ml-6 p-2 rounded-lg border-l-8 border-white/30">
+            <a href="{{ url('/user/profile') }}"
+                class="{{ Request::is('user/profile*') ? 'border-white bg-white/20 shadow-lg' : '' }} ml-6 mr-2 p-2 rounded-lg border-l-8 border-white/30">
                 <i class="fas fa-user text-white pl-1"></i>
                 <span class="text-white pl-1 font-semibold text-20">My Profile</span></a>
         @endif
