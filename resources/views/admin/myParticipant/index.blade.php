@@ -16,7 +16,7 @@
 
             {{-- Header yang Sticky --}}
             <div class="p-4 shadow-lg font-bold flex bg-gray-100 flex-row justify-between top-0 sticky z-30">
-                <div class="text-3xl font-bold pl-4">Management Course</div>
+                <div class="text-3xl font-bold pl-4">My Participant</div>
                 <div class="profile flex items-center gap-2 pr-4">
                     <i class="fas fa-bell text-xl"></i>
                     <div class="rounded-full justify-center flex bg-gray-300 h-8 w-8">
@@ -96,7 +96,40 @@
                                     <div class="flex items-center">
                                         <div class="ml-4 w-full">
                                             <div
-                                                class="text-xl font-semibold text-gray-700 truncate overflow-hidden whitespace-nowrap max-w-[650px]">
+                                                class="text-lg font-semibold text-gray-700 truncate overflow-hidden whitespace-nowrap max-w-[650px]">
+                                                Tutorial Laravel 12 Mantap jos gandoss mantap pollllll anda mahis
+                                                laravle dalam 3 menit pertama Laravel 12 Mantap jos gandoss mantap
+                                                pollllll ya jelas karena dia oke banget wkwkwkwk</div>
+                                            <div
+                                                class="text-sm text-gray-700 truncate overflow-hidden whitespace-nowrap max-w-[700px]">
+                                                Tutorial ini akan membuat anda mahis laravle dalam 3 menit pertama
+                                                Laravel 12 Mantap jos gandoss mantap pollllll ya jelas karena dia oke
+                                                banget wkwkwkwk</div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td class="pl-6 py-4">
+                                    <span
+                                        class="inline-flex text-xs leading-5 font-semibold rounded-full  text-gray-800">
+                                        25 Participant 2
+                                    </span>
+                                </td>
+                                <td class="pr-6 py-4">
+                                    <a id="show" href="/admin/myparticipant/show"
+                                        class="w-8 h-8 rounded-sm bg-indigo-400 hover:bg-indigo-500 text-white flex items-center justify-center"
+                                        aria-label="show">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+
+                            </tr>
+                            <tr class="bg-white border-t hover:bg-gray-50 ">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center">
+                                        <div class="ml-4 w-full">
+                                            <div
+                                                class="text-lg font-semibold text-gray-700 truncate overflow-hidden whitespace-nowrap max-w-[700px]">
                                                 Tutorial Laravel 12 Mantap jos gandoss mantap pollllll anda mahis
                                                 laravle dalam 3 menit pertama Laravel 12 Mantap jos gandoss mantap
                                                 pollllll ya jelas karena dia oke banget wkwkwkwk</div>
@@ -128,7 +161,7 @@
                                     <div class="flex items-center">
                                         <div class="ml-4 w-full">
                                             <div
-                                                class="text-xl font-semibold text-gray-700 truncate overflow-hidden whitespace-nowrap max-w-[700px]">
+                                                class="text-lg font-semibold text-gray-700 truncate overflow-hidden whitespace-nowrap max-w-[700px]">
                                                 Tutorial Laravel 12 Mantap jos gandoss mantap pollllll anda mahis
                                                 laravle dalam 3 menit pertama Laravel 12 Mantap jos gandoss mantap
                                                 pollllll ya jelas karena dia oke banget wkwkwkwk</div>
@@ -160,39 +193,7 @@
                                     <div class="flex items-center">
                                         <div class="ml-4 w-full">
                                             <div
-                                                class="text-xl font-semibold text-gray-700 truncate overflow-hidden whitespace-nowrap max-w-[700px]">
-                                                Tutorial Laravel 12 Mantap jos gandoss mantap pollllll anda mahis
-                                                laravle dalam 3 menit pertama Laravel 12 Mantap jos gandoss mantap
-                                                pollllll ya jelas karena dia oke banget wkwkwkwk</div>
-                                            <div
-                                                class="text-sm text-gray-700 truncate overflow-hidden whitespace-nowrap max-w-[700px]">
-                                                Tutorial ini akan membuat anda mahis laravle dalam 3 menit pertama
-                                                Laravel 12 Mantap jos gandoss mantap pollllll ya jelas karena dia oke
-                                                banget wkwkwkwk</div>
-                                        </div>
-                                    </div>
-                                </td>
-
-                                <td class="pl-6 py-4">
-                                    <span
-                                        class="inline-flex text-xs leading-5 font-semibold rounded-full  text-gray-800">
-                                        25 Participant
-                                    </span>
-                                </td>
-                                <td class="pr-6 py-4">
-                                    <button id="show"
-                                        class="w-8 h-8 rounded-sm bg-indigo-400 hover:bg-indigo-500 text-white flex items-center justify-center"
-                                        aria-label="show">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr class="bg-white border-t hover:bg-gray-50 ">
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center">
-                                        <div class="ml-4 w-full">
-                                            <div
-                                                class="text-xl font-semibold text-gray-700 truncate overflow-hidden whitespace-nowrap max-w-[700px]">
+                                                class="text-lg font-semibold text-gray-700 truncate overflow-hidden whitespace-nowrap max-w-[700px]">
                                                 Tutorial Laravel 12 Mantap jos gandoss mantap pollllll anda mahis
                                                 laravle dalam 3 menit pertama Laravel 12 Mantap jos gandoss mantap
                                                 pollllll ya jelas karena dia oke banget wkwkwkwk</div>

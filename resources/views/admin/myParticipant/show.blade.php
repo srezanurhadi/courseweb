@@ -16,7 +16,7 @@
 
             {{-- Header yang Sticky --}}
             <div class="p-4 shadow-lg font-bold flex bg-gray-100 flex-row justify-between top-0 sticky z-30">
-                <div class="text-3xl font-bold pl-4">Management Course</div>
+                <div class="text-3xl font-bold pl-4">My Participant</div>
                 <div class="profile flex items-center gap-2 pr-4">
                     <i class="fas fa-bell text-xl"></i>
                     <div class="rounded-full justify-center flex bg-gray-300 h-8 w-8">
@@ -86,7 +86,7 @@
                                 <th scope="col" class="px-6 py-3">Full Name</th>
                                 <th scope="col" class="px-6 py-3">Email Address</th>
                                 <th scope="col" class="px-6 py-3">Phone Number</th>
-                                <th scope="col" class="px-6 py-3">Role</th>
+                                <th scope="col" class="px-6 py-3">Progress</th>
                                 <th scope="col" class="px-6 py-3">Action</th>
                             </tr>
                         </thead>
@@ -111,7 +111,7 @@
                                 <td class="px-6 py-4">
                                     <span
                                         class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                        Participant
+                                        75%
                                     </span>
                                 </td>
                                 <td class="px-6 py-4">
@@ -121,11 +121,11 @@
                                             aria-label="show">
                                             <i class="fas fa-eye"></i>
                                         </button>
-                                        <button
+                                        <a href="/admin/myparticipant/1/edit"
                                             class="w-8 h-8 rounded-sm bg-amber-400 hover:bg-amber-500 text-white flex items-center justify-center"
                                             aria-label="edit">
                                             <i class="fas fa-pencil-alt"></i>
-                                        </button>
+                                        </a>
                                         <button
                                             class="w-8 h-8 rounded-sm bg-red-400 hover:bg-red-500 text-white flex items-center justify-center"
                                             aria-label="delete">
@@ -153,7 +153,7 @@
                                 <td class="px-6 py-4">
                                     <span
                                         class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                        Participant
+                                        80%
                                     </span>
                                 </td>
                                 <td class="px-6 py-4">
