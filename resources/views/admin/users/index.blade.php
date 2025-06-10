@@ -16,7 +16,7 @@
 
             {{-- Header yang Sticky --}}
             <div class="p-4 shadow-lg font-bold flex bg-gray-100 flex-row justify-between top-0 sticky z-30">
-                <div class="text-3xl font-bold pl-4">Management Course</div>
+                <div class="text-3xl font-bold pl-4">Management users</div>
                 <div class="profile flex items-center gap-2 pr-4">
                     <i class="fas fa-bell text-xl"></i>
                     <div class="rounded-full justify-center flex bg-gray-300 h-8 w-8">
@@ -29,26 +29,39 @@
             {{-- search --}}
             <div class="w-full flex pt-8 px-4 justify-between">
                 <div class="flex gap-4">
-                    <form class="flex gap-2">
-                        <div class=" flex gap-1 items-center rounded-lg border-gray-400 border-2 pl-2">
-                            <i class="fas fa-search text-gray-500"></i>
-                            <input type="text"
-                                class="rounded-lg min-w-56 focus:outline-none px-2 placeholder:font-semibold placeholder:italic bg-transparent"
-                                {{-- Ditambahkan bg-transparent jika input di dalam bg-gray-50 --}} placeholder="Search User...">
+                    <form action="{{ url('/admin/users') }}" method="GET" class="flex gap-4" id="search-form">
+                        <div class="flex gap-2">
+                            {{-- Input Pencarian --}}
+                            <div class="flex gap-1 items-center rounded-lg border-gray-400 border-2 pl-2">
+                                <i class="fas fa-search text-gray-500"></i>
+                                <input type="text" name="search" {{-- [PENTING] Tambahkan atribut name --}}
+                                    value="{{ request('search') }}" {{-- Menampilkan kembali keyword pencarian --}}
+                                    class="rounded-lg min-w-56 focus:outline-none px-2 placeholder:font-semibold placeholder:italic bg-transparent"
+                                    placeholder="Search User...">
+                            </div>
+
+                            {{-- Dropdown Kategori --}}
+                            <div class="flex gap-1 items-center rounded-lg border-gray-400 border-2 px-2">
+                                <i class="fas fa-filter text-gray-500"></i> {{-- Mengganti ikon agar lebih sesuai --}}
+                                <select name="category" id="category"
+                                    class="min-w-56 focus:outline-none px-2 text-gray-900 bg-transparent"
+                                    onchange="this.form.submit()"> {{-- [OPSIONAL] Otomatis submit saat kategori diubah --}}
+                                    <option value="">All Roles</option>
+                                    <option value="admin" {{ request('category') == 'admin' ? 'selected' : '' }}>Admin
+                                    </option>
+                                    <option value="author" {{ request('category') == 'author' ? 'selected' : '' }}>
+                                        Author</option>
+                                    <option value="user" {{ request('category') == 'user' ? 'selected' : '' }}>
+                                        Participant</option>
+                                </select>
+                            </div>
+
+                            {{-- Tombol Search --}}
+                            <button type="submit" class="bg-sky-600 px-4 rounded-lg">
+                                <p class="font-medium text-base text-white">Search</p>
+                            </button>
                         </div>
-                        <button class="bg-sky-600 px-2 rounded-lg">
-                            <p class=" font-medium text-base text-white">search</p>
-                        </button>
                     </form>
-                    <div class=" flex gap-1 items-center rounded-lg border-gray-400 border-2 px-2">
-                        <i class="fas fa-search text-gray-500"></i>
-                        <select name="category" id="category"
-                            class="min-w-56 focus:outline-none px-2 text-gray-900 bg-transparent"> {{-- Ditambahkan bg-transparent --}}
-                            <option value="writer" class="min-w-56 ">
-                                All User
-                            </option>
-                        </select>
-                    </div>
                 </div>
                 <div class="">
                     <a href="users/create" class="px-2 py-1 bg-sky-500 rounded-lg text-white font-semibold"><i
@@ -134,7 +147,8 @@
 
                                             </div>
                                             <div class="ml-4">
-                                                <div class="text-sm font-medium text-gray-900">{{ $user->name }}</div>
+                                                <div class="text-sm font-medium text-gray-900">{{ $user->name }}
+                                                </div>
                                             </div>
                                         </div>
                                     </td>
@@ -168,7 +182,8 @@
                                                 @method('delete')
                                                 @csrf
 
-                                                <button onclick="return confirm('anda yakin ingin menghapus {{ $user->name }}')"">
+                                                <button
+                                                    onclick="return confirm('anda yakin ingin menghapus {{ $user->name }}')"">
                                                     <div
                                                         class="bg-red-500 p-1 rounded-sm w-8 h-8 flex items-center justify-center group hover:bg-white hover:border-2 hover:border-red-500">
                                                         <span
@@ -421,7 +436,6 @@
             }, 500);
         })
     }
-    
 </script>
 
 </html>

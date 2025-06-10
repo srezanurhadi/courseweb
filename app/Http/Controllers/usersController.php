@@ -12,13 +12,32 @@ class usersController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $users = User::all();
         $admincount = User::where('role', 'admin')->count();
         $usercount = User::where('role', 'user')->count();
         $authorcount = User::where('role', 'author')->count();
-        return view('admin.users.index', compact('users','admincount','usercount','authorcount'));
+
+        $query = User::query();
+
+        // 1. Filter berdasarkan keyword pencarian
+        if ($request->has('search') && $request->input('search') != '') {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%');
+            });
+        }
+
+        // 2. Filter berdasarkan kategori/role
+        if ($request->has('category') && $request->input('category') != '') {
+            $category = $request->input('category');
+            $query->where('role', $category);
+        }
+
+        $users = $query->latest()->paginate(10);
+        return view('admin.users.index', compact('users', 'admincount', 'usercount', 'authorcount'));
     }
 
     /**
