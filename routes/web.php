@@ -5,7 +5,7 @@ use App\Http\Controllers\homecontroller;
 use App\Http\Controllers\usersController;
 use App\Http\Controllers\courseController;
 use App\Http\Controllers\contentController;
-
+use App\Http\Controllers\myParticipantController;
 
 Route::get('/', [homecontroller::class, 'index']);
 
@@ -14,14 +14,7 @@ Route::prefix('/admin')->group(function () {
     Route::resource('/users', usersController::class);
     Route::resource('/course', courseController::class);
     Route::resource('/content', contentController::class);
-    Route::get('/anggota', function () {
-        return view('admin.myParticipant.index');
-    });
-    Route::get('/anggotalihat', function () {
-        return view('admin.myParticipant.show');
-    });
-    
-    
+    Route::resource('/myparticipant', myParticipantController::class);
 });
 
 
