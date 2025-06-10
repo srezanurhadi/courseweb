@@ -1,0 +1,37 @@
+<?php
+
+namespace Database\Factories;
+
+use App\Models\User;
+use App\Models\Category;
+use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+class CourseFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        $title = $this->faker->sentence(4);
+
+        return [
+            // Kita tidak perlu mengambil ID di sini, Laravel bisa melakukannya
+            // jika relasi sudah didefinisikan dengan benar.
+            'user_id' => User::factory(),
+            'category_id' => Category::inRandomOrder()->first()->id,
+
+            // Data Utama
+            'title' => $title,
+            'slug' => Str::slug($title),
+            'description' => $this->faker->sentence(15),
+            'image' => $this->faker->imageUrl(640, 480, 'course', true),
+
+            // Metadata & Status
+            'status' => $this->faker->boolean(80),
+        ];
+    }
+}
