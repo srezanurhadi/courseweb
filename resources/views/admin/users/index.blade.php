@@ -135,7 +135,9 @@
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 h-10 w-10">
                                                 @if ($user->image)
+                        
                                                     <img src="{{ asset('storage/' . $user->image) }}"
+
                                                         class="bg-purple-600 object-cover text-white rounded-full h-10 w-10 flex items-center justify-center text-lg font-semibold">
                                                     </img>
                                                 @else

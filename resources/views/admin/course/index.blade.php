@@ -97,6 +97,9 @@
                         </div>
                     </div>
                 </div>
+                @foreach ( as )
+                    
+                @endforeach
                 <div class="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-around">
                     <div
                         class=" bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden">

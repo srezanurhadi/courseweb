@@ -18,6 +18,13 @@ class CourseFactory extends Factory
     {
         $title = $this->faker->sentence(4);
 
+        // 1. Buat array besar dengan distribusi yang diinginkan
+        $roles = array_merge(
+            array_fill(0, 80, 'participant'), // 80%
+            array_fill(0, 15, 'author'),      // 15%
+            array_fill(0, 5, 'admin')         // 5%
+        );
+
         return [
             // Kita tidak perlu mengambil ID di sini, Laravel bisa melakukannya
             // jika relasi sudah didefinisikan dengan benar.

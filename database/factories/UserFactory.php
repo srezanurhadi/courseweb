@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
+
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
  */
@@ -23,6 +24,14 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+
+        // 1. Buat array besar dengan distribusi yang diinginkan
+        $roles = array_merge(
+            array_fill(0, 80, 'participant'), // 80%
+            array_fill(0, 15, 'author'),      // 15%
+            array_fill(0, 5, 'admin')         // 5%
+        );
+        
         return [
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
@@ -31,9 +40,9 @@ class UserFactory extends Factory
             'remember_token' => Str::random(10),
 
             // Kolom kustom Anda
-            'role' => $this->faker->randomElement(['student', 'instructor']),
-            'no_telp' => $this->faker->phoneNumber(),
-            'image' => $this->faker->imageUrl(640, 640, 'people', true),
+            'role' => $this->faker->randomElement($roles),
+            'no_telp' => '08' . $this->faker->numerify('##########'),
+            
         ];
     }
 

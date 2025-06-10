@@ -9,17 +9,33 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+
     public function run(): void
     {
+        // Admin
         User::create([
-            'name' => 'Reza Nurhadi Saputra',
+            'name' => 'admin',
             'role' => 'admin',
-            'email' => 'rnsaputra12@gmail.com',
-            'password'=> Hash::make('Reza1234')
+            'email' => 'admin@example.com',
+            'password' => Hash::make('admin123'),
         ]);
+
+        // Author
+        User::create([
+            'name' => 'author',
+            'role' => 'author',
+            'email' => 'author@example.com',
+            'password' => Hash::make('author123'),
+        ]);
+
+        // Participant
+        User::create([
+            'name' => 'participant',
+            'role' => 'participant',
+            'email' => 'participant@example.com',
+            'password' => Hash::make('participant123'),
+        ]);
+    
         User::factory()->count(20)->create();
     }
 }
