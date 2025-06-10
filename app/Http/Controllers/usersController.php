@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class usersController extends Controller
 {
@@ -14,7 +15,10 @@ class usersController extends Controller
     public function index()
     {
         $users = User::all();
-        return view('admin.users.index', compact('users'));
+        $admincount = User::where('role', 'admin')->count();
+        $usercount = User::where('role', 'user')->count();
+        $authorcount = User::where('role', 'author')->count();
+        return view('admin.users.index', compact('users','admincount','usercount','authorcount'));
     }
 
     /**
@@ -36,7 +40,7 @@ class usersController extends Controller
             'password' => 'required|min:8|max:255|same:password_confirmation',
             'role' => 'required',
             'no_telp' => 'required',
-            'image' => 'image|file|max:1024'
+            'image' => 'image|file|max:2048'
         ]);
         if ($request->file('image')) {
             $validatedData['image'] = $request->file('image')->store('profile-picture');
@@ -61,7 +65,8 @@ class usersController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $name = User::where('name', $id)->first();
+        return view('admin.users.edit', compact('name'));
     }
 
     /**
@@ -69,7 +74,36 @@ class usersController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+
+        $user = User::where('id', $id)->first();
+        $oldimage = $user->image;
+
+
+        // Langkah 2: Validasi data
+        $rules = [
+            'name' => 'required|string|max:255',
+            'role' => 'required',
+            'no_telp' => 'required',
+            'image' => 'image|file|max:2048'
+        ];
+        if ($request->email != $user->email) {
+            $rules['email'] = 'required|email:dns|unique:users';
+        }
+
+        $validatedData = $request->validate($rules);
+
+        if ($request->file('image')) {
+            if ($oldimage) {
+                Storage::delete($oldimage);
+            }
+            $validatedData['image'] = $request->file('image')->store('profile-picture');
+        }
+        // Langkah 3: Update data user di database
+        $user->update($validatedData);
+
+        // Langkah 4: Redirect ke halaman daftar user dengan pesan sukses
+        // Ganti 'admin.users.index' dengan nama route halaman daftar user Anda
+        return redirect("/admin/users")->with('success', 'User Berhasil diubah');
     }
 
     /**
@@ -77,6 +111,13 @@ class usersController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::where('name', $id)->first();
+
+        if ($user->image) {
+            Storage::delete($user->image);
+        }
+        $user->delete();
+
+        return redirect("/admin/users")->with('success', 'User Berhasil diubah');
     }
 }
