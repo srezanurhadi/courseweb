@@ -68,7 +68,13 @@
                     class="w-full md:w-[50%] bg-white p-8 sm:p-10 lg:p-12 flex flex-col justify-center order-2 md:order-1">
                     <div class="w-full max-w-xs sm:max-w-sm mx-auto">
                         <h2 class="text-2xl md:text-3xl font-bold text-blue-900 mb-12 text-center">Login</h2>
-                        <form action="#" method="POST">
+                        @if (session('success'))
+                            <div class="alert alert-success italic text-green-600 font-bold" role="alert">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+                        <form action="{{ route('login') }}" method="POST">
+                            @csrf
                             <div class="mb-8">
                                 <label for="email" class="sr-only">Email</label>
                                 <div class="relative">
@@ -84,6 +90,9 @@
                                         </svg>
                                     </span>
                                 </div>
+                                @error('email')
+                                    <span class="text-red-600 italic font-bold">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="mb-8">
@@ -109,6 +118,9 @@
                                                 d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
                                         </svg>
                                     </span>
+                                    @error('password')
+                                        <span style="color: red;">{{ $message }}</span>
+                                    @enderror
                                 </div>
                             </div>
 
@@ -133,7 +145,7 @@
                             </div>
                         </form>
                         <p class="mt-8 text-center text-xs sm:text-sm text-gray-600">
-                            Don't have an account yet? <a href="#"
+                            Don't have an account yet? <a href="/register"
                                 class="font-medium text-blue-900 hover:text-blue-600">Register</a>
                         </p>
                     </div>

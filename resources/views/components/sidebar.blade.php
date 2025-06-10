@@ -64,5 +64,16 @@
                 <i class="fas fa-user text-white pl-1"></i>
                 <span class="text-white pl-1 font-semibold text-20">My Profile</span></a>
         @endif
+
+        <div class="p-4 mt-auto">
+            <form method="POST" action="/logout">
+                @csrf
+                <button type="submit"
+                    class="flex items-center w-full p-2 justify-center rounded-lg text-white bg-white/10 shadow-lg hover:bg-white/30 space-x-2 cursor-pointer">
+                    <i class="fas fa-sign-out-alt text-white pl-1 fa-fw"></i>
+                    <span class="font-bold text-20">Logout</span>
+                </button>
+            </form>
+        </div>
     </aside>
 </div>

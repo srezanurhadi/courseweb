@@ -6,6 +6,8 @@ use App\Http\Controllers\usersController;
 use App\Http\Controllers\courseController;
 use App\Http\Controllers\contentController;
 use App\Http\Controllers\myParticipantController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 
 Route::get('/', [homecontroller::class, 'index']);
 
@@ -92,10 +94,15 @@ Route::prefix('/user')->name('user.')->group(function () {
 
 // AUDENA PUNYA
 
-Route::get('/login', function () {
-    return view('user.index');
-});
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+// Proses data dari form login
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/register', function () {
-    return view('user.register');
-});
+// Route::get('/register', function () {
+//     return view('user.register');
+// });
+
+Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+// Proses data dari form register
+Route::post('/register', [RegisterController::class, 'register']);
