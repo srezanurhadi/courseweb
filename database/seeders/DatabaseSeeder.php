@@ -22,9 +22,6 @@ class DatabaseSeeder extends Seeder
             CourseSeeder::class,   // Seeder kursus dijalankan setelah kategori ada
         ]);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+
     }
 }

@@ -51,7 +51,8 @@
                                     </option>
                                     <option value="author" {{ request('category') == 'author' ? 'selected' : '' }}>
                                         Author</option>
-                                    <option value="user" {{ request('category') == 'user' ? 'selected' : '' }}>
+                                    <option value="participant"
+                                        {{ request('category') == 'participant' ? 'selected' : '' }}>
                                         Participant</option>
                                 </select>
                             </div>
@@ -75,7 +76,7 @@
                     class="border-l-4 border-indigo-700 bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl w-1/4 flex justify-between items-center pl-2 ">
                     <div class="p-2 flex flex-col font-semibold ">
                         <div class="text-base text-gray-800">All User</div>
-                        <div class="text-3xl text-indigo-700 pl-4">{{ $users->count() }}</div>
+                        <div class="text-3xl text-indigo-700 pl-4">{{ $userscount }}</div>
                     </div>
                     <div
                         class="rounded-full text-indigo-200 justify-center flex items-center bg-indigo-300 h-10 w-10 m-4">
@@ -135,9 +136,7 @@
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 h-10 w-10">
                                                 @if ($user->image)
-                        
                                                     <img src="{{ asset('storage/' . $user->image) }}"
-
                                                         class="bg-purple-600 object-cover text-white rounded-full h-10 w-10 flex items-center justify-center text-lg font-semibold">
                                                     </img>
                                                 @else
@@ -204,6 +203,9 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+            <div class="mt-4">
+                {{ $users->appends(request()->all())->links() }}
             </div>
             {{-- modal start --}}
             @foreach ($users as $user)
