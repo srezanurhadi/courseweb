@@ -30,7 +30,15 @@ class LoginController extends Controller
             $request->session()->regenerate();
 
             // Redirect ke halaman home setelah login berhasil
-            return redirect()->intended('/user/home');
+            $user = Auth::user();
+            if ($user->role === 'user') {
+                return redirect()->intended('/user/home');
+            } elseif ($user->role === 'admin') {
+                return redirect('/admin/home');
+            } elseif ($user->role === 'author') {
+                return redirect('/author/home');
+            }
+            
         }
 
         // Jika otentikasi gagal

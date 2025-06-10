@@ -103,7 +103,7 @@
                                 <option value="" hidden selected>Select Role</option>
                                 <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
                                 <option value="author" {{ old('role') == 'author' ? 'selected' : '' }}>Author</option>
-                                <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>User</option>
+                                <option value="user" {{ old('role') == 'participant' ? 'selected' : '' }}>participant</option>
                             </select>
 
                             <div

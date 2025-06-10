@@ -8,10 +8,13 @@ use App\Http\Controllers\contentController;
 use App\Http\Controllers\myParticipantController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Middleware\adminMiddleware;
+use App\Http\Middleware\authorMiddleware;
+use App\Http\Middleware\participantMiddleware;
 
-Route::get('/', [homecontroller::class, 'index']);
+Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
 
-Route::prefix('/admin')->group(function () {
+Route::prefix('/admin')->middleware(adminMiddleware::class)->group(function () {
     Route::get('/', [homecontroller::class, 'index']);
     Route::resource('/users', usersController::class);
     Route::resource('/course', courseController::class);
@@ -20,7 +23,7 @@ Route::prefix('/admin')->group(function () {
 });
 
 
-Route::prefix('/author')->group(function () {
+Route::prefix('/author')->middleware(authorMiddleware::class)->group(function () {
     Route::get('/', [homecontroller::class, 'index']);
     Route::resource('/users', usersController::class);
     Route::resource('/course', courseController::class);
@@ -54,7 +57,7 @@ Route::get('/coba', function () {
 });
 
 // AUDENA PUNYA
-Route::prefix('/user')->name('user.')->group(function () {
+Route::prefix('/user')->middleware(participantMiddleware::class)->name('user.')->group(function () {
     Route::get('/home', function () {
         return view('user.home');
     })->name('home');
