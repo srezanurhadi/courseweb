@@ -14,7 +14,7 @@
         <x-sidebar></x-sidebar>
         <div class="flex-1">
             {{-- - Navbar - --}}
-            <nav class="bg-white shadow-md z-10 sticky top-0">
+            <nav class="bg-white shadow-md z-50 sticky top-0">
                 <div class="px-6 py-0.5">
                     <div class="flex items-center justify-between h-16">
                         <div class="flex items-center px-4">
@@ -90,7 +90,7 @@
                                             Development
                                         </div>
                                     </div>
-                                    <a href="/overview"
+                                    <a href="{{ route('user.course.overview') }}"
                                         class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900 hover:text-indigo-900 cursor-pointer">
                                         Tutorial Laravel 12
                                         100% work no debat dan pasti berhasil realllllll pasti bisa yakn betul html dan
@@ -138,7 +138,7 @@
                                 <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-gray-900"> Web Development
                                 </div>
                             </div>
-                            <a href="/useroverviewcourse"
+                            <a href="{{ route('user.course.overview') }}"
                                 class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900 hover:text-indigo-900 cursor-pointer">
                                 Tutorial Laravel 12
                                 100% work no debat dan pasti berhasil realllllll pasti bisa yakn betul html dan lain
@@ -179,7 +179,7 @@
                                 <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-gray-900"> Web Development
                                 </div>
                             </div>
-                            <a href="/useroverviewcourse"
+                            <a href="{{ route('user.course.overview') }}"
                                 class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900 hover:text-indigo-900 cursor-pointer">
                                 Tutorial Laravel 12
                                 100% work no debat dan pasti berhasil realllllll pasti bisa yakn betul html dan lain
@@ -220,7 +220,7 @@
                                 <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-gray-900"> Web Development
                                 </div>
                             </div>
-                            <a href="/useroverviewcourse"
+                            <a href="{{ route('user.course.overview') }}"
                                 class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900 hover:text-indigo-900 cursor-pointer">
                                 Tutorial Laravel 12
                                 100% work no debat dan pasti berhasil realllllll pasti bisa yakn betul html dan lain
@@ -261,7 +261,7 @@
                                 <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-gray-900"> Web Development
                                 </div>
                             </div>
-                            <a href="/useroverviewcourse"
+                            <a href="{{ route('user.course.overview') }}"
                                 class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900 hover:text-indigo-900 cursor-pointer">
                                 Tutorial Laravel 12
                                 100% work no debat dan pasti berhasil realllllll pasti bisa yakn betul html dan lain
