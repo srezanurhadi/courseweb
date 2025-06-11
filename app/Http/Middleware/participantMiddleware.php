@@ -16,7 +16,7 @@ class participantMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-     if (Auth::check() && Auth::user()->role === 'user') {
+        if (Auth::check() && Auth::user()->role === 'participant') {
             return $next($request);
         }
         return redirect('/')->with('error', 'Anda tidak memiliki akses ke halaman ini.');

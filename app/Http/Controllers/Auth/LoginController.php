@@ -31,14 +31,13 @@ class LoginController extends Controller
 
             // Redirect ke halaman home setelah login berhasil
             $user = Auth::user();
-            if ($user->role === 'user') {
+            if ($user->role === 'participant') {
                 return redirect()->intended('/user/home');
             } elseif ($user->role === 'admin') {
                 return redirect('/admin');
             } elseif ($user->role === 'author') {
                 return redirect('/author');
             }
-            
         }
 
         // Jika otentikasi gagal
