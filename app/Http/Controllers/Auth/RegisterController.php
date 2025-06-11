@@ -25,7 +25,7 @@ class RegisterController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ], [
-            'password.min' => 'Password harus minimal 8 karakter',
+            'password.min' => 'Password minimal 8 karakter',
             'password.confirmed' =>'Konfirmasi password tidak cocok',
         ]);
 
