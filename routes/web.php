@@ -105,3 +105,8 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 // Proses data dari form register
 Route::post('/register', [RegisterController::class, 'register']);
+
+// Route untuk halaman syarat dan ketentuan
+Route::get('/terms', function () {
+    return view('terms');
+})->name('terms');

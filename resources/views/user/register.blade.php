@@ -248,7 +248,7 @@
                                 <input id="agree-terms" name="agree-terms" type="checkbox"
                                     class="h-4 w-4 text-gray-300 focus:ring-gray-500 border-gray-300 rounded" required>
                                 <label for="agree-terms" class="ml-2 block font-medium text-gray-400">
-                                    Saya setuju dengan <a href="#"
+                                    Saya setuju dengan <a href="{{ route('terms') }}"
                                         class="text-blue-900 hover:text-blue-600">syarat dan ketentuan</a>
                                 </label>
                             </div>
