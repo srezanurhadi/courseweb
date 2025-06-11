@@ -13,7 +13,8 @@
         <div class="flex flex-1">
             <x-sidebar></x-sidebar>
             <div class="w-full bg-gray-50 flex flex-col">
-                <div class="p-4 shadow-[0px_0px_4px_1px_rgba(0,0,0,0.4)] font-bold flex bg-gray-100 flex-row justify-between sticky top-0">
+                <div
+                    class="p-4 shadow-[0px_0px_4px_1px_rgba(0,0,0,0.4)] font-bold flex bg-gray-100 flex-row justify-between sticky top-0">
                     <div class="text-3xl font-bold pl-4">Management Course</div>
                     <div class="profile flex items-center gap-2 pr-4">
                         <i class="fas fa-bell text-xl"></i>
@@ -97,49 +98,56 @@
                         </div>
                     </div>
                 </div>
-                @foreach ( as )
-                    
-                @endforeach
                 <div class="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-around">
-                    <div
-                        class=" bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden">
+                    @foreach ($courses as $course)
                         <div
-                            class="p-2 h-52 w-full items-start flex justify-between  bg-[url('https://picsum.photos/900/600')] bg-cover bg-center">
-                            <div class="rounded-4xl bg-indigo-200/60 py-1 px-2 text-xs text-gray-900">12 Month Ago</div>
-                            <div class="rounded-4xl bg-green-600 py-1 px-2 text-xs text-gray-200">Published</div>
-                        </div>
-                        <div class="h-46 w-full p-2 flex flex-col mt-2">
-                            <div class="flex justify-between">
-                                <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-gray-900"> Web Development
-                                </div>
-                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                    fill="currentColor" aria-hidden="true">
-                                    <path
-                                        d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                                </svg>
-                            </div>
-                            <div class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900">Tutorial Laravel 12
-                                100% work no debat dan pasti berhasil realllllll pasti bisa yakn betul html dan lain
-                                lain</div>
-                            <div class="pl-2 pt-2 text-sm text-gray-500 line-clamp-2">Pelajari laravel 12 dengan
-                                sungguh-sungguh
-                                maka anda akan aman dan sehat sentosa</div>
-                            <div class="flex justify-between">
-                                <div class="flex items-center pt-2 pl-2">
-                                    <div
-                                        class="rounded-full h-6 w-6 bg-indigo-700 text-indigo-200 justify-center flex items-center">
-                                        P</div>
-                                    <div class="pl-2 text-sm text-gray-600">Prawowo</div>
-                                </div>
-                                <div class="flex items-center pt-2 gap-2">
-                                    <i class="fas fa-users-line text-indigo-700"></i>
-                                    <div class="text-sm text-gray-600">0.5% Participant</div>
-                                </div>
-                            </div>
+                            class=" bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden">
+                            <div class="p-2 h-52 w-full items-start flex justify-between  bg-cover bg-center"
+                                style="background-image: url('https://picsum.photos/900/600?random={{ $course->id }}');">
 
+                                <div class="rounded-4xl bg-indigo-200/60 py-1 px-2 text-xs text-gray-900">
+                                    {{ $course->created_at->diffForHumans() }}
+                                </div>
+                                @if ($course->status)
+                                    <div class="rounded-4xl bg-green-600 py-1 px-2 text-xs text-gray-200">Published
+                                    </div>
+                                @else
+                                    <div class="rounded-4xl bg-red-600 py-1 px-2 text-xs text-gray-200">Draft
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="h-46 w-full p-2 flex flex-col justify-around mt-2">
+                                <div class="flex justify-between">
+                                    <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-gray-900">
+                                        {{ $course->category->category }}
+                                    </div>
+                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                        fill="currentColor" aria-hidden="true">
+                                        <path
+                                            d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                                    </svg>
+                                </div>
+                                <div class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900">
+                                    {{ $course->title }}</div>
+                                <div class="pl-2 pt-2 text-sm text-gray-500 line-clamp-2">
+                                    {{ $course->description }}</div>
+                                <div class="flex justify-between">
+                                    <div class="flex items-center pt-2 pl-2">
+                                        <div
+                                            class="rounded-full h-6 w-6 bg-indigo-700 text-indigo-200 justify-center flex items-center">
+                                            {{ substr($course->user->name, 0, 1) }}</div>
+                                        <div class="pl-2 text-sm text-gray-600">{{ $course->user->name }}</div>
+                                    </div>
+                                    <div class="flex items-center pt-2 gap-2">
+                                        <i class="fas fa-users-line text-indigo-700"></i>
+                                        <div class="text-sm text-gray-600">0.5% Participant</div>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
-                    </div>
-                    <div
+                    @endforeach
+                    {{-- <div
                         class=" bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden">
                         <div
                             class="p-2 h-52 w-full items-start flex justify-between  bg-[url('https://picsum.photos/902/600')] bg-cover bg-center">
@@ -330,7 +338,7 @@
                             </div>
 
                         </div>
-                    </div>
+                    </div> --}}
 
                 </div>
             </div>

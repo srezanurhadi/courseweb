@@ -13,16 +13,27 @@
     <div class="flex flex-1 relative">
         <x-sidebar></x-sidebar>
         <div class="flex-1 bg-gray-50 flex flex-col p-4">
-            <form action="">
+            <form action="/admin/course" method="POST" enctype="multipart/form-data">
+                @csrf
                 <div
                     class="bg-gray-100 h-full p-4 pl-6 rounded-lg shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] flex flex-col gap-2">
                     <h1 class="font-bold text-3xl pt-2">Create New Course</h1>
+
+                    {{-- title --}}
                     <div class="mb-4">
                         <label for="title" class="text-sm">Course Title<span class="text-red-500">*</span></label>
-                        <input type="text" name="title" id="title"
-                            class="w-full
-                                px-3 py-2 border-2 border-gray-300 bg-gray-50 rounded-md focus:outline-none focus:border-indigo-500">
+                        <input type="text" name="title" id="title" value="{{ old('title') }}"
+                            class="@error('title') is-invalid @enderror w-full
+                                px-3 py-2 border-2 border-gray-300 bg-gray-50 rounded-md focus:outline-none focus:border-indigo-500"
+                            required>
+                        @error('title')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
                     </div>
+
+                    {{-- image --}}
                     <div class="mb-4">
                         <label for="image" lass="block text-sm font-medium text-gray-700 mb-1">Upload Gambar
                             Galeri <span class="text-red-500">*</span></label>
@@ -55,12 +66,17 @@
                                 class="w-100 aspect-4/3 object-cover object-center border-2 border-gray-400 rounded-md"
                                 alt="Image preview" />
                         </div>
+                        @error('image')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
+
+                    {{-- description --}}
                     <div class="mb-4">
                         <label for="description" class="text-sm">Course Description<span
                                 class="text-red-500">*</span></label>
                         <textarea name="description" id="description" rows="4"
-                            class="w-full bg-gray-50 border-2 border-gray-300 rounded-lg" placeholder=""></textarea>
+                            class="w-full bg-gray-50 border-2 border-gray-300 rounded-lg p-2" placeholder="Description of the course...">{{ old('description') }}</textarea>
                     </div>
                     <div class="mb-4">
                         <div
@@ -69,7 +85,7 @@
                                 <label for="course-content" class="text-sm">Course Content<span
                                         class="text-red-500">*</span></label>
                                 <button id="add_content" class="text-sm rounded-lg bg-indigo-700 text-gray-50 p-2">+
-                                    add course</button>
+                                    add content</button>
                             </div>
                             <div class="text-sm text-gray-700 p-4">No content add yet. click "Add Content" to Add
                                 course materials</div>
@@ -159,8 +175,10 @@
                                 class="text-red-500">*</span></label>
                         <select name="category" id="category"
                             class="w-full bg-gray-50 border-2 border-gray-300 rounded-lg p-2 text-sm text-gray-700">
-                            <option value="">Choose Category
-                            </option>
+                            @foreach ($categories as $category)
+                                <option value="" hidden selected>Select Category</option>
+                                <option value="{{ $category->id }}">{{ $category->category }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="mb-4">
@@ -178,9 +196,9 @@
                             <div onclick="window.location.href='{{ url('/admin/course') }}'"
                                 class="py-2 w-34 text-indigo-700 bg-gray-50 border-2 border-indigo-700 rounded-lg text-center">
                                 Cancel</div>
-                            <div
+                            <button type="submit"
                                 class="py-2 w-34 text-gray-50 bg-indigo-700 border-2 border-indigo-700 rounded-lg text-center">
-                                Save</div>
+                                Save</button>
                         </div>
                     </div>
                 </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class courseController extends Controller
@@ -10,9 +11,13 @@ class courseController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('admin.course.index');
+
+
+        $courses = Course::all(); // atau pakai pagination, dsb
+
+        return view('admin.course.index', compact('courses'));
     }
 
     /**
@@ -20,7 +25,8 @@ class courseController extends Controller
      */
     public function create()
     {
-        return view('admin.course.create');
+        $categories = Category::orderBy('category')->get();
+        return view('admin.course.create', compact('categories'));
     }
 
     /**
@@ -28,7 +34,29 @@ class courseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+
+
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:150',
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'description' => 'required|string',
+            'category' => 'required|exists:categories,id',
+            'status' => 'nullable'
+
+        ]);
+
+
+        if ($request->file('image')) {
+            $validatedData['image'] = $request->file('image')->store('course-images');
+        }
+
+        $validatedData['status'] = $request->has('status') ? 1 : 0;
+
+        dd($request->all());
+
+
+        return redirect("/admin/course")->with('success', 'Course Berhasil Ditambahkan');
     }
 
     /**
