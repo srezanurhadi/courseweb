@@ -69,7 +69,7 @@
                     <div class="w-full max-w-xs sm:max-w-sm mx-auto">
                         <h2 class="text-2xl md:text-3xl font-bold text-blue-900 mb-12 text-center">Login</h2>
                         @if (session('success'))
-                            <div class="alert alert-success italic text-green-600 font-bold" role="alert">
+                            <div class="alert-success text-green-600 mt-1 font-xs" role="alert">
                                 {{ session('success') }}
                             </div>
                         @endif
