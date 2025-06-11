@@ -3,7 +3,8 @@
         <div class="text-white text-3xl mt-4 pl-6 font-bold">R. DOSEN</div>
 
         @if (Request::is('admin*') || Request::is('author*'))
-            <a href="" class="m-6 mr-2 p-2 rounded-lg border-l-8 border-white bg-white/20 shadow-lg">
+            <a href="{{ url('/admin') }}"
+                class="{{ Request::is('admin') ? 'border-white bg-white/20 shadow-lg' : '' }} m-6 mr-2 p-2 rounded-lg border-l-8 border-white/30">
                 <i class="fas fa-gauge text-white pl-1"></i>
                 <span class="text-white pl-1 font-semibold text-20">Dashboard</span></a>
         @elseif (Request::is('user*'))

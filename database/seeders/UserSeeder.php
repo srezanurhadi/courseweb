@@ -20,22 +20,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('admin123'),
         ]);
 
-        // Author
-        User::create([
-            'name' => 'author',
-            'role' => 'author',
-            'email' => 'author@example.com',
-            'password' => Hash::make('author123'),
-        ]);
 
-        // Participant
-        User::create([
-            'name' => 'participant',
-            'role' => 'participant',
-            'email' => 'participant@example.com',
-            'password' => Hash::make('participant123'),
-        ]);
-    
         User::factory()->count(20)->create();
     }
 }

@@ -24,6 +24,9 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ], [
+            'password.min' => 'Password minimal 8 karakter',
+            'password.confirmed' =>'Konfirmasi password tidak cocok',
         ]);
 
         // 2. Jika validasi berhasil, buat user baru
@@ -31,10 +34,10 @@ class RegisterController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'user', // Otomatis set role sebagai 'user'
+            'role' => 'participant', // Otomatis set role sebagai 'participant'
         ]);
 
-        // 4. Redirect ke halaman login
+        // 4. Redirect ke halaman home
         return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login.');
     }
 }

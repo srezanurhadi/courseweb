@@ -36,9 +36,11 @@
                             <div class="flex items-center space-x-2 px-3">
                                 <span
                                     class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-neutral-300">
-                                    <span class="text-xl font-semibold leading-none text-gray-700">A</span>
+                                    <span
+                                        class="text-xl font-semibold leading-none text-gray-700">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
                                 </span>
-                                <span class="text-xl font-semibold text-gray-700">User</span>
+                                <span
+                                    class="text-xl font-semibold text-gray-700">{{ explode(' ', Auth::user()->name)[0] }}</span>
                             </div>
                         </div>
                     </div>

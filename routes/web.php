@@ -8,10 +8,13 @@ use App\Http\Controllers\contentController;
 use App\Http\Controllers\myParticipantController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Middleware\adminMiddleware;
+use App\Http\Middleware\authorMiddleware;
+use App\Http\Middleware\participantMiddleware;
 
-Route::get('/', [homecontroller::class, 'index']);
+Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
 
-Route::prefix('/admin')->group(function () {
+Route::prefix('/admin')->middleware(adminMiddleware::class)->group(function () {
     Route::get('/', [homecontroller::class, 'index']);
     Route::resource('/users', usersController::class);
     Route::resource('/course', courseController::class);
@@ -20,7 +23,7 @@ Route::prefix('/admin')->group(function () {
 });
 
 
-Route::prefix('/author')->group(function () {
+Route::prefix('/author')->middleware(authorMiddleware::class)->group(function () {
     Route::get('/', [homecontroller::class, 'index']);
     Route::resource('/users', usersController::class);
     Route::resource('/course', courseController::class);
@@ -28,7 +31,6 @@ Route::prefix('/author')->group(function () {
 });
 
 //BAGUSSS PUNYAAA DO NOT TOCHHH PLSS, THANKS b(^_^)d//
-
 
 Route::get('/author', function () {
     return view('author.course.index');
@@ -54,7 +56,7 @@ Route::get('/coba', function () {
 });
 
 // AUDENA PUNYA
-Route::prefix('/user')->name('user.')->group(function () {
+Route::prefix('/user')->middleware(participantMiddleware::class)->name('user.')->group(function () {
     Route::get('/home', function () {
         return view('user.home');
     })->name('home');
@@ -99,10 +101,12 @@ Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-// Route::get('/register', function () {
-//     return view('user.register');
-// });
 
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 // Proses data dari form register
 Route::post('/register', [RegisterController::class, 'register']);
+
+// Route untuk halaman syarat dan ketentuan
+Route::get('/terms', function () {
+    return view('terms');
+})->name('terms');

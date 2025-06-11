@@ -15,12 +15,11 @@ class usersController extends Controller
     public function index(Request $request)
     {
         $users = User::all();
+        $userscount = User::all()->count();
         $admincount = User::where('role', 'admin')->count();
-        $usercount = User::where('role', 'user')->count();
+        $usercount = User::where('role', 'participant')->count();
         $authorcount = User::where('role', 'author')->count();
-
         $query = User::query();
-
         // 1. Filter berdasarkan keyword pencarian
         if ($request->has('search') && $request->input('search') != '') {
             $search = $request->input('search');
@@ -35,9 +34,8 @@ class usersController extends Controller
             $category = $request->input('category');
             $query->where('role', $category);
         }
-
-        $users = $query->latest()->paginate(10);
-        return view('admin.users.index', compact('users', 'admincount', 'usercount', 'authorcount'));
+        $users = $query->latest()->paginate(10)->onEachSide(1);
+        return view('admin.users.index', compact('users', 'admincount', 'usercount', 'authorcount','userscount'));
     }
 
     /**
