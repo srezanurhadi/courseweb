@@ -31,10 +31,10 @@ class RegisterController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'user', // Otomatis set role sebagai 'user'
+            'role' => 'participant', // Otomatis set role sebagai 'participant'
         ]);
 
-        // 4. Redirect ke halaman login
+        // 4. Redirect ke halaman home
         return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login.');
     }
 }
