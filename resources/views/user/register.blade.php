@@ -193,7 +193,7 @@
                                 <div class="relative">
                                     <input type="password" id="password_input" name="password"
                                         class="w-full pl-4 pr-10 py-3 border border-blue-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 placeholder-gray-400 text-sm"
-                                        placeholder="Password" required>
+                                        placeholder="Password" required minlength="8">
                                     <span id="togglePassword"
                                         class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-gray-400 hover:text-gray-600">
                                         <svg id="eye_icon_open" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -212,6 +212,10 @@
                                         </svg>
                                     </span>
                                 </div>
+                                @error('password')
+                                    <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                                @enderror
+                                <p id="password_error" class="mt-1 text-xs text-red-500 hidden">Password harus minimal 8 karakter</p>
                             </div>
 
                             <div class="mb-6">
@@ -272,6 +276,17 @@
         const passwordInput = document.getElementById('password_input');
         const eyeIconOpen = document.getElementById('eye_icon_open');
         const eyeIconClosed = document.getElementById('eye_icon_closed');
+        const passwordError = document.getElementById('password_error');
+
+        if (passwordInput) {
+            passwordInput.addEventListener('input', function() {
+                if (this.value.length > 0 && this.value.length < 8) {
+                    passwordError.classList.remove('hidden');
+                } else {
+                    passwordError.classList.add('hidden');
+                }
+            });
+        }
 
         if (togglePasswordButton && passwordInput && eyeIconOpen && eyeIconClosed) {
             togglePasswordButton.addEventListener('click', function() {
