@@ -91,7 +91,7 @@
                                     </span>
                                 </div>
                                 @error('email')
-                                    <span class="text-red-600 italic font-bold">{{ $message }}</span>
+                                    <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                                 @enderror
                             </div>
 
@@ -119,7 +119,7 @@
                                         </svg>
                                     </span>
                                     @error('password')
-                                        <span style="color: red;">{{ $message }}</span>
+                                        <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                                     @enderror
                                 </div>
                             </div>
