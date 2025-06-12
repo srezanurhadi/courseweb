@@ -27,14 +27,18 @@ class Course extends Model
         'status',
     ];
 
-
+    // Mendefinisikan relasi bahwa Course ini dibuat oleh satu User (Author).
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
+<<<<<<< HEAD
+    // Mendefinisikan relasi bahwa Course ini milik satu Category.
+=======
+>>>>>>> 644a6d711fbcce2884a155d684f77a41de53475f
     public function category(): BelongsTo
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class, 'category_id');
     }
 }
