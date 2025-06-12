@@ -81,13 +81,10 @@ Route::prefix('/user')->middleware(participantMiddleware::class)->name('user.')-
         return view('user.history');
     })->name('history');
 
-    Route::get('/profile', function () {
-        return view('user.myprofile.index');
-    })->name('profile');
-
-    Route::get('/profile/edit', function () {
-        return view('user.myprofile.edit');
-    })->name('profile.edit');
+    // Rute Profil yang sudah benar
+    Route::get('/profile', [myParticipantController::class, 'showProfile'])->name('profile');
+    Route::get('/profile/edit', [myParticipantController::class, 'editProfile'])->name('profile.edit');
+    Route::post('/profile/update', [myParticipantController::class, 'updateProfile'])->name('profile.update'); // Nama sudah benar
 
     Route::get('/profile/course/{id}', function ($id) {
         return view('user.myprofile.detail', ['courseId' => $id]);
@@ -105,3 +102,8 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 // Proses data dari form register
 Route::post('/register', [RegisterController::class, 'register']);
+
+// Route untuk halaman syarat dan ketentuan
+Route::get('/terms', function () {
+    return view('user.terms');
+})->name('terms');

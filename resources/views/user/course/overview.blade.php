@@ -30,11 +30,22 @@
                                 <i class="fa-regular fa-bell fa-lg text-black hover:text-gray-600"></i>
                             </button>
                             <div class="flex items-center space-x-2 px-3">
-                                <span
-                                    class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-neutral-300">
-                                    <span class="text-xl font-semibold leading-none text-gray-700">A</span>
+                                <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-neutral-300 overflow-hidden">
+                                    @if (Auth::user()->image)
+                                        {{-- Jika user punya foto, tampilkan foto --}}
+                                        <img src="{{ asset('storage/' . Auth::user()->image) }}" 
+                                            alt="{{ Auth::user()->name }}" 
+                                            class="w-full h-full object-cover">
+                                    @else
+                                        {{-- Jika tidak ada foto, tampilkan inisial --}}
+                                        <span class="text-xl font-semibold leading-none text-gray-700">
+                                            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                                        </span>
+                                    @endif
                                 </span>
-                                <span class="text-xl font-semibold text-gray-700">User</span>
+                                <span class="text-xl font-semibold text-gray-700">
+                                    {{ explode(' ', Auth::user()->name)[0] }}
+                                </span>
                             </div>
                         </div>
                     </div>

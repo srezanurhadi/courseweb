@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\MyParticipant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class myParticipantController extends Controller
 {
@@ -61,5 +64,70 @@ class myParticipantController extends Controller
     public function destroy(MyParticipant $myParticipant)
     {
         //
+    }
+
+    /**
+     * Menampilkan halaman profil utama milik participant.
+     */
+    public function showProfile()
+    {
+        $user = Auth::user(); // Ambil data pengguna yang sedang login
+        return view('user.myprofile.index', compact('user')); // Kirim data ke view 'index'
+    }
+
+    /**
+     * Menampilkan halaman untuk mengedit profil.
+     */
+    public function editProfile()
+    {
+        $user = Auth::user(); // Ambil data pengguna yang sedang login
+        return view('user.myprofile.edit', compact('user')); // Kirim data ke view 'edit'
+    }
+
+    /**
+     * Method lain bisa ditambahkan di sini nanti jika perlu.
+     */
+    public function updateProfile(Request $request)
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        // Validasi, tambahkan aturan untuk 'image'
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'no_telp' => 'required|string|min:10|max:15',
+            'password' => 'nullable|string|min:8',
+            'image' => 'nullable|image|file|max:2048', // Boleh kosong, harus gambar, maks 2MB
+            'delete_photo' => 'nullable|boolean', // Untuk flag hapus foto
+        ]);
+
+        // Proses password jika diisi
+        if (!empty($validatedData['password'])) {
+            $validatedData['password'] = Hash::make($validatedData['password']);
+        } else {
+            unset($validatedData['password']);
+        }
+
+        // PROSES FOTO PROFIL
+        if ($request->has('delete_photo') && $request->delete_photo == '1') {
+            // Hapus foto jika ada dan delete_photo bernilai true
+            if ($user->image) {
+                Storage::disk('public')->delete($user->image);
+                $validatedData['image'] = null; // Set kolom image ke null
+            }
+        } elseif ($request->file('image')) {
+            // Upload foto baru jika ada
+            // 1. Hapus gambar lama jika ada
+            if ($user->image) {
+                Storage::disk('public')->delete($user->image);
+            }
+            // 2. Simpan gambar baru dan dapatkan path-nya
+            $validatedData['image'] = $request->file('image')->store('profile-pictures', 'public');
+        }
+
+        // Update data pengguna
+        $user->update($validatedData);
+
+        return redirect()->route('user.profile')->with('success', 'Profile berhasil diperbarui!');
     }
 }

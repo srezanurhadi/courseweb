@@ -30,11 +30,22 @@
                                 <i class="fa-regular fa-bell fa-lg text-black hover:text-gray-600"></i>
                             </button>
                             <div class="flex items-center space-x-2 px-3">
-                                <span
-                                    class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-neutral-300">
-                                    <span class="text-xl font-semibold leading-none text-gray-700">A</span>
+                                <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-neutral-300 overflow-hidden">
+                                    @if (Auth::user()->image)
+                                        {{-- Jika user punya foto, tampilkan foto --}}
+                                        <img src="{{ asset('storage/' . Auth::user()->image) }}" 
+                                            alt="{{ Auth::user()->name }}" 
+                                            class="w-full h-full object-cover">
+                                    @else
+                                        {{-- Jika tidak ada foto, tampilkan inisial --}}
+                                        <span class="text-xl font-semibold leading-none text-gray-700">
+                                            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                                        </span>
+                                    @endif
                                 </span>
-                                <span class="text-xl font-semibold text-gray-700">User</span>
+                                <span class="text-xl font-semibold text-gray-700">
+                                    {{ explode(' ', Auth::user()->name)[0] }}
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -50,6 +61,13 @@
                             <h2 class="text-xl font-bold text-gray-800">Profile</h2>
                         </div>
 
+                        {{-- Tampilkan pesan sukses jika ada dengan auto hide --}}
+                        @if (session('success'))
+                            <div id="success-message" class="mb-4 p-4 bg-green-100 text-green-800 border border-green-300 rounded-md transition-opacity duration-500">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+
                         <section class="mb-8 rounded-md border border-gray-300 shadow-md bg-white">
                             <!-- Profile content -->
                             <div class="p-4 lg:p-6 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
@@ -61,22 +79,21 @@
                                                 Name</label>
                                             <input
                                                 class="border border-gray-400 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 w-full max-w-xs"
-                                                id="fullname" type="text" value="Roro Jonggrang" readonly />
+                                                id="fullname" type="text" value="{{ $user->name }}" readonly />
                                         </div>
                                         <div class="flex flex-col">
                                             <label class="text-sm font-semibold mb-1 select-none"
                                                 for="email">Email</label>
                                             <input
                                                 class="border border-gray-400 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 w-full max-w-xs"
-                                                id="email" type="email" value="rorojonggrang@gmail.com"
-                                                readonly />
+                                                id="email" type="email" value="{{ $user->email }}"readonly />
                                         </div>
                                         <div class="flex flex-col">
                                             <label class="text-sm font-semibold mb-1 select-none"
                                                 for="handphone">Handphone</label>
                                             <input
                                                 class="border border-gray-400 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 w-full max-w-xs"
-                                                id="handphone" type="text" value="081234567890" readonly />
+                                                id="handphone" type="text" value="{{ $user->no_telp }}" readonly />
                                         </div>
                                         <div class="flex flex-col">
                                             <label class="text-sm font-semibold mb-1 select-none"
@@ -90,7 +107,7 @@
                                                 Date</label>
                                             <input
                                                 class="border border-gray-400 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 w-full max-w-xs"
-                                                id="joindate" type="text" value="2020" readonly />
+                                                id="joindate" type="text" value="{{ $user->created_at->format('Y') }}" readonly />
                                         </div>
                                         <div class="flex flex-col">
                                             <label class="text-sm font-semibold mb-1 select-none" for="enddate">End
@@ -107,20 +124,35 @@
                                 </div>
 
                                 <!-- Profile Photo Section - Now on the right side -->
-                                <div class="flex flex-col items-center gap-4 lg:w-1/3 order-first lg:order-last">
+                               <div class="flex flex-col items-center gap-4 lg:w-1/3 order-first lg:order-last">
                                     <div class="relative">
-                                        <div
-                                            class="w-32 h-32 sm:w-54 sm:h-54 rounded-full bg-indigo-100 flex items-center justify-center overflow-hidden">
-                                            <!-- Initials as fallback -->
-                                            <span class="text-3xl sm:text-4xl font-semibold text-indigo-700">RJ</span>
+                                        <input type="file" id="image" name="image" class="hidden" accept="image/*">
+
+                                        <div id="image-container" class="w-32 h-32 sm:w-54 sm:h-54 rounded-full bg-indigo-100 flex items-center justify-center overflow-hidden">
+                                            @if ($user->image)
+                                                {{-- Jika pengguna punya gambar, tampilkan gambar tersebut --}}
+                                                <img id="image-preview" src="{{ asset('storage/' . $user->image) }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
+                                            @else
+                                                {{-- Jika tidak, tampilkan preview dari file yg baru dipilih (awalnya kosong) --}}
+                                                <img id="image-preview" src="#" alt="Image Preview" class="w-full h-full object-cover hidden">
+                                                {{-- Dan tampilkan inisial sebagai default --}}
+                                                <span id="initials-preview" class="text-3xl sm:text-4xl font-semibold text-indigo-700">
+                                                    @php
+                                                        $words = explode(' ', $user->name);
+                                                        $initials = strtoupper(substr($words[0], 0, 1));
+                                                        if (isset($words[1])) { $initials .= strtoupper(substr($words[1], 0, 1)); }
+                                                    @endphp
+                                                    {{ $initials }}
+                                                </span>
+                                            @endif
                                         </div>
-                                        <button
-                                            class="absolute bottom-0 right-0 bg-white rounded-full p-3 shadow-md hover:bg-gray-100">
+
+                                        <label for="image" class="cursor-pointer absolute bottom-0 right-0 bg-white rounded-full p-3 shadow-md hover:bg-gray-100">
                                             <i class="fas fa-camera text-indigo-700 text-md"></i>
-                                        </button>
+                                        </label>
                                     </div>
                                     <div class="text-center">
-                                        <h3 class="text-lg font-semibold text-gray-800">Roro Jonggrang</h3>
+                                        <h3 class="text-lg font-semibold text-gray-800">{{ $user->name }}</h3>
                                         <p class="text-sm text-gray-500">Participant</p>
                                     </div>
                                 </div>
@@ -225,6 +257,23 @@
             </main>
         </div>
     </div>
+
+    {{-- JavaScript untuk auto hide success message --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const successMessage = document.getElementById('success-message');
+            if (successMessage) {
+                // Hilangkan pesan setelah 4 detik (4000ms)
+                setTimeout(function() {
+                    successMessage.style.opacity = '0';
+                    // Hapus element setelah animasi selesai
+                    setTimeout(function() {
+                        successMessage.remove();
+                    }, 500); // 500ms untuk durasi transition opacity
+                }, 4000); // 4 detik
+            }
+        });
+    </script>
 </body>
 
 </html>
