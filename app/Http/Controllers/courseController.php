@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use App\Models\Category;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class courseController extends Controller
 {
@@ -15,7 +17,8 @@ class courseController extends Controller
     {
 
 
-        $courses = Course::all(); // atau pakai pagination, dsb
+        $courses = Course::orderBy('updated_at', 'desc')->paginate(9)->onEachSide(1);
+
 
         return view('admin.course.index', compact('courses'));
     }
@@ -53,8 +56,13 @@ class courseController extends Controller
 
         $validatedData['status'] = $request->has('status') ? 1 : 0;
 
-        dd($request->all());
+        $validatedData['user_id'] = Auth::user()->id;
 
+        $validatedData['category_id'] = $request->input('category');
+
+        $validatedData['slug'] = Str::slug($request->input('title'));
+
+        Course::create($validatedData);
 
         return redirect("/admin/course")->with('success', 'Course Berhasil Ditambahkan');
     }

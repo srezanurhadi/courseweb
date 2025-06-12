@@ -341,6 +341,9 @@
                     </div> --}}
 
                 </div>
+                <div class="mt-4">
+                    {{ $courses->appends(request()->all())->links() }}
+                </div>
             </div>
         </div>
     </body>
