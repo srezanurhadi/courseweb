@@ -10,9 +10,10 @@ class contentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('admin.content.index');
+        $contents = Content::orderBy('updated_at', 'desc')->paginate(10)->onEachSide(1);
+        return view('admin.content.index',compact('contents'));
     }
 
     /**

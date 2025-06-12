@@ -41,7 +41,7 @@ class courseController extends Controller
 
 
         $validatedData = $request->validate([
-            'title' => 'required|string|max:150',
+            'title' => 'required|string|max:150|unique:courses,title',
             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'description' => 'required|string',
             'category' => 'required|exists:categories,id',

@@ -111,87 +111,48 @@
                     </div>
                     {{-- data --}}
                     <div class="space-y-4 px-4 py-4">
-
-                        <div class="flex items-center bg-amber-100 rounded-lg shadow-md text-sm font-medium">
-                            <div class="px-6 py-3 w-4/12 text-gray-900">
-                                <div class="flex items-center">
-                                    <div
-                                        class="flex-shrink-0 h-8 w-8 rounded-md bg-amber-500 flex items-center justify-center text-white">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L1.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09l2.846.813-.813 2.846a4.5 4.5 0 00-3.09 3.09zM18.25 12L17 14.25l-1.25-2.25L13.5 11l2.25-1.25L17 7.5l1.25 2.25L20.5 11l-2.25 1.25z" />
-                                        </svg>
-                                    </div>
-                                    <div class="ml-4 truncate">
-                                        Tutorial Laravel 12 2024 mantap Terpercaya work 100% dijamin jago
+                        @foreach ($contents as $content)
+                            <div class="flex items-center bg-amber-100 rounded-lg shadow-md text-sm font-medium">
+                                <div class="px-6 py-3 w-4/12 text-gray-900">
+                                    <div class="flex items-center">
+                                        <div
+                                            class="flex-shrink-0 h-8 w-8 rounded-md bg-amber-500 flex items-center justify-center text-white">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L1.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09l2.846.813-.813 2.846a4.5 4.5 0 00-3.09 3.09zM18.25 12L17 14.25l-1.25-2.25L13.5 11l2.25-1.25L17 7.5l1.25 2.25L20.5 11l-2.25 1.25z" />
+                                            </svg>
+                                        </div>
+                                        <div class="ml-4 truncate">
+                                            {{ $content->title }} 
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="px-6 py-3 w-2/12 text-gray-700 truncate">Bagus Prag...</div>
-                            <div class="px-6 py-3 w-2/12 text-gray-700 truncate">Laravel</div>
-                            <div class="px-6 py-3 w-2/12 text-gray-700">12-10-2025</div>
-                            <div class="px-6 py-3 w-2/12">
-                                <div class="flex items-center space-x-2">
-                                    <button
-                                        class="w-8 h-8 rounded-sm bg-sky-500 hover:bg-sky-600 text-white flex items-center justify-center"
-                                        aria-label="Lihat">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button
-                                        class="w-8 h-8 rounded-sm bg-amber-400 hover:bg-amber-500 text-white flex items-center justify-center"
-                                        aria-label="Ubah">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </button>
-                                    <button
-                                        class="w-8 h-8 rounded-sm bg-red-500 hover:bg-red-600 text-white flex items-center justify-center"
-                                        aria-label="Hapus">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex items-center bg-rose-100 rounded-lg shadow-md text-sm font-medium">
-                            <div class="px-6 py-3 w-4/12 text-gray-900">
-                                <div class="flex items-center">
-                                    <div
-                                        class="flex-shrink-0 h-8 w-8 rounded-md bg-pink-500 flex items-center justify-center text-white">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z">
-                                            </path>
-                                        </svg>
-                                    </div>
-                                    <div class="ml-4 truncate">
-                                        Tutorial PHP OOP 2024 Lengkap Mudah Dipahami
+                                <div class="px-6 py-3 w-2/12 text-gray-700 truncate">{{ optional($content->creator)->name ?? 'Tidak diketahui' }}</div>
+                                <div class="px-6 py-3 w-2/12 text-gray-700 truncate">Laravel</div>
+                                <div class="px-6 py-3 w-2/12 text-gray-700">{{ $content->created_at->format('d-m-Y') }}</div>
+                                <div class="px-6 py-3 w-2/12">
+                                    <div class="flex items-center space-x-2">
+                                        <button
+                                            class="w-8 h-8 rounded-sm bg-sky-500 hover:bg-sky-600 text-white flex items-center justify-center"
+                                            aria-label="Lihat">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button
+                                            class="w-8 h-8 rounded-sm bg-amber-400 hover:bg-amber-500 text-white flex items-center justify-center"
+                                            aria-label="Ubah">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </button>
+                                        <button
+                                            class="w-8 h-8 rounded-sm bg-red-500 hover:bg-red-600 text-white flex items-center justify-center"
+                                            aria-label="Hapus">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="px-6 py-3 w-2/12 text-gray-700 truncate">Siti Aminah</div>
-                            <div class="px-6 py-3 w-2/12 text-gray-700 truncate">PHP</div>
-                            <div class="px-6 py-3 w-2/12 text-gray-700">11-10-2025</div>
-                            <div class="px-6 py-3 w-2/12">
-                                <div class="flex items-center space-x-2">
-                                    <button
-                                        class="w-8 h-8 rounded-sm bg-sky-500 hover:bg-sky-600 text-white flex items-center justify-center"
-                                        aria-label="Lihat">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button
-                                        class="w-8 h-8 rounded-sm bg-amber-400 hover:bg-amber-500 text-white flex items-center justify-center"
-                                        aria-label="Ubah">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </button>
-                                    <button
-                                        class="w-8 h-8 rounded-sm bg-red-500 hover:bg-red-600 text-white flex items-center justify-center"
-                                        aria-label="Hapus">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
+                        @endforeach
+                        
                     </div>
                 </div>
             </div>

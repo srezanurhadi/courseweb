@@ -27,7 +27,7 @@
                                 px-3 py-2 border-2 border-gray-300 bg-gray-50 rounded-md focus:outline-none focus:border-indigo-500"
                             required>
                         @error('title')
-                            <div class="invalid-feedback">
+                            <div class="invalid-feedback text-red-600 italic">
                                 {{ $message }}
                             </div>
                         @enderror

@@ -12,7 +12,7 @@ class CourseSeeder extends Seeder
      */
     public function run(): void
     {
-        Course::truncate();
+        Course::query()->delete();
         Course::factory()->count(20)->create();
     }
 }
