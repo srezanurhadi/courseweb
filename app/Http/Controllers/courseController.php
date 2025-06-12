@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\Content;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -29,7 +30,8 @@ class courseController extends Controller
     public function create()
     {
         $categories = Category::orderBy('category')->get();
-        return view('admin.course.create', compact('categories'));
+        $contents = Content::orderBy('updated_at', 'desc')->paginate(10)->onEachSide(1);
+        return view('admin.course.create', compact('categories', 'contents'));
     }
 
     /**

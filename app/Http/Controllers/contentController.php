@@ -13,7 +13,7 @@ class contentController extends Controller
     public function index(Request $request)
     {
         $contents = Content::orderBy('updated_at', 'desc')->paginate(10)->onEachSide(1);
-        return view('admin.content.index',compact('contents'));
+        return view('admin.content.index', compact('contents'));
     }
 
     /**
