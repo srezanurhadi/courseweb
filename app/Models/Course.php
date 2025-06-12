@@ -33,6 +33,7 @@ class Course extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    // Mendefinisikan relasi bahwa Course ini milik satu Category.
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'category_id');
