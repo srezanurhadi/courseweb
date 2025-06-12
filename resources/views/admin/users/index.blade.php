@@ -204,7 +204,7 @@
                     </table>
                 </div>
             </div>
-            <div class="mt-4">
+            <div class="mt-4 mb-10">
                 {{ $users->appends(request()->all())->links() }}
             </div>
             {{-- modal start --}}

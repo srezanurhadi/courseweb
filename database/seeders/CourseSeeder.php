@@ -12,8 +12,7 @@ class CourseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Panggil Factory untuk membuat 20 course.
-        // Factory akan mengurus semua detail pembuatan data palsunya.
+        Course::truncate();
         Course::factory()->count(20)->create();
     }
 }
