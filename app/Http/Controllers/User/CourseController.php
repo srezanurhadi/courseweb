@@ -36,4 +36,19 @@ class CourseController extends Controller
             'categories' => $categories
         ]);
     }
+
+    /**
+     * Menampilkan halaman detail sebuah course.
+     * Menggunakan Route Model Binding dengan 'slug'.
+     */
+    public function show(Course $course)
+    {
+        // Pastikan kursus yang diakses sudah di-publish (status = 1)
+        if (!$course->status) {
+            // Jika belum, kembalikan ke halaman daftar kursus dengan pesan error
+            return redirect()->route('user.course.index')->with('error', 'Kursus tidak ditemukan.');
+        }
+
+        return view('user.course.overview', compact('course'));
+    }
 }

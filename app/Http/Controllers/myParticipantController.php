@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\MyParticipant;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -129,5 +130,18 @@ class myParticipantController extends Controller
         $user->update($validatedData);
 
         return redirect()->route('user.profile')->with('success', 'Profile berhasil diperbarui!');
+    }
+
+    /**
+     * Menampilkan daftar kursus yang diikuti oleh participant.
+     */
+    public function myCourses()
+    {
+        $user = Auth::user();
+
+        // Ambil semua kursus yang diikuti user melalui relasi
+        $courses = $user->enrolledCourses()->latest()->paginate(8);
+
+        return view('user.mycourse.index', compact('courses'));
     }
 }

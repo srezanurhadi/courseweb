@@ -12,6 +12,7 @@ use App\Http\Middleware\adminMiddleware;
 use App\Http\Middleware\authorMiddleware;
 use App\Http\Middleware\participantMiddleware;
 use App\Http\Controllers\User\CourseController as UserCourseController;
+use App\Http\Controllers\User\EnrollmentController;
 
 
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
@@ -65,21 +66,17 @@ Route::prefix('/user')->middleware(participantMiddleware::class)->name('user.')-
 
     Route::get('/course', [UserCourseController::class, 'index'])->name('course.index');
 
-    // Route::get('/course', function () {
-    //     return view('user.course.index');
-    // })->name('course.index');
-
     Route::get('/course/content', function () {
         return view('user.course.content');
     })->name('course.content');
 
-    Route::get('/course/overview', function () {
-        return view('user.course.overview');
-    })->name('course.overview');
+    Route::get('/course/{course:slug}', [UserCourseController::class, 'show'])->name('course.show');
+    Route::post('/enroll/{course:slug}', [EnrollmentController::class, 'store'])->name('course.enroll');
 
-    Route::get('/mycourse', function () {
-        return view('user.mycourse.index');
-    })->name('mycourse.index');
+    // Route::get('/mycourse', function () {
+    //     return view('user.mycourse.index');
+    // })->name('mycourse.index');
+    Route::get('/mycourse', [myParticipantController::class, 'myCourses'])->name('mycourse.index');
 
     Route::get('/history', function () {
         return view('user.history');
