@@ -28,6 +28,12 @@ class Course extends Model
         'status',
     ];
 
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+
     // Mendefinisikan relasi bahwa Course ini dibuat oleh satu User (Author).
     public function user(): BelongsTo
     {

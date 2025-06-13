@@ -376,7 +376,6 @@
 
 
 <script>
-
     document.addEventListener('DOMContentLoaded', function() {
         const saveSelectedContentBtn = document.getElementById('saveSelectedContent');
         const selectedContentContainer = document.getElementById('selected-content-container');
@@ -391,7 +390,7 @@
             saveSelectedContentBtn.addEventListener('click', function() {
                 // Get all checked checkboxes
                 const checkedBoxes = document.querySelectorAll(
-                'input[name="content_checkbox"]:checked');
+                    'input[name="content_checkbox"]:checked');
 
                 // Clear previous selections
                 selectedContents = [];
@@ -420,6 +419,16 @@
                 modalElement.classList.add('opacity-0');
                 setTimeout(() => {
                     modalElement.classList.add('hidden');
+
+                    // Scroll to the content section
+                    const contentSection = document.getElementById('selected-content-container')
+                        .closest('.mb-4');
+                    if (contentSection) {
+                        contentSection.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'center'
+                        });
+                    }
                 }, 500);
             });
         }
