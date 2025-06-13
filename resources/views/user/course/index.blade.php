@@ -12,7 +12,7 @@
 <body>
     <div class="flex flex-1">
         <x-sidebar></x-sidebar>
-        <div class="flex-1">
+        <div class="flex-1 flex flex-col min-h-screen">
             {{-- - Navbar - --}}
             <nav class="bg-white shadow-md z-50 sticky top-0">
                 <div class="px-6 py-0.5">
@@ -48,7 +48,7 @@
             </nav>
 
             {{-- - Content Area - --}}
-            <div class="relative">
+            <div class="relative flex-grow">
                 <header
                     class="bg-indigo-100 h-[50px] rounded-b-3xl mb-4 flex justify-center items-center relative overflow-hidden">
                 </header>
@@ -161,8 +161,8 @@
                         </div>
                     @empty
                         <div class="col-span-full text-center py-10">
-                            <p class="text-gray-500 text-lg">Saat ini belum ada kursus yang tersedia.</p>
-                            <p class="text-gray-400 text-sm mt-2">Silakan cek kembali nanti!</p>
+                            <p class="text-gray-500 text-lg">There are currently no courses available.</p>
+                            <p class="text-gray-400 text-sm mt-2">Please check back later!</p>
                         </div>
                     @endforelse
                 </div>
