@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Category;
+use App\Models\enrollments as Enrollment;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class CourseController extends Controller
 {
@@ -49,6 +51,15 @@ class CourseController extends Controller
             return redirect()->route('user.course.index')->with('error', 'Kursus tidak ditemukan.');
         }
 
-        return view('user.course.overview', compact('course'));
+        // Cek apakah user yang sedang login sudah terdaftar di kursus ini
+        $isEnrolled = false;
+        if (Auth::check()) {
+            $isEnrolled = Enrollment::where('user_id', Auth::id())
+                ->where('course_id', $course->id)
+                ->exists();
+        }
+
+        // Kirim variabel $isEnrolled ke view
+        return view('user.course.overview', compact('course', 'isEnrolled'));
     }
 }

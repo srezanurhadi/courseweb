@@ -82,30 +82,48 @@
                                     <span class="text-xl font-bold text-gray-900">50%</span>
                                 </div>
                                 {{-- enrollmernt start --}}
-                                @if (session('success'))
-                                    <div class="bg-green-50 border border-green-700 text-green-700 px-4 py-3 rounded relative my-4"
-                                        role="alert">
-                                        <strong class="font-bold">Sukses!</strong>
-                                        <span class="block sm:inline">{{ session('success') }}</span>
-                                    </div>
-                                @endif
+                                <div class="flex-1">
+                                    @if (session('success'))
+                                        <div class="bg-green-50 border border-green-700 text-green-700 px-4 py-3 rounded relative my-4"
+                                            role="alert">
+                                            <strong class="font-bold">Sukses!</strong>
+                                            <span class="block sm:inline">{{ session('success') }}</span>
+                                        </div>
+                                    @endif
 
-                                @if (session('error'))
-                                    <div class="bg-red-100 border border-red-700 text-red-700 px-4 py-3 rounded relative my-4"
-                                        role="alert">
-                                        <strong class="font-bold">Gagal!</strong>
-                                        <span class="block sm:inline">{{ session('error') }}</span>
-                                    </div>
-                                @endif
+                                    @if (session('error'))
+                                        <div class="bg-red-100 border border-red-700 text-red-700 px-4 py-3 rounded relative my-4"
+                                            role="alert">
+                                            <strong class="font-bold">Gagal!</strong>
+                                            <span class="block sm:inline">{{ session('error') }}</span>
+                                        </div>
+                                    @endif
 
-                                <form action="{{ route('user.course.enroll', $course->id) }}" method="POST">
-                                    @csrf
-                                    <button type="submit"
-                                        class="h-8 w-full mt-4 bg-indigo-700 hover:bg-indigo-800 text-white font-semibold py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2">
-                                        <i class="fas fa-plus"></i>
-                                        Enroll This Course
-                                    </button>
-                                </form>
+                                    @if ($isEnrolled)
+                                        {{-- Jika SUDAH terdaftar, tampilkan tombol Unenroll --}}
+                                        <form action="{{ route('user.course.unenroll', $course->slug) }}"
+                                            method="POST"
+                                            onsubmit="return confirm('Apakah Anda yakin ingin berhenti dari kursus ini?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="h-8 w-full mt-4 bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2">
+                                                <i class="fas fa-times-circle"></i>
+                                                Unenroll From Course
+                                            </button>
+                                        </form>
+                                    @else
+                                        {{-- Jika BELUM terdaftar, tampilkan tombol Enroll --}}
+                                        <form action="{{ route('user.course.enroll', $course->slug) }}" method="POST">
+                                            @csrf
+                                            <button type="submit"
+                                                class="h-8 w-full mt-4 bg-indigo-700 hover:bg-indigo-800 text-white font-semibold py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2">
+                                                <i class="fas fa-plus"></i>
+                                                Enroll This Course
+                                            </button>
+                                        </form>
+                                    @endif
+                                </div>
                                 {{-- enrollmernt end --}}
                             </div>
                         </div>

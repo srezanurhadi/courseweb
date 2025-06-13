@@ -15,7 +15,6 @@ class EnrollmentController extends Controller
      */
     public function store(Request $request, Course $course)
     {
-        /** @var \App\Models\User $user */
         $user = Auth::user();
 
         // Cek apakah user sudah terdaftar di kursus ini sebelumnya
@@ -35,5 +34,25 @@ class EnrollmentController extends Controller
 
         // Redirect ke halaman overview kursus tersebut dengan pesan sukses
         return redirect()->route('user.course.show', $course->slug)->with('success', 'Selamat, Anda berhasil mendaftar kursus!');
+    }
+
+    /**
+     * Menghapus data pendaftaran user dari sebuah course.
+     */
+    public function destroy(Course $course)
+    {
+        $user = Auth::user();
+
+        // Cari dan hapus record pendaftaran
+        $enrollment = Enrollment::where('user_id', $user->id)
+            ->where('course_id', $course->id)
+            ->first();
+
+        if ($enrollment) {
+            $enrollment->delete();
+            return redirect()->route('user.course.show', $course->slug)->with('success', 'Anda telah berhasil berhenti dari kursus ini.');
+        }
+
+        return back()->with('error', 'Gagal berhenti dari kursus.');
     }
 }

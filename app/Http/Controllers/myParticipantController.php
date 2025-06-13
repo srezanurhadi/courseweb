@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\MyParticipant;
 use App\Models\User;
+use App\Models\Category;
+use App\Models\enrollments as Enrollment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -137,11 +139,33 @@ class myParticipantController extends Controller
      */
     public function myCourses()
     {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
+        $lastSeenCourse = null;
+        $courses = collect(); // Inisialisasi sebagai koleksi kosong
 
-        // Ambil semua kursus yang diikuti user melalui relasi
-        $courses = $user->enrolledCourses()->latest()->paginate(8);
+        // 2. Ambil semua kategori
+        $categories = Category::all();
 
-        return view('user.mycourse.index', compact('courses'));
+        // Cek apakah user sudah mendaftar di setidaknya satu kursus
+        if ($user->enrolledCourses()->exists()) {
+            // ... (logika last seen course tidak berubah)
+            $lastEnrollment = Enrollment::where('user_id', $user->id)
+                ->latest('updated_at')
+                ->first();
+
+            if ($lastEnrollment) {
+                $lastSeenCourse = $lastEnrollment->course;
+            }
+
+            $enrolledCoursesQuery = $user->enrolledCourses()->latest();
+            if ($lastSeenCourse) {
+                $enrolledCoursesQuery->where('courses.id', '!=', $lastSeenCourse->id);
+            }
+            $courses = $enrolledCoursesQuery->paginate(8);
+        }
+
+        // 3. Kirim variabel $categories ke view
+        return view('user.mycourse.index', compact('courses', 'lastSeenCourse', 'categories'));
     }
 }

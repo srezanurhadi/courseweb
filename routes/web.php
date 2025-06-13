@@ -2,15 +2,17 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\homecontroller;
+use App\Http\Middleware\adminMiddleware;
 use App\Http\Controllers\usersController;
+use App\Http\Middleware\authorMiddleware;
 use App\Http\Controllers\courseController;
 use App\Http\Controllers\contentController;
-use App\Http\Controllers\myParticipantController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Middleware\adminMiddleware;
-use App\Http\Middleware\authorMiddleware;
 use App\Http\Middleware\participantMiddleware;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\myParticipantController;
+use App\Http\Controllers\User\EnrollmentController;
+use App\Http\Controllers\User\CourseController as UserCourseController;
 
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
 
@@ -69,9 +71,9 @@ Route::prefix('/user')->middleware(participantMiddleware::class)->name('user.')-
         return view('user.course.content');
     })->name('course.content');
 
-    Route::get('/course/overview', function () {
-        return view('user.course.overview');
-    })->name('course.overview');
+    Route::get('/course/{course:slug}', [UserCourseController::class, 'show'])->name('course.show');
+    Route::post('/enroll/{course:slug}', [EnrollmentController::class, 'store'])->name('course.enroll');
+    Route::delete('/unenroll/{course:slug}', [EnrollmentController::class, 'destroy'])->name('course.unenroll');
 
     Route::get('/mycourse', function () {
         return view('user.mycourse.index');

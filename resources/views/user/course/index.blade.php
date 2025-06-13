@@ -161,8 +161,8 @@
                         </div>
                     @empty
                         <div class="col-span-full text-center py-10">
-                            <p class="text-gray-500 text-lg">Saat ini belum ada kursus yang tersedia.</p>
-                            <p class="text-gray-400 text-sm mt-2">Silakan cek kembali nanti!</p>
+                            <p class="text-gray-500 text-lg">There are currently no courses available.</p>
+                            <p class="text-gray-400 text-sm mt-2">Please check back later!</p>
                         </div>
                     @endforelse
                 </div>
