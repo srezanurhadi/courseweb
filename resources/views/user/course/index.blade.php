@@ -12,7 +12,7 @@
 <body>
     <div class="flex flex-1">
         <x-sidebar></x-sidebar>
-        <div class="flex-1">
+        <div class="flex-1 flex flex-col min-h-screen">
             {{-- - Navbar - --}}
             <nav class="bg-white shadow-md z-50 sticky top-0">
                 <div class="px-6 py-0.5">
@@ -48,7 +48,7 @@
             </nav>
 
             {{-- - Content Area - --}}
-            <div class="relative">
+            <div class="relative flex-grow">
                 <header
                     class="bg-indigo-100 h-[50px] rounded-b-3xl mb-4 flex justify-center items-center relative overflow-hidden">
                 </header>

@@ -12,7 +12,7 @@
 <body>
     <div class="flex flex-1">
         <x-sidebar></x-sidebar>
-        <div class="flex-1">
+        <div class="flex-1 flex flex-col min-h-screen">
             {{-- - Navbar - --}}
             <nav class="bg-white shadow-md z-50 sticky top-0">
                 <div class="px-6 py-0.5">
@@ -25,12 +25,12 @@
                                 <i class="fa-regular fa-bell fa-lg text-black hover:text-gray-600"></i>
                             </button>
                             <div class="flex items-center space-x-2 px-3">
-                                <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-neutral-300 overflow-hidden">
+                                <span
+                                    class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-neutral-300 overflow-hidden">
                                     @if (Auth::user()->image)
                                         {{-- Jika user punya foto, tampilkan foto --}}
-                                        <img src="{{ asset('storage/' . Auth::user()->image) }}" 
-                                            alt="{{ Auth::user()->name }}" 
-                                            class="w-full h-full object-cover">
+                                        <img src="{{ asset('storage/' . Auth::user()->image) }}"
+                                            alt="{{ Auth::user()->name }}" class="w-full h-full object-cover">
                                     @else
                                         {{-- Jika tidak ada foto, tampilkan inisial --}}
                                         <span class="text-xl font-semibold leading-none text-gray-700">
@@ -48,7 +48,7 @@
             </nav>
 
             {{-- - Content Area - --}}
-            <div class="relative">
+            <div class="relative flex-grow">
                 <header
                     class="bg-indigo-100 h-[50px] rounded-b-3xl mb-4 flex justify-center items-center relative overflow-hidden">
                 </header>

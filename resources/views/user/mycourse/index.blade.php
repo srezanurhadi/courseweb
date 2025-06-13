@@ -12,7 +12,7 @@
 <body>
     <div class="flex flex-1">
         <x-sidebar></x-sidebar>
-        <div class="flex-1">
+        <div class="flex-1 flex flex-col min-h-screen">
             {{-- - Navbar - --}}
             <nav class="bg-white shadow-md z-50 sticky top-0">
                 <div class="px-6 py-0.5">
@@ -48,7 +48,7 @@
             </nav>
 
             {{-- - Content Area - --}}
-            <div class="relative">
+            <div class="relative flex-grow">
                 @if ($courses->isEmpty() && !$lastSeenCourse)
                     {{-- TAMPILAN JIKA BELUM ENROLL KURSUS APAPUN --}}
                     <header
@@ -100,11 +100,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-span-full text-center py-10">
+                    <div class="col-span-full text-center py-15">
                         <p class="text-gray-500 text-lg">You are not enrolled in any courses yet.</p>
-                        <p class="text-gray-400 text-sm mt-2">Explore a variety of exciting courses we offer and start
+                        <p class="text-gray-400 text-sm">Explore a variety of exciting courses we offer and start
                             learning now.</p>
-                        <a href="{{ route('user.course.index') }}" class="text-indigo-400 text-sm mt-2">View All
+                        <a href="{{ route('user.course.index') }}" class="text-indigo-400 text-sm">View All
                             Courses</a>
                     </div>
                 @else
