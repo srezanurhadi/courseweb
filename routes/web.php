@@ -63,9 +63,7 @@ Route::prefix('/user')->middleware(participantMiddleware::class)->name('user.')-
         return view('user.home');
     })->name('home');
 
-    Route::get('/course', function () {
-        return view('user.course.index');
-    })->name('course.index');
+    Route::get('/course', [UserCourseController::class, 'index'])->name('course.index');
 
     Route::get('/course/content', function () {
         return view('user.course.content');
@@ -75,9 +73,7 @@ Route::prefix('/user')->middleware(participantMiddleware::class)->name('user.')-
     Route::post('/enroll/{course:slug}', [EnrollmentController::class, 'store'])->name('course.enroll');
     Route::delete('/unenroll/{course:slug}', [EnrollmentController::class, 'destroy'])->name('course.unenroll');
 
-    Route::get('/mycourse', function () {
-        return view('user.mycourse.index');
-    })->name('mycourse.index');
+    Route::get('/mycourse', [myParticipantController::class, 'myCourses'])->name('mycourse.index');
 
     Route::get('/history', function () {
         return view('user.history');
