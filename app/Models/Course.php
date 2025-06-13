@@ -48,7 +48,7 @@ class Course extends Model
 
     public function contents(): BelongsToMany
     {
-        return $this->belongsToMany(Content::class, 'course_content')
+        return $this->belongsToMany(Content::class, 'course_contents')
             ->withPivot('order')
             ->orderBy('order');
     }

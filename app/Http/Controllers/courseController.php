@@ -47,7 +47,8 @@ class courseController extends Controller
             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'description' => 'required|string',
             'category' => 'required|exists:categories,id',
-            'status' => 'nullable'
+            'status' => 'nullable',
+            'selected_content_ids' => 'required|string'
 
         ]);
 
@@ -64,7 +65,25 @@ class courseController extends Controller
 
         $validatedData['slug'] = Str::slug($request->input('title'));
 
-        Course::create($validatedData);
+        $course = Course::create($validatedData);
+
+        // Ambil data dari hidden input JSON
+        $selectedContentsJson = $request->input('selected_content_ids');
+        $selectedContents = json_decode($selectedContentsJson, true);
+
+        if (is_array($selectedContents)) {
+            $syncData = [];
+
+            foreach ($selectedContents as $item) {
+                // Pastikan ada id dan order
+                if (isset($item['id']) && isset($item['order'])) {
+                    $syncData[$item['id']] = ['order' => $item['order']];
+                }
+            }
+
+            // Simpan ke tabel pivot
+            $course->contents()->attach($syncData);
+        }
 
         return redirect("/admin/course")->with('success', 'Course Berhasil Ditambahkan');
     }

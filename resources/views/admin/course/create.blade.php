@@ -409,7 +409,7 @@
                 });
 
                 // Update the hidden input with selected IDs
-                selectedContentIdsInput.value = selectedContents.map(item => item.id).join(',');
+                selectedContentIdsInput.value = JSON.stringify(selectedContents);
 
                 // Update the UI
                 updateSelectedContentDisplay();
