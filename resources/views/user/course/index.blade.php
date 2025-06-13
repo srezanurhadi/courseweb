@@ -25,12 +25,12 @@
                                 <i class="fa-regular fa-bell fa-lg text-black hover:text-gray-600"></i>
                             </button>
                             <div class="flex items-center space-x-2 px-3">
-                                <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-neutral-300 overflow-hidden">
+                                <span
+                                    class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-neutral-300 overflow-hidden">
                                     @if (Auth::user()->image)
                                         {{-- Jika user punya foto, tampilkan foto --}}
-                                        <img src="{{ asset('storage/' . Auth::user()->image) }}" 
-                                            alt="{{ Auth::user()->name }}" 
-                                            class="w-full h-full object-cover">
+                                        <img src="{{ asset('storage/' . Auth::user()->image) }}"
+                                            alt="{{ Auth::user()->name }}" class="w-full h-full object-cover">
                                     @else
                                         {{-- Jika tidak ada foto, tampilkan inisial --}}
                                         <span class="text-xl font-semibold leading-none text-gray-700">
@@ -104,7 +104,7 @@
                             class="bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden h-105">
 
                             {{-- Gambar Course --}}
-                            <a href="{{ route('user.course.overview') }}" class="w-full">
+                            <a href="{{ route('user.course.show', $course->slug) }}" class="w-full">
                                 <div class="p-2 h-40 w-full items-start flex justify-between bg-cover bg-center"
                                     style="background-image: url('{{ asset('storage/' . $course->image) }}')">
 
@@ -126,7 +126,7 @@
                                 </div>
 
                                 {{-- Judul Course --}}
-                                <a href="{{ route('user.course.overview') }}"
+                                <a href="{{ route('user.course.show', $course->slug) }}"
                                     class="pl-2 pt-1 font-semibold line-clamp-2 text-lg text-gray-900 hover:text-indigo-900 cursor-pointer">
                                     {{ \Illuminate\Support\Str::limit($course->title, 40) }}
                                 </a>

@@ -11,8 +11,6 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Middleware\adminMiddleware;
 use App\Http\Middleware\authorMiddleware;
 use App\Http\Middleware\participantMiddleware;
-use App\Http\Controllers\User\CourseController as UserCourseController;
-
 
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
 
@@ -63,11 +61,9 @@ Route::prefix('/user')->middleware(participantMiddleware::class)->name('user.')-
         return view('user.home');
     })->name('home');
 
-    Route::get('/course', [UserCourseController::class, 'index'])->name('course.index');
-
-    // Route::get('/course', function () {
-    //     return view('user.course.index');
-    // })->name('course.index');
+    Route::get('/course', function () {
+        return view('user.course.index');
+    })->name('course.index');
 
     Route::get('/course/content', function () {
         return view('user.course.content');
