@@ -137,19 +137,19 @@ class myParticipantController extends Controller
     /**
      * Menampilkan daftar kursus yang diikuti oleh participant.
      */
-    public function myCourses()
+    public function myCourses(Request $request) // [Diubah] Method sekarang menerima Request
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $lastSeenCourse = null;
-        $courses = collect(); // Inisialisasi sebagai koleksi kosong
-
-        // 2. Ambil semua kategori
         $categories = Category::all();
 
-        // Cek apakah user sudah mendaftar di setidaknya satu kursus
-        if ($user->enrolledCourses()->exists()) {
-            // ... (logika last seen course tidak berubah)
+        // Cek apakah ada filter atau search yang aktif.
+        $isFilteringOrSearching = ($request->has('search') && $request->filled('search')) ||
+            ($request->has('category') && $request->filled('category'));
+
+        // Hanya ambil 'lastSeenCourse' jika TIDAK sedang memfilter atau mencari.
+        if (!$isFilteringOrSearching && $user->enrolledCourses()->exists()) {
             $lastEnrollment = Enrollment::where('user_id', $user->id)
                 ->latest('updated_at')
                 ->first();
@@ -157,15 +157,34 @@ class myParticipantController extends Controller
             if ($lastEnrollment) {
                 $lastSeenCourse = $lastEnrollment->course;
             }
+        }
+        // >>> Akhir blok logika baru <<<
 
-            $enrolledCoursesQuery = $user->enrolledCourses()->latest();
-            if ($lastSeenCourse) {
-                $enrolledCoursesQuery->where('courses.id', '!=', $lastSeenCourse->id);
-            }
-            $courses = $enrolledCoursesQuery->paginate(8);
+        // Query dasar untuk semua kursus yang diikuti user
+        $enrolledCoursesQuery = $user->enrolledCourses();
+
+        // Terapkan filter kategori jika ada
+        if ($request->has('category') && $request->filled('category')) {
+            $enrolledCoursesQuery->where('category_id', $request->category);
         }
 
-        // 3. Kirim variabel $categories ke view
+        // Terapkan filter pencarian jika ada
+        if ($request->has('search') && $request->filled('search')) {
+            $searchTerm = $request->search;
+            $enrolledCoursesQuery->where(function ($q) use ($searchTerm) {
+                $q->where('title', 'like', '%' . $searchTerm . '%')
+                    ->orWhere('description', 'like', '%' . $searchTerm . '%');
+            });
+        }
+
+        // Hanya kecualikan 'lastSeenCourse' dari daftar utama jika 'lastSeenCourse' ada.
+        if ($lastSeenCourse) {
+            $enrolledCoursesQuery->where('courses.id', '!=', $lastSeenCourse->id);
+        }
+
+        // Query yang dipaginasi sudah mencakup semua filter.
+        $courses = $enrolledCoursesQuery->latest()->paginate(8);
+
         return view('user.mycourse.index', compact('courses', 'lastSeenCourse', 'categories'));
     }
 }

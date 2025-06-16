@@ -50,7 +50,6 @@
             {{-- - Content Area - --}}
             <div class="relative flex-grow">
                 @if ($courses->isEmpty() && !$lastSeenCourse)
-                    {{-- TAMPILAN JIKA BELUM ENROLL KURSUS APAPUN --}}
                     <header
                         class="bg-indigo-100 h-[50px] rounded-b-3xl mb-4 flex justify-center items-center relative overflow-hidden">
                     </header>
@@ -58,7 +57,7 @@
                     <div class="absolute top-[25px] left-1/2 transform -translate-x-1/2">
                         <div class="bg-white rounded-3xl shadow-md py-3 px-5 flex items-center">
                             <div class="flex items-center gap-3">
-                                <form method="GET" action="{{ route('user.course.index') }}"
+                                <form method="GET" action="{{ route('user.mycourse.index') }}"
                                     class="flex items-center gap-2">
                                     <div class=" flex gap-1 items-center rounded-3xl border-gray-300 border-2 pl-2">
                                         <i class="fas fa-search text-gray-500"></i>
@@ -82,15 +81,16 @@
                                     Category :</p>
                                 <div class=" flex gap-1 items-center rounded-3xl border-gray-300 border-2 px-2">
                                     <i class="fas fa-search text-gray-500"></i>
-                                    <select id="categoryFilter"
+                                    <select id="categoryFilterMyCourse"
                                         class="w-40 focus:outline-none px-2 text-gray-900 bg-transparent">
-                                        <option value="{{ route('user.course.index') }}"
+                                        <option
+                                            value="{{ route('user.mycourse.index', ['search' => request('search')]) }}"
                                             @if (!request('category')) selected @endif>
                                             All Category
                                         </option>
                                         @foreach ($categories as $category)
                                             <option
-                                                value="{{ route('user.course.index', ['category' => $category->id, 'search' => request('search')]) }}"
+                                                value="{{ route('user.mycourse.index', ['category' => $category->id, 'search' => request('search')]) }}"
                                                 @if (request('category') == $category->id) selected @endif>
                                                 {{ $category->category }}
                                             </option>
@@ -100,19 +100,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-span-full text-center py-15">
-                        <p class="text-gray-500 text-lg">You are not enrolled in any courses yet.</p>
-                        <p class="text-gray-400 text-sm">Explore a variety of exciting courses we offer and start
-                            learning now.</p>
-                        <a href="{{ route('user.course.index') }}" class="text-indigo-400 text-sm">View All
-                            Courses</a>
-                    </div>
                 @else
                     <header
                         class="bg-indigo-100 h-auto rounded-b-3xl flex flex-col justify-center items-center relative overflow-hidden py-8 px-4">
                         <div class="bg-white rounded-3xl shadow-md py-3 px-5">
                             <div class="flex items-center gap-3">
-                                <form method="GET" action="{{ route('user.course.index') }}"
+                                <form method="GET" action="{{ route('user.mycourse.index') }}"
                                     class="flex items-center gap-2">
                                     <div class=" flex gap-1 items-center rounded-3xl border-gray-300 border-2 pl-2">
                                         <i class="fas fa-search text-gray-500"></i>
@@ -136,15 +129,16 @@
                                     Category :</p>
                                 <div class=" flex gap-1 items-center rounded-3xl border-gray-300 border-2 px-2">
                                     <i class="fas fa-search text-gray-500"></i>
-                                    <select id="categoryFilter"
+                                    <select id="categoryFilterMyCourse"
                                         class="w-40 focus:outline-none px-2 text-gray-900 bg-transparent">
-                                        <option value="{{ route('user.course.index') }}"
+                                        <option
+                                            value="{{ route('user.mycourse.index', ['search' => request('search')]) }}"
                                             @if (!request('category')) selected @endif>
                                             All Category
                                         </option>
                                         @foreach ($categories as $category)
                                             <option
-                                                value="{{ route('user.course.index', ['category' => $category->id, 'search' => request('search')]) }}"
+                                                value="{{ route('user.mycourse.index', ['category' => $category->id, 'search' => request('search')]) }}"
                                                 @if (request('category') == $category->id) selected @endif>
                                                 {{ $category->category }}
                                             </option>
@@ -164,15 +158,21 @@
                                                 alt="{{ $lastSeenCourse->title }}"
                                                 class="w-full h-full object-cover rounded-xl shadow-md">
                                         </div>
-                                        <div class="flex-1">
-                                            <h3 class="text-2xl font-bold text-gray-900 mb-2">
+                                        <div class="flex-1 flex flex-col">
+                                            <div class="self-start w-auto">
+                                                <div
+                                                    class="rounded-4xl bg-indigo-200 font-semibold py-1 px-2 text-xs text-indigo-700">
+                                                    {{ $lastSeenCourse->category->category }}
+                                                </div>
+                                            </div>
+                                            <h3 class="text-2xl font-bold text-gray-900 my-2">
                                                 {{ $lastSeenCourse->title }}
                                             </h3>
-                                            <p class="text-gray-600 font-semibold line-clamp-3 mb-4">
+                                            <p class="text-gray-600 font-semibold line-clamp-3 mb-2">
                                                 By: {{ $lastSeenCourse->user->name }}
                                             </p>
                                             <p class="text-gray-600 line-clamp-3 mb-4">
-                                                {{ $lastSeenCourse->description }}
+                                                {{ \Illuminate\Support\Str::limit($lastSeenCourse->description, 70) }}
                                             </p>
                                             <div class="flex items-center justify-between">
                                                 <div class="flex-1 bg-gray-200 rounded-full h-2.5">
@@ -187,6 +187,18 @@
                             @endif
                         </div>
                     </header>
+                @endif
+
+
+                @if ($courses->isEmpty() && !$lastSeenCourse)
+                    <div class="col-span-full text-center py-15">
+                        <p class="text-gray-500 text-lg">You are not enrolled in any courses yet.</p>
+                        <p class="text-gray-400 text-sm">Explore a variety of exciting courses we offer and start
+                            learning now.</p>
+                        <a href="{{ route('user.course.index') }}" class="text-indigo-400 text-sm">View All
+                            Courses</a>
+                    </div>
+                @else
                     <div class="mx-10 my-5 p-4 grid grid-cols-4 gap-10 justify-around">
                         @foreach ($courses as $course)
                             <div
@@ -252,6 +264,7 @@
                         @endforeach
                     </div>
                 @endif
+
                 {{-- Pagination (hanya tampil jika ada kursus) --}}
                 @if (!$courses->isEmpty())
                     <div class="mb-4 px-10">
