@@ -2,20 +2,23 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\homecontroller;
+use App\Http\Middleware\adminMiddleware;
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\usersController;
+use App\Http\Middleware\authorMiddleware;
 use App\Http\Controllers\courseController;
 use App\Http\Controllers\contentController;
-use App\Http\Controllers\myParticipantController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Middleware\adminMiddleware;
-use App\Http\Middleware\authorMiddleware;
 use App\Http\Middleware\participantMiddleware;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\myParticipantController;
+
 
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
 
 Route::prefix('/admin')->middleware(adminMiddleware::class)->group(function () {
     Route::get('/', [homecontroller::class, 'index']);
+    Route::post('/upload-image', [ImageController::class, 'store'])->name('image.store');
     Route::resource('/users', usersController::class);
     Route::resource('/course', courseController::class);
     Route::resource('/content', contentController::class);
