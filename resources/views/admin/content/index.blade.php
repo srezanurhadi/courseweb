@@ -48,7 +48,7 @@
                     </div>
                 </div>
                 <div class="">
-                    <a href="" class="px-2 py-1 bg-sky-500 rounded-lg text-white font-semibold"><i
+                    <a href="content/create" class="px-2 py-1 bg-sky-500 rounded-lg text-white font-semibold"><i
                             class="fas fa-plus text-gray-50"></i> Add Content</a>
                 </div>
 
