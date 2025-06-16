@@ -20,8 +20,8 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,   // Seeder kursus dijalankan setelah kategori ada
             UserSeeder::class,   // Seeder kursus dijalankan setelah kategori ada
             CourseSeeder::class,   // Seeder kursus dijalankan setelah kategori ada
+            ContentSeeder::class,   // Seeder kursus dijalankan setelah kategori ada
+            CourseContentSeeder::class,
         ]);
-
-
     }
 }

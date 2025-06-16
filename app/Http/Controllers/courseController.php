@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\Content;
 use App\Models\Category;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class courseController extends Controller
 {
@@ -15,7 +18,8 @@ class courseController extends Controller
     {
 
 
-        $courses = Course::all(); // atau pakai pagination, dsb
+        $courses = Course::orderBy('updated_at', 'desc')->paginate(9)->onEachSide(1);
+
 
         return view('admin.course.index', compact('courses'));
     }
@@ -26,7 +30,8 @@ class courseController extends Controller
     public function create()
     {
         $categories = Category::orderBy('category')->get();
-        return view('admin.course.create', compact('categories'));
+        $contents = Content::orderBy('updated_at', 'desc')->paginate(10)->onEachSide(1);
+        return view('admin.course.create', compact('categories', 'contents'));
     }
 
     /**
@@ -36,11 +41,12 @@ class courseController extends Controller
     {
 
         $validatedData = $request->validate([
-            'title' => 'required|string|max:150',
+            'title' => 'required|string|max:150|unique:courses,title',
             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'description' => 'required|string',
             'category' => 'required|exists:categories,id',
-            'status' => 'nullable'
+            'status' => 'nullable',
+            'selected_content_ids' => 'required|string'
 
         ]);
 
@@ -51,8 +57,31 @@ class courseController extends Controller
 
         $validatedData['status'] = $request->has('status') ? 1 : 0;
 
-        dd($request->all());
+        $validatedData['user_id'] = Auth::user()->id;
 
+        $validatedData['category_id'] = $request->input('category');
+
+        $validatedData['slug'] = Str::slug($request->input('title'));
+
+        $course = Course::create($validatedData);
+
+        // Ambil data dari hidden input JSON
+        $selectedContentsJson = $request->input('selected_content_ids');
+        $selectedContents = json_decode($selectedContentsJson, true);
+
+        if (is_array($selectedContents)) {
+            $syncData = [];
+
+            foreach ($selectedContents as $item) {
+                // Pastikan ada id dan order
+                if (isset($item['id']) && isset($item['order'])) {
+                    $syncData[$item['id']] = ['order' => $item['order']];
+                }
+            }
+
+            // Simpan ke tabel pivot
+            $course->contents()->attach($syncData);
+        }
 
         return redirect("/admin/course")->with('success', 'Course Berhasil Ditambahkan');
     }
@@ -62,7 +91,7 @@ class courseController extends Controller
      */
     public function show(Course $course)
     {
-        return view('admin.course.show');
+        return view('admin.course.show', compact('course'));
     }
 
     /**

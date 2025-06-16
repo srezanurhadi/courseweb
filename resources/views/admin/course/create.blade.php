@@ -27,7 +27,7 @@
                                 px-3 py-2 border-2 border-gray-300 bg-gray-50 rounded-md focus:outline-none focus:border-indigo-500"
                             required>
                         @error('title')
-                            <div class="invalid-feedback">
+                            <div class="invalid-feedback text-red-600 italic">
                                 {{ $message }}
                             </div>
                         @enderror
@@ -87,92 +87,18 @@
                                 <button id="add_content" class="text-sm rounded-lg bg-indigo-700 text-gray-50 p-2">+
                                     add content</button>
                             </div>
-                            <div class="text-sm text-gray-700 p-4">No content add yet. click "Add Content" to Add
+                            <div id="no-content-message" class="text-sm text-gray-700 p-4">No content add yet. click
+                                "Add Content" to Add
                                 course materials</div>
-                            <div class="space-y-4">
-                                <!-- Course Card 1 -->
-                                <div class="flex items-start p-4 border border-gray-300 rounded-md bg-white shadow-sm">
-                                    <div class="mr-3">
-                                        <div
-                                            class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center font-bold">
-                                            1</div>
-                                    </div>
-                                    <div class="flex-1">
-                                        <h3 class="font-semibold text-gray-800">UI/UX Definition 1</h3>
-                                        <p class="text-sm text-gray-600">
-                                            UI adalah salah satu cara untuk mendesign sesuai tampilan halaman UI adalah
-                                            salah satu cara
-                                            untuk mendesign sesuai tsdfdsfsfsdf...
-                                        </p>
-                                    </div>
-                                    <div class="ml-3 flex flex-col items-center justify-center space-y-1">
-                                        <button class="text-gray-500 hover:text-gray-700">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7">
-                                                </path>
-                                            </svg>
-                                        </button>
-                                        <button class="text-gray-500 hover:text-gray-700">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7">
-                                                </path>
-                                            </svg>
-                                        </button>
-                                    </div>
-                                    <button class="ml-3 text-red-500 hover:text-red-700">
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="M6 2a1 1 0 00-1 1v1H3.5a.5.5 0 000 1h.54l.7 10.11A2 2 0 006.73 17h6.54a2 2 0 001.99-1.89L16.96 5H17.5a.5.5 0 000-1H15V3a1 1 0 00-1-1H6zm1 4a.5.5 0 011 0v7a.5.5 0 01-1 0V6zm4 0a.5.5 0 011 0v7a.5.5 0 01-1 0V6z" />
-                                        </svg>
-                                    </button>
-                                </div>
-
-                                <!-- Course Card 2 -->
-                                <div class="flex items-start p-4 border border-gray-300 rounded-md bg-white shadow-sm">
-                                    <div class="mr-3">
-                                        <div
-                                            class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center font-bold">
-                                            2</div>
-                                    </div>
-                                    <div class="flex-1">
-                                        <h3 class="font-semibold text-gray-800">UI/UX Definition 2</h3>
-                                        <p class="text-sm text-gray-600">
-                                            UI adalah salah satu cara untuk mendesign sesuai tampilan halaman UI adalah
-                                            salah satu cara
-                                            untuk mendesign sesuai tsdfdsfsfsdf...
-                                        </p>
-                                    </div>
-                                    <div class="ml-3 flex flex-col items-center justify-center space-y-1">
-                                        <button class="text-gray-500 hover:text-gray-700">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor"
-                                                stroke-width="2" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M5 15l7-7 7 7"></path>
-                                            </svg>
-                                        </button>
-                                        <button class="text-gray-500 hover:text-gray-700">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor"
-                                                stroke-width="2" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M19 9l-7 7-7-7"></path>
-                                            </svg>
-                                        </button>
-                                    </div>
-                                    <button class="ml-3 text-red-500 hover:text-red-700">
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="M6 2a1 1 0 00-1 1v1H3.5a.5.5 0 000 1h.54l.7 10.11A2 2 0 006.73 17h6.54a2 2 0 001.99-1.89L16.96 5H17.5a.5.5 0 000-1H15V3a1 1 0 00-1-1H6zm1 4a.5.5 0 011 0v7a.5.5 0 01-1 0V6zm4 0a.5.5 0 011 0v7a.5.5 0 01-1 0V6z" />
-                                        </svg>
-                                    </button>
-                                </div>
+                            <div id="selected-content-container" class="space-y-4 w-full">
+                                <!-- Selected content will be displayed here -->
                             </div>
+                            <input type="hidden" name="selected_content_ids" id="selected_content_ids" value="">
+
                         </div>
                     </div>
                     <div class="mb-4">
-                        <label for="category" class="text-sm">Course Category<span
-                                class="text-red-500">*</span></label>
+                        <label for="category" class="text-sm">Course Category<span class="text-red-500">*</span></label>
                         <select name="category" id="category"
                             class="w-full bg-gray-50 border-2 border-gray-300 rounded-lg p-2 text-sm text-gray-700">
                             @foreach ($categories as $category)
@@ -259,223 +185,46 @@
                     {{-- data --}}
                     <div class="space-y-4 px-4 py-4 overflow-y-auto h-100">
 
-                        <div class="flex items-center bg-amber-100 rounded-lg shadow-md text-sm font-medium">
-                            <div class="px-6 py-3 w-4/12 text-gray-900">
-                                <div class="flex items-center">
-                                    <div
-                                        class="flex-shrink-0 h-8 w-8 rounded-md bg-amber-500 flex items-center justify-center text-white">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L1.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09l2.846.813-.813 2.846a4.5 4.5 0 00-3.09 3.09zM18.25 12L17 14.25l-1.25-2.25L13.5 11l2.25-1.25L17 7.5l1.25 2.25L20.5 11l-2.25 1.25z" />
-                                        </svg>
-                                    </div>
-                                    <div class="ml-4 truncate">
-                                        Tutorial Laravel 12 2024 mantap Terpercaya work 100% dijamin jago
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="px-6 py-3 w-2/12 text-gray-700 truncate">Laravel</div>
-                            <div class="px-6 py-3 w-2/12 text-gray-700">12-10-2025</div>
-                            <div class="px-6 py-3 w-2/12 text-gray-700 ">Belum pernah dipilih</div>
-                            <div class="px-6 py-3 w-2/12 ">
-                                <div class="flex items-center space-x-2">
-                                    <div class="flex justify-center w-full">
-                                        <input type="checkbox" id="pilih_content" name="pilih_content"
-                                            value="sms"
-                                            class="h-6 w-6 border-gray-300 rounded focus:ring-indigo-700 text-indigo-700">
-                                    </div>
-                                    <button id="lihat"
-                                        class="w-6 h-6 p-2 rounded-sm bg-sky-500 hover:bg-sky-600 text-white flex items-center justify-center"
-                                        aria-label="Lihat">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex items-center bg-rose-100 rounded-lg shadow-md text-sm font-medium">
-                            <div class="px-6 py-3 w-4/12 text-gray-900">
-                                <div class="flex items-center">
-                                    <div
-                                        class="flex-shrink-0 h-8 w-8 rounded-md bg-pink-500 flex items-center justify-center text-white">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z">
-                                            </path>
-                                        </svg>
-                                    </div>
-                                    <div class="ml-4 truncate">
-                                        Tutorial PHP OOP 2024 Lengkap Mudah Dipahami
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="px-6 py-3 w-2/12 text-gray-700 truncate">PHP</div>
-                            <div class="px-6 py-3 w-2/12 text-gray-700">11-10-2025</div>
-                            <div class="px-6 py-3 w-2/12 text-gray-700 ">Belum pernah dipilih</div>
-                            <div class="px-6 py-3 w-2/12">
-                                <div class="flex items-center space-x-2">
-                                    <div class="flex justify-center w-full">
-                                        <input type="checkbox" id="pilih_content" name="pilih_content"
-                                            value="sms"
-                                            class="h-6 w-6 border-gray-300 rounded focus:ring-indigo-700 text-indigo-700">
-                                    </div>
-                                    <button id="lihat"
-                                        class="w-6 h-6 p-2
-                                        rounded-sm bg-sky-500 hover:bg-sky-600 text-white flex items-center
-                                        justify-center"
-                                        aria-label="Lihat">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex items-center bg-rose-100 rounded-lg shadow-md text-sm font-medium">
-                            <div class="px-6 py-3 w-4/12 text-gray-900">
-                                <div class="flex items-center">
-                                    <div
-                                        class="flex-shrink-0 h-8 w-8 rounded-md bg-pink-500 flex items-center justify-center text-white">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z">
-                                            </path>
-                                        </svg>
-                                    </div>
-                                    <div class="ml-4 truncate">
-                                        Tutorial PHP OOP 2024 Lengkap Mudah Dipahami
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="px-6 py-3 w-2/12 text-gray-700 truncate">PHP</div>
-                            <div class="px-6 py-3 w-2/12 text-gray-700">11-10-2025</div>
-                            <div class="px-6 py-3 w-2/12 text-gray-700 ">Belum pernah dipilih</div>
-                            <div class="px-6 py-3 w-2/12">
-                                <div class="flex items-center space-x-2">
-                                    <div class="flex justify-center w-full">
-                                        <input type="checkbox" id="pilih_content" name="pilih_content"
-                                            value="sms"
-                                            class="h-6 w-6 border-gray-300 rounded focus:ring-indigo-700 text-indigo-700">
-                                    </div>
-                                    <button id="lihat"
-                                        class="w-6 h-6 p-2
-                                        rounded-sm bg-sky-500 hover:bg-sky-600 text-white flex items-center
-                                        justify-center"
-                                        aria-label="Lihat">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex items-center bg-rose-100 rounded-lg shadow-md text-sm font-medium">
-                            <div class="px-6 py-3 w-4/12 text-gray-900">
-                                <div class="flex items-center">
-                                    <div
-                                        class="flex-shrink-0 h-8 w-8 rounded-md bg-pink-500 flex items-center justify-center text-white">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z">
-                                            </path>
-                                        </svg>
-                                    </div>
-                                    <div class="ml-4 truncate">
-                                        Tutorial PHP OOP 2024 Lengkap Mudah Dipahami
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="px-6 py-3 w-2/12 text-gray-700 truncate">PHP</div>
-                            <div class="px-6 py-3 w-2/12 text-gray-700">11-10-2025</div>
-                            <div class="px-6 py-3 w-2/12 text-gray-700 ">Belum pernah dipilih</div>
-                            <div class="px-6 py-3 w-2/12">
-                                <div class="flex items-center space-x-2">
-                                    <div class="flex justify-center w-full">
-                                        <input type="checkbox" id="pilih_content" name="pilih_content"
-                                            value="sms"
-                                            class="h-6 w-6 border-gray-300 rounded focus:ring-indigo-700 text-indigo-700">
-                                    </div>
-                                    <button id="lihat"
-                                        class="w-6 h-6 p-2
-                                        rounded-sm bg-sky-500 hover:bg-sky-600 text-white flex items-center
-                                        justify-center"
-                                        aria-label="Lihat">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex items-center bg-amber-100 rounded-lg shadow-md text-sm font-medium">
-                            <div class="px-6 py-3 w-4/12 text-gray-900">
-                                <div class="flex items-center">
-                                    <div
-                                        class="flex-shrink-0 h-8 w-8 rounded-md bg-amber-500 flex items-center justify-center text-white">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L1.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09l2.846.813-.813 2.846a4.5 4.5 0 00-3.09 3.09zM18.25 12L17 14.25l-1.25-2.25L13.5 11l2.25-1.25L17 7.5l1.25 2.25L20.5 11l-2.25 1.25z" />
-                                        </svg>
-                                    </div>
-                                    <div class="ml-4 truncate">
-                                        Tutorial Laravel 12 2024 mantap Terpercaya work 100% dijamin jago
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="px-6 py-3 w-2/12 text-gray-700 truncate">Laravel</div>
-                            <div class="px-6 py-3 w-2/12 text-gray-700">12-10-2025</div>
-                            <div class="px-6 py-3 w-2/12 text-gray-700 ">Belum pernah dipilih</div>
-                            <div class="px-6 py-3 w-2/12 ">
-                                <div class="flex items-center space-x-2">
-                                    <div class="flex justify-center w-full">
-                                        <input type="checkbox" id="pilih_content" name="pilih_content"
-                                            value="sms"
-                                            class="h-6 w-6 border-gray-300 rounded focus:ring-indigo-700 text-indigo-700">
-                                    </div>
-                                    <button id="lihat"
-                                        class="w-6 h-6 p-2 rounded-sm bg-sky-500 hover:bg-sky-600 text-white flex items-center justify-center"
-                                        aria-label="Lihat">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex items-center bg-rose-100 rounded-lg shadow-md text-sm font-medium">
-                            <div class="px-6 py-3 w-4/12 text-gray-900">
-                                <div class="flex items-center">
-                                    <div
-                                        class="flex-shrink-0 h-8 w-8 rounded-md bg-pink-500 flex items-center justify-center text-white">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z">
-                                            </path>
-                                        </svg>
-                                    </div>
-                                    <div class="ml-4 truncate">
-                                        Tutorial PHP OOP 2024 Lengkap Mudah Dipahami
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="px-6 py-3 w-2/12 text-gray-700 truncate">PHP</div>
-                            <div class="px-6 py-3 w-2/12 text-gray-700">11-10-2025</div>
-                            <div class="px-6 py-3 w-2/12 text-gray-700 ">Belum pernah dipilih</div>
-                            <div class="px-6 py-3 w-2/12">
-                                <div class="flex items-center space-x-2">
-                                    <div class="flex justify-center w-full">
-                                        <input type="checkbox" id="pilih_content" name="pilih_content"
-                                            value="sms"
-                                            class="h-6 w-6 border-gray-300 rounded focus:ring-indigo-700 text-indigo-700">
-                                    </div>
-                                    <button id="lihat"
-                                        class="w-6 h-6 p-2
-                                        rounded-sm bg-sky-500 hover:bg-sky-600 text-white flex items-center
-                                        justify-center"
-                                        aria-label="Lihat">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                        @foreach ($contents as $content)
+                            <div class="flex items-center bg-amber-100 rounded-lg shadow-md text-sm font-medium">
 
+                                <div class="px-6 py-3 w-4/12 text-gray-900">
+                                    <div class="flex items-center">
+                                        <div
+                                            class="flex-shrink-0 h-8 w-8 rounded-md bg-amber-500 flex items-center justify-center text-white">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                class="w-5 h-5">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L1.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09l2.846.813-.813 2.846a4.5 4.5 0 00-3.09 3.09zM18.25 12L17 14.25l-1.25-2.25L13.5 11l2.25-1.25L17 7.5l1.25 2.25L20.5 11l-2.25 1.25z" />
+                                            </svg>
+                                        </div>
+                                        <div class="ml-4 truncate">
+                                            {{ $content->title }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="px-6 py-3 w-2/12 text-gray-700 truncate">Laravel</div>
+                                <div class="px-6 py-3 w-2/12 text-gray-700">{{ $content->created_at->format('d-m-Y') }}
+                                </div>
+                                <div class="px-6 py-3 w-2/12 text-gray-700 ">Belum pernah dipilih</div>
+                                <div class="px-6 py-3 w-2/12 ">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="flex justify-center w-full">
+                                            <input type="checkbox" id="content_{{ $content->id }}"
+                                                name="content_checkbox" value="{{ $content->id }}"
+                                                data-title="{{ $content->title }}"
+                                                class="h-6 w-6 border-gray-300 rounded focus:ring-indigo-700 text-indigo-700">
+                                        </div>
+                                        <button id="lihat"
+                                            class="w-6 h-6 p-2 rounded-sm bg-sky-500 hover:bg-sky-600 text-white flex items-center justify-center"
+                                            aria-label="Lihat" data-content-id="{{ $content->id }}">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
                 <div class="mt-4">
@@ -483,9 +232,9 @@
                         <button id="closeModal"
                             class="py-1 w-34 text-indigo-700 bg-gray-50 border-2 border-indigo-700 rounded-lg text-center">
                             Cancel</button>
-                        <div
+                        <button id="saveSelectedContent" type="button"
                             class="py-1 w-34 text-gray-50 bg-indigo-700 border-2 border-indigo-700 rounded-lg text-center">
-                            Save</div>
+                            Save</button>
                     </div>
                 </div>
             </div>
@@ -504,7 +253,7 @@
                     <div
                         class="w-full h-120 overflow-y-auto font-bold p-8 bg-gray-100 rounded-lg shadow-[0px_1px_2px_1px_rgba(0,0,0,0.4)] flex flex-wrap gep-2">
                         <p class="text-2xl font-bold">
-                            1. Content 1
+                            {{ $content->title }}
                         </p>
                         <p class="text-base font-medium indent-10">
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique magni tenetur sunt quo
@@ -622,6 +371,185 @@
             previewImage.src = '#';
             imagePreviewDiv.classList.add('hidden');
         }
+    });
+</script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const saveSelectedContentBtn = document.getElementById('saveSelectedContent');
+        const selectedContentContainer = document.getElementById('selected-content-container');
+        const noContentMessage = document.getElementById('no-content-message');
+        const selectedContentIdsInput = document.getElementById('selected_content_ids');
+
+        // Store selected content IDs
+        let selectedContents = [];
+
+        // Handle save button click in the modal
+        if (saveSelectedContentBtn) {
+            saveSelectedContentBtn.addEventListener('click', function() {
+                // Get all checked checkboxes
+                const checkedBoxes = document.querySelectorAll(
+                    'input[name="content_checkbox"]:checked');
+
+                // Clear previous selections
+                selectedContents = [];
+
+                // Process each checked box
+                checkedBoxes.forEach(function(checkbox, index) {
+                    const contentId = checkbox.value;
+                    const contentTitle = checkbox.getAttribute('data-title');
+
+                    // Add to selected contents array
+                    selectedContents.push({
+                        id: contentId,
+                        title: contentTitle,
+                        order: index + 1
+                    });
+                });
+
+                // Update the hidden input with selected IDs
+                selectedContentIdsInput.value = JSON.stringify(selectedContents);
+
+                // Update the UI
+                updateSelectedContentDisplay();
+
+                // Close the modal
+                const modalElement = document.querySelector('#modal');
+                modalElement.classList.add('opacity-0');
+                setTimeout(() => {
+                    modalElement.classList.add('hidden');
+
+                    // Scroll to the content section
+                    const contentSection = document.getElementById('selected-content-container')
+                        .closest('.mb-4');
+                    if (contentSection) {
+                        contentSection.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'center'
+                        });
+                    }
+                }, 500);
+            });
+        }
+
+        // Function to update the selected content display
+        function updateSelectedContentDisplay() {
+            // Clear the container
+            selectedContentContainer.innerHTML = '';
+
+            if (selectedContents.length === 0) {
+                // Show the "no content" message if nothing is selected
+                noContentMessage.classList.remove('hidden');
+                return;
+            }
+
+            // Hide the "no content" message
+            noContentMessage.classList.add('hidden');
+
+            // Add each selected content to the display
+            selectedContents.forEach(function(content, index) {
+                const contentCard = document.createElement('div');
+                contentCard.className =
+                    'flex items-start p-4 border border-gray-300 rounded-md bg-white shadow-sm';
+                contentCard.dataset.contentId = content.id;
+
+                contentCard.innerHTML = `
+                    <div class="mr-3">
+                        <div class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center font-bold">
+                            ${index + 1}
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-semibold text-gray-800">${content.title}</h3>
+                        <p class="text-sm text-gray-600">
+                            Selected content item
+                        </p>
+                    </div>
+                    <div class="ml-3 flex flex-col items-center justify-center space-y-1">
+                        <button type="button" class="move-up-btn text-gray-500 hover:text-gray-700" data-index="${index}">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"></path>
+                            </svg>
+                        </button>
+                        <button type="button" class="move-down-btn text-gray-500 hover:text-gray-700" data-index="${index}">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <button type="button" class="remove-content-btn ml-3 text-red-500 hover:text-red-700" data-index="${index}">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M6 2a1 1 0 00-1 1v1H3.5a.5.5 0 000 1h.54l.7 10.11A2 2 0 006.73 17h6.54a2 2 0 001.99-1.89L16.96 5H17.5a.5.5 0 000-1H15V3a1 1 0 00-1-1H6zm1 4a.5.5 0 011 0v7a.5.5 0 01-1 0V6zm4 0a.5.5 0 011 0v7a.5.5 0 01-1 0V6z" />
+                        </svg>
+                    </button>
+                `;
+
+                selectedContentContainer.appendChild(contentCard);
+            });
+
+            // Add event listeners for the buttons
+            addContentCardEventListeners();
+        }
+
+        // Function to add event listeners to content card buttons
+        function addContentCardEventListeners() {
+            // Remove content button
+            document.querySelectorAll('.remove-content-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const index = parseInt(this.dataset.index);
+                    selectedContents.splice(index, 1);
+                    selectedContentIdsInput.value = selectedContents.map(item => item.id).join(
+                        ',');
+                    updateSelectedContentDisplay();
+                });
+            });
+
+            // Move up button
+            document.querySelectorAll('.move-up-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const index = parseInt(this.dataset.index);
+                    if (index > 0) {
+                        // Swap with the item above
+                        [selectedContents[index], selectedContents[index - 1]] = [
+                            selectedContents[index - 1], selectedContents[index]
+                        ];
+                        updateSelectedContentDisplay();
+                    }
+                });
+            });
+
+            // Move down button
+            document.querySelectorAll('.move-down-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const index = parseInt(this.dataset.index);
+                    if (index < selectedContents.length - 1) {
+                        // Swap with the item below
+                        [selectedContents[index], selectedContents[index + 1]] = [
+                            selectedContents[index + 1], selectedContents[index]
+                        ];
+                        updateSelectedContentDisplay();
+                    }
+                });
+            });
+        }
+
+        // Update the lihat button event listeners
+        document.querySelectorAll('#lihat').forEach(button => {
+            button.addEventListener('click', function() {
+                const contentId = this.getAttribute('data-content-id');
+                const modalElement = document.querySelector('#modal2');
+
+                if (modalElement) {
+                    modalElement.classList.remove('hidden');
+                    setTimeout(() => {
+                        modalElement.classList.remove('opacity-0');
+                    }, 10);
+                }
+            });
+        });
     });
 </script>
 

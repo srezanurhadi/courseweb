@@ -21,7 +21,7 @@
                             <h1 class="text-3xl font-bold text-gray-800">
                                 <a href="{{ route('user.course.index') }}" class="hover:text-indigo-900">Course</a>
                                 <i class="fa-solid fa-chevron-right mx-1 text-2xl"></i>
-                                <a href="{{ route('user.course.overview') }}" class="hover:text-indigo-900">Title</a>
+                                <a href="{{ route('user.course.index') }}" class="hover:text-indigo-900">Title</a>
                                 <i class="fa-solid fa-chevron-right mx-1 text-2xl"></i>
                                 <a href="{{ route('user.course.content') }}" class="hover:text-indigo-900">Content 1</a>
                             </h1>
@@ -32,12 +32,12 @@
                                 <i class="fa-regular fa-bell fa-lg text-black hover:text-gray-600"></i>
                             </button>
                             <div class="flex items-center space-x-2 px-3">
-                                <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-neutral-300 overflow-hidden">
+                                <span
+                                    class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-neutral-300 overflow-hidden">
                                     @if (Auth::user()->image)
                                         {{-- Jika user punya foto, tampilkan foto --}}
-                                        <img src="{{ asset('storage/' . Auth::user()->image) }}" 
-                                            alt="{{ Auth::user()->name }}" 
-                                            class="w-full h-full object-cover">
+                                        <img src="{{ asset('storage/' . Auth::user()->image) }}"
+                                            alt="{{ Auth::user()->name }}" class="w-full h-full object-cover">
                                     @else
                                         {{-- Jika tidak ada foto, tampilkan inisial --}}
                                         <span class="text-xl font-semibold leading-none text-gray-700">
@@ -56,7 +56,7 @@
 
             {{-- - Content Area - --}}
             <div class="max-w-6xl mx-auto py-4">
-                <a href="{{ route('user.course.overview') }}"
+                <a href="{{ url()->previous() }}"
                     class="flex items-center text-indigo-700 hover:text-indigo-800 text-2xl font-bold pb-2 rounded-lg transition-colors gap-2">
                     <i class="fa-solid fa-caret-left text-4xl"></i>
                     Back

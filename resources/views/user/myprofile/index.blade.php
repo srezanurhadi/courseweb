@@ -146,10 +146,6 @@
                                                 </span>
                                             @endif
                                         </div>
-
-                                        <label for="image" class="cursor-pointer absolute bottom-0 right-0 bg-white rounded-full p-3 shadow-md hover:bg-gray-100">
-                                            <i class="fas fa-camera text-indigo-700 text-md"></i>
-                                        </label>
                                     </div>
                                     <div class="text-center">
                                         <h3 class="text-lg font-semibold text-gray-800">{{ $user->name }}</h3>

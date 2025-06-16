@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\MyParticipant;
+use App\Models\User;
+use App\Models\Category;
+use App\Models\enrollments as Enrollment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -129,5 +132,40 @@ class myParticipantController extends Controller
         $user->update($validatedData);
 
         return redirect()->route('user.profile')->with('success', 'Profile berhasil diperbarui!');
+    }
+
+    /**
+     * Menampilkan daftar kursus yang diikuti oleh participant.
+     */
+    public function myCourses()
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $lastSeenCourse = null;
+        $courses = collect(); // Inisialisasi sebagai koleksi kosong
+
+        // 2. Ambil semua kategori
+        $categories = Category::all();
+
+        // Cek apakah user sudah mendaftar di setidaknya satu kursus
+        if ($user->enrolledCourses()->exists()) {
+            // ... (logika last seen course tidak berubah)
+            $lastEnrollment = Enrollment::where('user_id', $user->id)
+                ->latest('updated_at')
+                ->first();
+
+            if ($lastEnrollment) {
+                $lastSeenCourse = $lastEnrollment->course;
+            }
+
+            $enrolledCoursesQuery = $user->enrolledCourses()->latest();
+            if ($lastSeenCourse) {
+                $enrolledCoursesQuery->where('courses.id', '!=', $lastSeenCourse->id);
+            }
+            $courses = $enrolledCoursesQuery->paginate(8);
+        }
+
+        // 3. Kirim variabel $categories ke view
+        return view('user.mycourse.index', compact('courses', 'lastSeenCourse', 'categories'));
     }
 }

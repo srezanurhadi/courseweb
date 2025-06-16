@@ -7,6 +7,7 @@ use App\Models\Category;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Course extends Model
 {
@@ -27,14 +28,28 @@ class Course extends Model
         'status',
     ];
 
-
-    public function user(): BelongsTo
+    public function getRouteKeyName()
     {
-        return $this->belongsTo(User::class);
+        return 'slug';
     }
 
+
+    // Mendefinisikan relasi bahwa Course ini dibuat oleh satu User (Author).
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    // Mendefinisikan relasi bahwa Course ini milik satu Category.
     public function category(): BelongsTo
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class, 'category_id');
+    }
+
+    public function contents(): BelongsToMany
+    {
+        return $this->belongsToMany(Content::class, 'course_contents')
+            ->withPivot('order')
+            ->orderBy('order');
     }
 }

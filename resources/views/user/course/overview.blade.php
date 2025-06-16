@@ -21,7 +21,8 @@
                             <h1 class="text-3xl font-bold text-gray-800">
                                 <a href="{{ route('user.course.index') }}" class="hover:text-indigo-900">Course</a>
                                 <i class="fa-solid fa-chevron-right mx-1 text-2xl"></i>
-                                <a href="{{ route('user.course.overview') }}" class="hover:text-indigo-900">Title</a>
+                                <a href="{{ route('user.course.show', $course->slug) }}"
+                                    class="hover:text-indigo-900">{{ \Illuminate\Support\Str::limit($course->title, 15) }}</a>
                             </h1>
                         </div>
                         <div class="flex
@@ -30,12 +31,12 @@
                                 <i class="fa-regular fa-bell fa-lg text-black hover:text-gray-600"></i>
                             </button>
                             <div class="flex items-center space-x-2 px-3">
-                                <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-neutral-300 overflow-hidden">
+                                <span
+                                    class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-neutral-300 overflow-hidden">
                                     @if (Auth::user()->image)
                                         {{-- Jika user punya foto, tampilkan foto --}}
-                                        <img src="{{ asset('storage/' . Auth::user()->image) }}" 
-                                            alt="{{ Auth::user()->name }}" 
-                                            class="w-full h-full object-cover">
+                                        <img src="{{ asset('storage/' . Auth::user()->image) }}"
+                                            alt="{{ Auth::user()->name }}" class="w-full h-full object-cover">
                                     @else
                                         {{-- Jika tidak ada foto, tampilkan inisial --}}
                                         <span class="text-xl font-semibold leading-none text-gray-700">
@@ -57,7 +58,7 @@
                 <header class="bg-indigo-100 px-6 py-8">
                     <div class="max-w-6xl mx-auto">
 
-                        <div class="flex flex-row gap-6">
+                        <div class="flex flex-row items-center gap-6">
                             <!-- Course Image -->
                             <div class="w-80 h-full bg-gray-300 rounded-xl flex items-center justify-center">
                                 <img src="https://picsum.photos/900/600" alt="Course Image"
@@ -69,26 +70,61 @@
                             <div class="flex-1">
                                 <span
                                     class="inline-block bg-indigo-200 text-indigo-700 px-3 py-1 rounded-full text-sm font-semibold mb-3">
-                                    Web Development
+                                    {{ $course->category->category }}
                                 </span>
-                                <h1 class="text-3xl font-bold text-gray-900 mb-4">Tutorial Laravel 12 100% work no debat
-                                    dan pasti berhasil realllllll pasti bisa yakn betul html dan lain
-                                    lain</h1>
-                                <p class="text-gray-600 mb-3 leading-relaxed">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                                    irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                                    pariatur.
-                                </p>
-
+                                <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ $course->title }}</h1>
+                                <span class="text-gray-900 mb-2">By: {{ $course->user->name }}</span>
                                 <!-- Progress Bar -->
                                 <div class="flex items-center gap-4">
-                                    <div class="flex-1 bg-gray-300 rounded-full h-2 mr-3">
-                                        <div class="bg-indigo-700 h-2 rounded-full" style="width: 50%"></div>
+                                    <div class="flex-1 bg-gray-300 rounded-full h-3 mr-3">
+                                        <div class="bg-indigo-700 h-3 rounded-full" style="width: 50%"></div>
                                     </div>
                                     <span class="text-xl font-bold text-gray-900">50%</span>
                                 </div>
+                                {{-- enrollmernt start --}}
+                                <div class="flex-1">
+                                    @if (session('success'))
+                                        <div class="bg-green-50 border border-green-700 text-green-700 px-4 py-3 rounded relative my-4"
+                                            role="alert">
+                                            <strong class="font-bold">Sukses!</strong>
+                                            <span class="block sm:inline">{{ session('success') }}</span>
+                                        </div>
+                                    @endif
+
+                                    @if (session('error'))
+                                        <div class="bg-red-100 border border-red-700 text-red-700 px-4 py-3 rounded relative my-4"
+                                            role="alert">
+                                            <strong class="font-bold">Gagal!</strong>
+                                            <span class="block sm:inline">{{ session('error') }}</span>
+                                        </div>
+                                    @endif
+
+                                    @if ($isEnrolled)
+                                        {{-- Jika SUDAH terdaftar, tampilkan tombol Unenroll --}}
+                                        <form action="{{ route('user.course.unenroll', $course->slug) }}"
+                                            method="POST"
+                                            onsubmit="return confirm('Apakah Anda yakin ingin berhenti dari kursus ini?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="h-8 w-full mt-4 bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2">
+                                                <i class="fas fa-times-circle"></i>
+                                                Unenroll From Course
+                                            </button>
+                                        </form>
+                                    @else
+                                        {{-- Jika BELUM terdaftar, tampilkan tombol Enroll --}}
+                                        <form action="{{ route('user.course.enroll', $course->slug) }}" method="POST">
+                                            @csrf
+                                            <button type="submit"
+                                                class="h-8 w-full mt-4 bg-indigo-700 hover:bg-indigo-800 text-white font-semibold py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2">
+                                                <i class="fas fa-plus"></i>
+                                                Enroll This Course
+                                            </button>
+                                        </form>
+                                    @endif
+                                </div>
+                                {{-- enrollmernt end --}}
                             </div>
                         </div>
                     </div>
@@ -147,7 +183,7 @@
                                 </ul>
                             </div>
                             <button
-                                class="w-full mt-6 bg-indigo-100 hover:bg-indigo-300 text-gray-700 font-semibold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
+                                class="w-full mt-6 bg-indigo-100 hover:bg-indigo-300 text-gray-700 font-semibold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 shadow-lg">
                                 <i class="fas fa-users"></i>
                                 Discussion Group
                             </button>
@@ -155,34 +191,11 @@
 
                         <!-- Main Content -->
                         <div class="col-span-2">
-                            <div class="bg-gray-100 rounded-xl shadow-lg p-6">
-                                <h2 class="text-2xl font-bold text-gray-900 mb-6">Why Do We Choose Laravel?</h2>
+                            <div class="bg-gray-100 rounded-xl shadow-lg p-6 h-full">
+                                <h2 class="text-2xl font-bold text-gray-900 mb-6">Description</h2>
                                 <p class="text-gray-600 text-lg leading-relaxed text-justify">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                                    irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                                    pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-                                    deserunt mollit anim id est laborum. Excepteur sint occaecat cupidatat non proident,
-                                    sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                    {{ $course->description }}
                                 </p>
-                            </div>
-                            <div class="flex items-center justify-center gap-63 mt-8">
-                                <button
-                                    class="bg-indigo-700 hover:bg-indigo-800 text-white font-semibold px-6 py-2 rounded-lg transition-colors">
-                                    Previous
-                                </button>
-
-                                <div class="flex items-center gap-2">
-                                    <button class="w-6 h-6 bg-indigo-700 text-white rounded-lg font-medium">1</button>
-                                    <button
-                                        class="w-6 h-6 text-indigo-700 rounded-lg font-medium hover:bg-gray-300 transition-colors">2</button>
-                                </div>
-
-                                <button
-                                    class="bg-indigo-700 hover:bg-indigo-800 text-white font-semibold px-6 py-2 rounded-lg transition-colors">
-                                    Next
-                                </button>
                             </div>
                         </div>
                     </div>
