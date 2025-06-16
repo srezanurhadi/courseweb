@@ -135,7 +135,7 @@
                                         class="js-dropdown-menu hidden origin-top-right absolute shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] right-0 mt-2 w-56 rounded-md bg-gray-100 focus:outline-none"
                                         role="menu" aria-orientation="vertical" aria-labelledby="dropdown-button">
                                         <div class="py-1" role="none">
-                                            <a href="#"
+                                            <a href="{{ url('admin/course/' . $course->slug . '/edit') }}"
                                                 class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-300"
                                                 role="menuitem" id="menu-item-0">Edit Course</a>
                                             <a href="{{ url('admin/course/' . $course->slug) }}"
