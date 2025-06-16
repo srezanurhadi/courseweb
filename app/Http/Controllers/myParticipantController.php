@@ -185,6 +185,6 @@ class myParticipantController extends Controller
         // Query yang dipaginasi sudah mencakup semua filter.
         $courses = $enrolledCoursesQuery->latest()->paginate(8);
 
-        return view('user.mycourse.index', compact('courses', 'lastSeenCourse', 'categories'));
+        return view('user.mycourse.index', compact('courses', 'lastSeenCourse', 'categories', 'isFilteringOrSearching'));
     }
 }
