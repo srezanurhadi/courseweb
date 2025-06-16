@@ -93,9 +93,13 @@ class contentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Content $content)
+    public function show(string $slug, )
     {
-        return view('admin.content.show');
+        $content = Content::where('slug', $slug)->first();
+        $contentData = $content->content;
+        $decodedContent = json_decode($contentData, true);
+;
+        return view('admin.content.show',compact('content','decodedContent'));
     }
 
     /**

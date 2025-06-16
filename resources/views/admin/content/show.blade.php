@@ -7,6 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <x-headcomponent></x-headcomponent>
+    {{-- Pastikan Tailwind CSS Typography Plugin diaktifkan di tailwind.config.js Anda --}}
+    @vite('resources/css/app.css') {{-- Jika Anda menggunakan Vite --}}
+    {{-- Atau <link href="{{ asset('css/app.css') }}" rel="stylesheet"> jika Anda menggunakan Mix --}}
 </head>
 
 <body>
@@ -26,7 +29,7 @@
             <div class="w-full flex pt-8 px-4 justify-between">
                 <div class="w-full flex flex-wrap gap-2 font-semibold">
                     <div class="w-full flex gap-2 items-center p-2">
-                        <div class="  text-indigo-700"> <i class="fa-solid fa-play rotate-180"></i><span
+                        <div class=" text-indigo-700"> <i class="fa-solid fa-play rotate-180"></i><span
                                 class="pl-2">Back</span>
                         </div>
                         <div class=" py-0.5 px-3 border-amber-500 text-amber-500 bg-amber-100 rounded-sm border-2">
@@ -37,33 +40,109 @@
                         </div>
                     </div>
                     <div
-                        class="w-full p-4 bg-gray-100 rounded-lg shadow-[0px_1px_2px_1px_rgba(0,0,0,0.4)] flex flex-wrap gep-2 border h-200">
-                        <p>
-                            1. Content 1
+                        class="w-full p-4 bg-gray-100 rounded-lg shadow-[0px_1px_2px_1px_rgba(0,0,0,0.4)] flex flex-wrap gap-2 h-200">
+                        {{-- ini bagian judul --}}
+                        <p class="w-full">
+                            1. Content 1 {{-- Anda mungkin ingin mengganti ini dengan judul dinamis dari data Anda --}}
                         </p>
-                        <p class="text-base font-medium indent-10">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique magni tenetur sunt quo
-                            iure nesciunt unde voluptatum earum dolor sit natus sequi maxime delectus pariatur quas
-                            perferendis minima ipsa repellendus, consequuntur quidem aliquid itaque eligendi accusamus
-                            hic? Fuga, molestias? Consequatur nesciunt sint officia enim vel doloribus, ex cum non
-                            libero tenetur iusto delectus necessitatibus eaque. Culpa, quo doloribus? Dolorum dolore
-                            quos ipsa quas ullam asperiores beatae labore repellendus, laboriosam sed qui nobis vitae in
-                            assumenda aliquam. Vitae recusandae vel excepturi velit aut, et quod itaque maxime in fuga
-                            rerum alias corrupti quidem ratione error nesciunt, aliquam harum molestias. Ipsam, et omnis
-                            voluptatibus odio, libero maiores autem numquam veritatis earum quaerat dolore ullam
-                            eligendi atque ratione rerum tempore enim quibusdam reiciendis eum unde maxime qui quos
-                            deserunt. Incidunt doloremque labore iusto est cupiditate facilis esse unde autem beatae?
-                            Ipsum laborum incidunt, iure inventore facilis minima voluptatem at quam impedit saepe? Vel
-                            iure perferendis ad? Saepe, suscipit placeat dicta exercitationem ex unde ullam cumque
-                            totam, corrupti deserunt quae, dolorum explicabo alias! Molestiae inventore aliquid aperiam
-                            nobis, fugiat voluptates praesentium. Nesciunt quae quaerat laudantium officia sequi magni
-                            voluptate officiis, quibusdam doloribus tenetur soluta perferendis numquam ratione
-                            repudiandae consectetur ipsum quas ipsam iusto? Aspernatur.
-                        </p>
+
+                        {{-- --- EDITOR.JS CONTENT RENDERING START --- --}}
+                        <div class="prose max-w-none w-full"> {{-- Gunakan Tailwind Typography Plugin di sini --}}
+                            @if (isset($editorJsData) && is_array($editorJsData['blocks']))
+                                @foreach ($editorJsData['blocks'] as $block)
+                                    @switch ($block['type'])
+                                        @case('paragraph')
+                                            <p>{!! $block['data']['text'] !!}</p>
+                                        @break
+
+                                        @case('header')
+                                            @php
+                                                $level = $block['data']['level'];
+                                                $tag = 'h' . $level;
+                                            @endphp
+                                            <{!! $tag !!}>{!! $block['data']['text'] !!}</{!! $tag !!}>
+                                            @break
+
+                                            @case('image')
+                                                <figure class="my-6">
+                                                    <img src="{{ $block['data']['file']['url'] }}"
+                                                        alt="{{ $block['data']['caption'] ?? 'Image' }}"
+                                                        class="max-w-full h-auto mx-auto rounded-lg shadow-md {{ $block['data']['stretched'] ? 'w-full' : '' }}">
+                                                    @if ($block['data']['caption'])
+                                                        <figcaption class="text-center text-sm text-gray-600 mt-2">
+                                                            {{ $block['data']['caption'] }}</figcaption>
+                                                    @endif
+                                                </figure>
+                                            @break
+
+                                            @case('list')
+                                                @if ($block['data']['style'] === 'unordered')
+                                                    <ul>
+                                                        @foreach ($block['data']['items'] as $item)
+                                                            <li>{!! $item !!}</li>
+                                                        @endforeach
+                                                    </ul>
+                                                @elseif ($block['data']['style'] === 'ordered')
+                                                    <ol>
+                                                        @foreach ($block['data']['items'] as $item)
+                                                            <li>{!! $item !!}</li>
+                                                        @endforeach
+                                                    </ol>
+                                                @endif
+                                            @break
+
+                                            @case('delimiter')
+                                                <hr class="my-8 border-t-2 border-gray-300 w-24 mx-auto">
+                                            @break
+
+                                            @case('quote')
+                                                <blockquote>
+                                                    <p>{!! $block['data']['text'] !!}</p>
+                                                    @if ($block['data']['caption'])
+                                                        <footer>— {{ $block['data']['caption'] }}</footer>
+                                                    @endif
+                                                </blockquote>
+                                            @break
+
+                                            @case('code')
+                                                <pre><code>{!! htmlspecialchars($block['data']['code']) !!}</code></pre>
+                                            @break
+
+                                            @case('table')
+                                                <div class="overflow-x-auto my-6">
+                                                    <table>
+                                                        <tbody>
+                                                            @foreach ($block['data']['content'] as $row)
+                                                                <tr>
+                                                                    @foreach ($row as $cell)
+                                                                        <td>{!! $cell !!}</td>
+                                                                    @endforeach
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            @break
+
+                                            
+
+                                            @default
+                                                <p class="text-red-500">
+                                                    Tipe blok tidak dikenal: {{ $block['type'] }}
+                                                </p>
+                                        @endswitch
+                                @endforeach
+                            @else
+                                <p class="text-gray-500 italic">Tidak ada konten yang tersedia.</p>
+                            @endif
+                        </div>
+                        {{-- --- EDITOR.JS CONTENT RENDERING END --- --}}
+
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 </body>
 <script></script>
 
