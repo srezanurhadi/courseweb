@@ -137,7 +137,7 @@ class myParticipantController extends Controller
     /**
      * Menampilkan daftar kursus yang diikuti oleh participant.
      */
-    public function myCourses(Request $request) // [Diubah] Method sekarang menerima Request
+    public function myCourses(Request $request)
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
@@ -158,10 +158,9 @@ class myParticipantController extends Controller
                 $lastSeenCourse = $lastEnrollment->course;
             }
         }
-        // >>> Akhir blok logika baru <<<
 
         // Query dasar untuk semua kursus yang diikuti user
-        $enrolledCoursesQuery = $user->enrolledCourses();
+        $enrolledCoursesQuery = $user->enrolledCourses()->withCount('enrollments');
 
         // Terapkan filter kategori jika ada
         if ($request->has('category') && $request->filled('category')) {
@@ -182,9 +181,20 @@ class myParticipantController extends Controller
             $enrolledCoursesQuery->where('courses.id', '!=', $lastSeenCourse->id);
         }
 
-        // Query yang dipaginasi sudah mencakup semua filter.
+        // Query yang dipaginasi
         $courses = $enrolledCoursesQuery->latest()->paginate(8);
 
-        return view('user.mycourse.index', compact('courses', 'lastSeenCourse', 'categories', 'isFilteringOrSearching'));
+        // Debug: Tambahkan informasi untuk debugging
+        $totalCourses = $user->enrolledCourses()->count();
+        $hasMoreThanOnePage = $courses->hasPages();
+
+        return view('user.mycourse.index', compact(
+            'courses',
+            'lastSeenCourse',
+            'categories',
+            'isFilteringOrSearching',
+            'totalCourses',
+            'hasMoreThanOnePage'
+        ));
     }
 }

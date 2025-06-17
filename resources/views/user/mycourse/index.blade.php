@@ -18,7 +18,7 @@
                 <div class="px-6 py-0.5">
                     <div class="flex items-center justify-between h-16">
                         <div class="flex items-center px-4">
-                            <h1 class="text-3xl font-bold text-gray-800">MyCourse</h1>
+                            <h1 class="text-3xl font-bold text-gray-800">My Course</h1>
                         </div>
                         <div class="flex items-center space-x-4 px-4">
                             <button>
@@ -98,7 +98,7 @@
                         </div>
                         <div class="w-full max-w-6xl mt-6 mx-6">
                             <p class="text-indigo-700 text-2xl font-bold px-4 text-shadow-lg mb-2">Last Seen</p>
-                            <a href="{{ route('user.course.show', $lastSeenCourse->slug) }}"
+                            <a href="{{ route('user.course.show', ['course' => $lastSeenCourse->slug, 'from' => 'my-course']) }}"
                                 class="block bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg p-6 hover:bg-white transition-all duration-300">
                                 <div class="flex flex-row gap-6 items-center">
                                     <div class="w-1/3 h-40 flex-shrink-0">
@@ -187,79 +187,94 @@
                     </div>
                 @endif
 
-                @if ($courses->isEmpty() && !$lastSeenCourse)
-                    <div class="col-span-full text-center py-15">
-                        <p class="text-gray-500 text-lg">You are not enrolled in any courses yet.</p>
-                        <p class="text-gray-400 text-sm">Explore a variety of exciting courses we offer and start
-                            learning now.</p>
-                        <a href="{{ route('user.course.index') }}" class="text-indigo-400 text-sm">View All
-                            Courses</a>
-                    </div>
-                @else
-                    <div class="m-10 p-4 grid grid-cols-4 gap-10 justify-around">
-                        @foreach ($courses as $course)
-                            <div
-                                class="bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden h-105">
+                {{-- Konten Courses --}}
+                <div class="min-h-[400px]">
+                    @if ($courses->isEmpty() && !$lastSeenCourse)
+                        <div class="col-span-full text-center py-15">
+                            <p class="text-gray-500 text-lg">You are not enrolled in any courses yet.</p>
+                            <p class="text-gray-400 text-sm">Explore a variety of exciting courses we offer and start
+                                learning now.</p>
+                            <a href="{{ route('user.course.index') }}" class="text-indigo-400 text-sm">View All
+                                Courses</a>
+                        </div>
+                    @else
+                        {{-- Grid Courses --}}
+                        @if ($courses->count() > 0)
+                            <div class="mx-10 mt-10 mb-4 p-4 grid grid-cols-4 gap-10 justify-around">
+                                @foreach ($courses as $course)
+                                    <div
+                                        class="bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden h-105">
 
-                                {{-- Gambar Course --}}
-                                <a href="{{ route('user.course.show', $course->slug) }}" class="w-full">
-                                    <div class="p-2 h-40 w-full items-start flex justify-between bg-cover bg-center"
-                                        style="background-image: url('{{ asset('storage/' . $course->image) }}')">
+                                        {{-- Gambar Course --}}
+                                        <a href="{{ route('user.course.show', $course->slug) }}" class="w-full">
+                                            <div class="p-2 h-40 w-full items-start flex justify-between bg-cover bg-center"
+                                                style="background-image: url('{{ asset('storage/' . $course->image) }}')">
 
-                                        <div class="rounded-4xl bg-indigo-200/60 py-1 px-2 text-xs text-indigo-700">
-                                            {{ $course->created_at->diffForHumans() }}
-                                        </div>
+                                                <div
+                                                    class="rounded-4xl bg-indigo-200/60 py-1 px-2 text-xs text-indigo-700">
+                                                    {{ $course->created_at->diffForHumans() }}
+                                                </div>
 
-                                        <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-indigo-700">12
-                                            Pages
-                                        </div>
-                                    </div>
-                                </a>
-
-                                <div class="h-full w-full p-2 flex flex-col mt-2">
-                                    {{-- Kategori Course --}}
-                                    <div class="self-start">
-                                        <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-gray-900">
-                                            {{ $course->category->category }}
-                                        </div>
-                                    </div>
-
-                                    {{-- Judul Course --}}
-                                    <a href="{{ route('user.course.show', $course->slug) }}"
-                                        class="pl-2 pt-1 font-semibold line-clamp-2 text-lg text-gray-900 hover:text-indigo-900 cursor-pointer">
-                                        {{ \Illuminate\Support\Str::limit($course->title, 40) }}
-                                    </a>
-
-                                    {{-- Deskripsi Course --}}
-                                    <div class="pl-2 pt-1 text-sm text-gray-500 line-clamp-2 h-10">
-                                        {{ \Illuminate\Support\Str::limit($course->description, 70) }}
-                                    </div>
-
-                                    <div class="flex-col space-y-2 m-2 mt-auto">
-                                        <div class="flex items-center space-x-2">
-                                            <i class="fas fa-users-line text-indigo-700"></i>
-                                            <div class="text-sm text-gray-600">30 Participant</div>
-                                        </div>
-
-                                        <div class="flex items-center space-x-1">
-                                            <div
-                                                class="rounded-full h-6 w-6 bg-indigo-700 text-indigo-200 justify-center flex items-center">
-                                                {{ substr($course->user->name, 0, 1) }}
+                                                <div
+                                                    class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-indigo-700">
+                                                    12
+                                                    Pages
+                                                </div>
                                             </div>
-                                            <div class="text-sm text-gray-600">{{ $course->user->name }}</div>
-                                        </div>
+                                        </a>
 
-                                        <div class="flex items-center justify-between">
-                                            <div class="flex-1 bg-gray-200 rounded-full h-2 mr-3">
-                                                <div class="bg-indigo-700 h-2 rounded-full" style="width: 0%"></div>
+                                        <div class="h-full w-full p-2 flex flex-col mt-2">
+                                            {{-- Kategori Course --}}
+                                            <div class="self-start">
+                                                <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-gray-900">
+                                                    {{ $course->category->category }}
+                                                </div>
                                             </div>
-                                            <span class="text-sm font-bold text-gray-900">0%</span>
+
+                                            {{-- Judul Course --}}
+                                            <a href="{{ route('user.course.show', ['course' => $course->slug, 'from' => 'my-course']) }}"
+                                                class="pl-2 pt-1 font-semibold line-clamp-2 text-lg text-gray-900 hover:text-indigo-900 cursor-pointer">
+                                                {{ \Illuminate\Support\Str::limit($course->title, 40) }}
+                                            </a>
+
+                                            {{-- Deskripsi Course --}}
+                                            <div class="pl-2 pt-1 text-sm text-gray-500 line-clamp-2 h-10">
+                                                {{ \Illuminate\Support\Str::limit($course->description, 70) }}
+                                            </div>
+
+                                            <div class="flex-col space-y-2 m-2 mt-auto">
+                                                <div class="flex items-center space-x-2">
+                                                    <i class="fas fa-users-line text-indigo-700"></i>
+                                                    <div class="text-sm text-gray-600">
+                                                        {{ $course->enrollments_count }} Participant</div>
+                                                </div>
+
+                                                <div class="flex items-center space-x-1">
+                                                    <div
+                                                        class="rounded-full h-6 w-6 bg-indigo-700 text-indigo-200 justify-center flex items-center">
+                                                        {{ strtoupper(substr($course->user->name, 0, 1)) }}
+                                                    </div>
+                                                    <div class="text-sm text-gray-600">{{ $course->user->name }}</div>
+                                                </div>
+
+                                                <div class="flex items-center justify-between">
+                                                    <div class="flex-1 bg-gray-200 rounded-full h-2 mr-3">
+                                                        <div class="bg-indigo-700 h-2 rounded-full" style="width: 0%">
+                                                        </div>
+                                                    </div>
+                                                    <span class="text-sm font-bold text-gray-900">0%</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                @endforeach
                             </div>
-                        @endforeach
-                    </div>
+                        @endif
+                    @endif
+                </div>
+
+                {{-- Pagination --}}
+                @if ($courses->hasPages())
                     <div class="mb-4 px-10">
                         {{ $courses->withQueryString()->links() }}
                     </div>
@@ -269,6 +284,7 @@
             <x-footer></x-footer>
         </div>
     </div>
+
     <script>
         // Menunggu hingga seluruh konten halaman selesai dimuat
         document.addEventListener('DOMContentLoaded', function() {

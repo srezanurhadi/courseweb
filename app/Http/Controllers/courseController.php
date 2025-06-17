@@ -145,9 +145,6 @@ class courseController extends Controller
         return view('admin.course.edit', compact('course', 'categories', 'contents'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Course $course)
     {
         $validatedData = $request->validate([
