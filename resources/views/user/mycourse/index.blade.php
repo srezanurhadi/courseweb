@@ -156,7 +156,7 @@
                         <div class="w-full max-w-6xl mt-6 mx-6">
                             @if ($lastSeenCourse)
                                 <p class="text-indigo-700 text-2xl font-bold px-4 text-shadow-lg mb-2">Last Seen</p>
-                                <a href="{{ route('user.course.show', $lastSeenCourse->slug) }}"
+                                <a href="{{ route('user.course.show', ['course' => $lastSeenCourse->slug, 'from' => 'my-course']) }}"
                                     class="block bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg p-6 hover:bg-white transition-all 	duration-300">
                                     <div class="flex flex-row gap-6 items-center">
                                         <div class="w-1/3 h-40 flex-shrink-0">
@@ -216,7 +216,7 @@
                                     </div>
 
                                     {{-- Judul Course --}}
-                                    <a href="{{ route('user.course.show', $course->slug) }}"
+                                    <a href="{{ route('user.course.show', ['course' => $course->slug, 'from' => 'my-course']) }}"
                                         class="pl-2 pt-1 font-semibold line-clamp-2 text-lg text-gray-900 hover:text-indigo-900 cursor-pointer">
                                         {{ \Illuminate\Support\Str::limit($course->title, 40) }}
                                     </a>

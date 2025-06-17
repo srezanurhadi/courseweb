@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Models\Course;
 use App\Models\Category;
+USE App\Models\Content;
 use App\Models\enrollments as Enrollment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -43,15 +44,12 @@ class CourseController extends Controller
      * Menampilkan halaman detail sebuah course.
      * Menggunakan Route Model Binding dengan 'slug'.
      */
-    public function show(Course $course)
+    public function show(Course $course, Request $request) // <-- TAMBAHKAN Request $request
     {
-        // Pastikan kursus yang diakses sudah di-publish (status = 1)
         if (!$course->status) {
-            // Jika belum, kembalikan ke halaman daftar kursus dengan pesan error
             return redirect()->route('user.course.index')->with('error', 'Kursus tidak ditemukan.');
         }
 
-        // Cek apakah user yang sedang login sudah terdaftar di kursus ini
         $isEnrolled = false;
         if (Auth::check()) {
             $isEnrolled = Enrollment::where('user_id', Auth::id())
@@ -59,7 +57,25 @@ class CourseController extends Controller
                 ->exists();
         }
 
-        // Kirim variabel $isEnrolled ke view
-        return view('user.course.overview', compact('course', 'isEnrolled'));
+        // Ambil parameter 'from' dari URL
+        $from = $request->query('from');
+
+        // Kirim semua variabel yang diperlukan ke view, termasuk 'from'
+        return view('user.course.overview', compact('course', 'isEnrolled', 'from'));
+    }
+
+    /**
+     * Menampilkan halaman detail sebuah konten dari sebuah course.
+     */
+    public function showContent(Course $course, Content $content, Request $request)
+    {
+        // Anda bisa menambahkan validasi di sini jika perlu
+        // Contoh: Cek apakah user sudah terdaftar di course ini
+
+        // Ambil parameter 'from' dari URL
+        $from = $request->query('from');
+
+        // Ganti 'user.course.content.show' dengan nama view Anda yang sebenarnya
+        return view('user.course.content', compact('course', 'content', 'from'));
     }
 }
