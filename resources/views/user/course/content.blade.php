@@ -38,7 +38,7 @@
                                 
                                 <i class="fa-solid fa-chevron-right mx-1 text-2xl"></i>
                                 
-                                <span class="text-gray-600">{{ $content->title ?? 'Content 1' }}</span>
+                                <span class="text-gray-600">{{ $currentContent->title ?? 'Content 1' }}</span>
                             </h1>
                         </div>
                         <div class="flex items-center space-x-4 px-4">
@@ -73,7 +73,7 @@
                     Back
                 </a>
                 <div class="bg-gray-100 border-gray-200 border-2 rounded-xl shadow-lg p-8">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-6">1. Content 1</h2>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">{{ $pagination['current_page'] }}. {{ $currentContent->title ?? 'Content 1' }}</h2>
                     <p class="text-gray-600 text-lg leading-relaxed text-justify">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
                         incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
@@ -87,7 +87,7 @@
                         <div class="w-150 overflow-hidden">
                             <img src="https://picsum.photos/900/600" alt="Course Image"
                                 class="w-full h-auto rounded-lg object-cover">
-                            <p class="flex justify-center mt-1 text-gray-600 text-sm italic">Fig.1 Lorem picsum</p>
+                            <p class="flex justify-center mt-1 text-gray-600 text-sm italic">Fig.{{ $pagination['current_page'] }} Lorem picsum</p>
                         </div>
                     </div>
                     <p class="text-gray-600 text-lg leading-relaxed text-justify">
@@ -100,28 +100,92 @@
                         sunt in culpa qui officia deserunt mollit anim id est laborum.
                     </p>
                 </div>
+                
+                {{-- Updated Pagination Section --}}
                 <div class="flex items-center justify-center gap-63 mt-8">
-                    <button
-                        class="bg-indigo-700 hover:bg-indigo-800 text-white font-semibold px-6 py-2 rounded-lg transition-colors">
-                        Previous
-                    </button>
+                    {{-- Previous Button --}}
+                    @if($pagination['has_previous'])
+                        <a href="{{ route('user.course.content.show', [
+                            'course' => $course->slug,
+                            'content' => $pagination['previous_content_id'],
+                            'from' => $from ?? 'course'
+                        ]) }}"
+                            class="bg-indigo-700 hover:bg-indigo-800 text-white font-semibold px-6 py-2 rounded-lg transition-colors">
+                            Previous
+                        </a>
+                    @else
+                        <button disabled
+                            class="bg-gray-400 text-white font-semibold px-6 py-2 rounded-lg cursor-not-allowed">
+                            Previous
+                        </button>
+                    @endif
 
+                    {{-- Page Numbers --}}
                     <div class="flex items-center gap-2">
-                        <button class="w-6 h-6 bg-indigo-700 text-white rounded-lg font-medium">1</button>
-                        <button
-                            class="w-6 h-6 text-indigo-700 rounded-lg font-medium hover:bg-gray-300 transition-colors">2</button>
-                        <button
-                            class="w-6 h-6 text-indigo-700 rounded-lg font-medium hover:bg-gray-300 transition-colors">3</button>
-                        <button
-                            class="w-6 h-6 text-indigo-700 rounded-lg font-medium hover:bg-gray-300 transition-colors">...</button>
-                        <button
-                            class="w-6 h-6 text-indigo-700 rounded-lg font-medium hover:bg-gray-300 transition-colors">10</button>
+                        @php
+                            $totalPages = $pagination['total_pages'];
+                            $currentPage = $pagination['current_page'];
+                            $startPage = max(1, $currentPage - 2);
+                            $endPage = min($totalPages, $currentPage + 2);
+                        @endphp
+
+                        {{-- Show first page if not in range --}}
+                        @if($startPage > 1)
+                            <a href="{{ route('user.course.content.show', [
+                                'course' => $course->slug,
+                                'content' => $pagination['all_contents'][0]->id,
+                                'from' => $from ?? 'course'
+                            ]) }}"
+                                class="w-6 h-6 text-indigo-700 rounded-lg font-medium hover:bg-gray-300 transition-colors flex items-center justify-center">1</a>
+                            @if($startPage > 2)
+                                <span class="w-6 h-6 text-indigo-700 rounded-lg font-medium flex items-center justify-center">...</span>
+                            @endif
+                        @endif
+
+                        {{-- Show page range --}}
+                        @for($i = $startPage; $i <= $endPage; $i++)
+                            @if($i == $currentPage)
+                                <button class="w-6 h-6 bg-indigo-700 text-white rounded-lg font-medium">{{ $i }}</button>
+                            @else
+                                <a href="{{ route('user.course.content.show', [
+                                    'course' => $course->slug,
+                                    'content' => $pagination['all_contents'][$i-1]->id,
+                                    'from' => $from ?? 'course'
+                                ]) }}"
+                                    class="w-6 h-6 text-indigo-700 rounded-lg font-medium hover:bg-gray-300 transition-colors flex items-center justify-center">{{ $i }}</a>
+                            @endif
+                        @endfor
+
+                        {{-- Show last page if not in range --}}
+                        @if($endPage < $totalPages)
+                            @if($endPage < $totalPages - 1)
+                                <span class="w-6 h-6 text-indigo-700 rounded-lg font-medium flex items-center justify-center">...</span>
+                            @endif
+                            <a href="{{ route('user.course.content.show', [
+                                'course' => $course->slug,
+                                'content' => $pagination['all_contents'][$totalPages-1]->id,
+                                'from' => $from ?? 'course'
+                            ]) }}"
+                                class="w-6 h-6 text-indigo-700 rounded-lg font-medium hover:bg-gray-300 transition-colors flex items-center justify-center">{{ $totalPages }}</a>
+                        @endif
                     </div>
 
-                    <button
-                        class="bg-indigo-700 hover:bg-indigo-800 text-white font-semibold px-6 py-2 rounded-lg transition-colors">
-                        Next
-                    </button>
+                    {{-- Next Button --}}
+                    @if($pagination['has_next'])
+                        <a href="{{ route('user.course.content.show', [
+                            'course' => $course->slug,
+                            'content' => $pagination['next_content_id'],
+                            'from' => $from ?? 'course'
+                        ]) }}"
+                            class="bg-indigo-700 hover:bg-indigo-800 text-white font-semibold px-6 py-2 rounded-lg transition-colors">
+                            Next
+                        </a>
+                    @else
+                        <button disabled
+                            class="bg-gray-400 text-white font-semibold px-6 py-2 rounded-lg cursor-not-allowed">
+                            Next
+                        </button>
+                    @endif
                 </div>
             </div>
             <div class="relative">
