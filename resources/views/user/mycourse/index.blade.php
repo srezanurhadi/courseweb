@@ -113,12 +113,22 @@
                                                 {{ $lastSeenCourse->category->category }}
                                             </div>
                                         </div>
-                                        <h3 class="text-2xl font-bold text-gray-900 my-2">
+                                        <h3 class="text-2xl font-bold text-gray-900 my-1">
                                             {{ $lastSeenCourse->title }}
                                         </h3>
-                                        <p class="text-gray-600 font-semibold line-clamp-3 mb-2">
-                                            By: {{ $lastSeenCourse->user->name }}
-                                        </p>
+                                        <div class="flex items-center space-x-2">
+                                            <i class="fas fa-users-line text-indigo-700"></i>
+                                            <div class="font-semibold text-gray-600">
+                                                {{ $lastSeenCourse->enrollments_count }} Participant</div>
+                                        </div>
+                                        <div class="flex items-center space-x-1 my-1">
+                                            <div
+                                                class="rounded-full h-6 w-6 bg-indigo-700 text-indigo-200 justify-center flex items-center">
+                                                {{ strtoupper(substr($lastSeenCourse->user->name, 0, 1)) }}
+                                            </div>
+                                            <div class="font-semibold text-gray-600">{{ $lastSeenCourse->user->name }}
+                                            </div>
+                                        </div>
                                         <p class="text-gray-600 line-clamp-3 mb-4">
                                             {{ \Illuminate\Support\Str::limit($lastSeenCourse->description, 70) }}
                                         </p>

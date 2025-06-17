@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\MyParticipant;
-use App\Models\User;
+use App\Models\Course;
 use App\Models\Category;
 use App\Models\enrollments as Enrollment;
 use Illuminate\Http\Request;
@@ -155,7 +155,7 @@ class myParticipantController extends Controller
                 ->first();
 
             if ($lastEnrollment) {
-                $lastSeenCourse = $lastEnrollment->course;
+                $lastSeenCourse = Course::withCount('enrollments')->find($lastEnrollment->course_id);
             }
         }
 
