@@ -48,7 +48,7 @@
                     </div>
                 </div>
                 <div class="">
-                    <a href="" class="px-2 py-1 bg-sky-500 rounded-lg text-white font-semibold"><i
+                    <a href="content/create" class="px-2 py-1 bg-sky-500 rounded-lg text-white font-semibold"><i
                             class="fas fa-plus text-gray-50"></i> Add Content</a>
                 </div>
 
@@ -133,11 +133,11 @@
                                 <div class="px-6 py-3 w-2/12 text-gray-700">{{ $content->created_at->format('d-m-Y') }}</div>
                                 <div class="px-6 py-3 w-2/12">
                                     <div class="flex items-center space-x-2">
-                                        <button
+                                        <a href="content/{{ $content->slug }}"
                                             class="w-8 h-8 rounded-sm bg-sky-500 hover:bg-sky-600 text-white flex items-center justify-center"
                                             aria-label="Lihat">
                                             <i class="fas fa-eye"></i>
-                                        </button>
+                                        </a>
                                         <button
                                             class="w-8 h-8 rounded-sm bg-amber-400 hover:bg-amber-500 text-white flex items-center justify-center"
                                             aria-label="Ubah">

@@ -8,6 +8,7 @@ use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class courseController extends Controller
 {
@@ -39,8 +40,6 @@ class courseController extends Controller
      */
     public function store(Request $request)
     {
-
-
 
         $validatedData = $request->validate([
             'title' => 'required|string|max:150|unique:courses,title',
@@ -101,7 +100,13 @@ class courseController extends Controller
      */
     public function edit(Course $course)
     {
-        return view('admin.course.edit');
+
+        $categories = Category::orderBy('category')->get();
+        $contents = Content::orderBy('updated_at', 'desc')->paginate(10)->onEachSide(1);
+
+        $course->load('contents');
+
+        return view('admin.course.edit', compact('course', 'categories', 'contents'));
     }
 
     /**
@@ -109,7 +114,44 @@ class courseController extends Controller
      */
     public function update(Request $request, Course $course)
     {
-        //
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'category' => 'required|exists:categories,id',
+            'selected_content_ids' => 'required|json',
+            'status' => 'boolean',
+        ]);
+
+        $data = $validatedData;
+        $data['slug'] = Str::slug($request->title);
+        $data['category_id'] = $request->category;
+        $data['status'] = $request->has('status') ? 1 : 0;
+
+        if ($request->hasFile('image')) {
+            if ($course->image) {
+                Storage::disk('public')->delete($course->image);
+            }
+            $data['image'] = $request->file('image')->store('course_images', 'public');
+        }
+
+        $course->update($data);
+
+        $selectedContents = json_decode($request->selected_content_ids, true);
+
+        if (is_array($selectedContents)) {
+            $syncData = [];
+            foreach ($selectedContents as $item) {
+                if (isset($item['id']) && isset($item['order'])) {
+                    $syncData[$item['id']] = ['order' => $item['order']];
+                }
+            }
+            $course->contents()->sync($syncData);
+        } else {
+            $course->contents()->sync([]);
+        }
+
+        return redirect('/admin/course')->with('success', 'Course berhasil diperbarui!');
     }
 
     /**

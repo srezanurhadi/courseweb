@@ -50,6 +50,6 @@ class Course extends Model
     {
         return $this->belongsToMany(Content::class, 'course_contents')
             ->withPivot('order')
-            ->orderBy('order');
+            ->orderBy('course_contents.order');
     }
 }
