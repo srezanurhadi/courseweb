@@ -94,9 +94,19 @@ class contentController extends Controller
      * Display the specified resource.
      */
     public function show(Content $content)
-    {
-        return view('admin.content.show');
+   {
+    // Check if request wants JSON (for the modal preview)
+    if (request()->ajax() || request()->wantsJson()) {
+        return response()->json([
+            'title' => $content->title,
+            'content' => $content->content ?? 'Tidak ada konten.',
+            'category' => $content->category->category ?? 'Tidak ada kategori',
+            'created_at' => $content->created_at->format('d-m-Y')
+        ]);
     }
+    // Regular view for non-AJAX requests
+    return view('admin.content.show', compact('content'));
+}
 
     /**
      * Show the form for editing the specified resource.

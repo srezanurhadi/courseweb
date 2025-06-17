@@ -136,36 +136,34 @@
                 {{-- Search dll --}}
                 <div class="w-full bg-gray-100 flex pt-2 pb-4 px-1 justify-between">
                     <div class="flex gap-4 justify-between">
-                        <form class="flex gap-2">
+                        <form action={{ url('/admin/course/create#modal') }} method="GET" class="flex gap-2">
                             <div class=" flex gap-1 items-center rounded-lg border-gray-400 border-2 pl-2">
                                 <i class="fas fa-search text-gray-500"></i>
-                                <input type="text"
+                                <input type="text" name="search" value="{{ request('search') }}"
                                     class="rounded-lg min-w-56 focus:outline-none px-2 placeholder:font-semibold placeholder:italic"
-                                    placeholder="Search Content...">
+                                    placeholder="Search Course...">
                             </div>
+                            <div class=" flex gap-1 items-center rounded-lg border-gray-400 border-2 px-2">
+                                <i class="fas fa-filter text-gray-500"></i>
+                                <select name="category" id="category"
+                                    class="min-w-56 focus:outline-none px-2 text-gray-900"
+                                    onchange="this.form.submit()">
 
+                                    <option value="" {{ request('category') ? '' : 'selected' }}>All Category
+                                    </option>
+
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}"
+                                            {{ request('category') == $category->id ? 'selected' : '' }}>
+                                            {{ $category->category }}
+                                        </option>
+                                    @endforeach`
+                                </select>
+                            </div>
                             <button class="bg-sky-600 px-2 rounded-lg">
                                 <p class=" font-medium text-base text-white">search</p>
                             </button>
                         </form>
-                        <div class=" flex gap-1 items-center rounded-lg border-gray-400 border-2 px-2">
-                            <i class="fas fa-search text-gray-500"></i>
-                            <select name="category" id="category"
-                                class="min-w-56 focus:outline-none px-2 text-gray-900">
-                                <option value="writer" class="min-w-56 gray-900">
-                                    All Category
-                                </option>
-                            </select>
-                        </div>
-                        <div class=" flex gap-1 items-center rounded-lg border-gray-400 border-2 px-2">
-                            <i class="fas fa-search text-gray-500"></i>
-                            <select name="category" id="category"
-                                class="min-w-42 focus:outline-none px-2 text-gray-900">
-                                <option value="writer" class="min-w-56 gray-900">
-                                    Status
-                                </option>
-                            </select>
-                        </div>
                     </div>
                 </div>
                 <div class="bg-gray-50 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl overflow-hidden pb-5">
@@ -185,7 +183,7 @@
                     {{-- data --}}
                     <div class="space-y-4 px-4 py-4 overflow-y-auto h-100">
 
-                        @foreach ($contents as $content)
+                        @forelse ($contents as $content)
                             <div class="flex items-center bg-amber-100 rounded-lg shadow-md text-sm font-medium">
 
                                 <div class="px-6 py-3 w-4/12 text-gray-900">
@@ -204,8 +202,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="px-6 py-3 w-2/12 text-gray-700 truncate">Laravel</div>
-                                <div class="px-6 py-3 w-2/12 text-gray-700">{{ $content->created_at->format('d-m-Y') }}
+                                <div class="px-6 py-3 w-2/12 text-gray-700 truncate">
+                                    {{ $content->category->category }}</div>
+                                <div class="px-6 py-3 w-2/12 text-gray-700">
+                                    {{ $content->created_at->format('d-m-Y') }}
                                 </div>
                                 <div class="px-6 py-3 w-2/12 text-gray-700 ">Belum pernah dipilih</div>
                                 <div class="px-6 py-3 w-2/12 ">
@@ -224,7 +224,11 @@
                                     </div>
                                 </div>
                             </div>
-                        @endforeach
+                        @empty
+                            <div class="text-center text-gray-600 py-4">
+                                Tidak ada konten yang ditemukan.
+                            </div>
+                        @endforelse
                     </div>
                 </div>
                 <div class="mt-4">
@@ -251,36 +255,12 @@
                 </button>
                 <div class="bg-gray shadow-lg rounded-xl overflow-hidden">
                     <div
-                        class="w-full h-120 overflow-y-auto font-bold p-8 bg-gray-100 rounded-lg shadow-[0px_1px_2px_1px_rgba(0,0,0,0.4)] flex flex-wrap gep-2">
+                        class="w-full h-120 overflow-y-auto p-8 bg-gray-100 rounded-lg shadow-[0px_1px_2px_1px_rgba(0,0,0,0.4)] flex flex-col gap-4">
                         <p class="text-2xl font-bold">
-                            {{ $content->title }}
+                            <!-- Content title will be loaded here -->
                         </p>
                         <p class="text-base font-medium indent-10">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique magni tenetur sunt quo
-                            iure nesciunt unde voluptatum earum dolor sit natus sequi maxime delectus pariatur quas
-                            perferendis minima ipsa repellendus, consequuntur quidem aliquid itaque eligendi accusamus
-                            hic? Fuga, molestias? Consequatur nesciunt sint officia enim vel doloribus, ex cum non
-                            libero tenetur iusto delectus necessitatibus eaque. Culpa, quo doloribus? Dolorum dolore
-                            quos ipsa quas ullam asperiores beatae labore repellendus, laboriosam sed qui nobis vitae in
-                            assumenda aliquam. Vitae recusandae vel excepturi velit aut, et quod itaque maxime in fuga
-                            rerum alias corrupti quidem ratione error nesciunt, aliquam harum molestias. Ipsam, et omnis
-                            voluptatibus odio, libero maiores autem numquam veritatis earum quaerat dolore ullam
-                            eligendi atque ratione rerum tempore enim quibusdam reiciendis eum unde maxime qui quos
-                            deserunt. Incidunt doloremque labore iusto est cupiditate facilis esse unde autem beatae?
-                            Ipsum laborum incidunt, iure inventore facilis minima voluptatem at quam impedit saepe? Vel
-                            iure perferendis ad? Saepe, suscipit placeat dicta exercitationem ex unde ullam cumque
-                            totam, corrupti deserunt quae, dolorum explicabo alias! Molestiae inventore aliquid aperiam
-                            nobis, fugiat voluptates praesentium. Nesciunt quae quaerat laudantium officia sequi magni
-
-                            voluptate officiis, quibusdam doloribus tenetur soluta perferendis numquam ratione
-                            repudiandae consectetur ipsum quas ipsam iusto? Aspernatur.
-                            Incidunt doloremque labore iusto est cupiditate facilis esse unde autem beatae?
-                            Ipsum laborum incidunt, iure inventore facilis minima voluptatem at quam impedit saepe? Vel
-                            iure perferendis ad? Saepe, suscipit placeat dicta exercitationem ex unde ullam cumque
-                            totam, corrupti deserunt quae, dolorum explicabo alias! Molestiae inventore aliquid aperiam
-                            nobis, fugiat voluptates praesentium. Nesciunt quae quaerat laudantium officia sequi magni
-                            voluptate officiis, quibusdam doloribus tenetur soluta perferendis numquam ratione
-                            repudiandae consectetur ipsum quas ipsam iusto? Aspernatur
+                            <!-- Content body will be loaded here -->
                         </p>
                     </div>
                 </div>
@@ -296,111 +276,168 @@
     const modalClose = document.querySelectorAll('#closeModal');
 
     for (let i = 0; i < modalOpen.length; i++) {
-        modalOpen[i].addEventListener('click', () => {
+        modalOpen[i].addEventListener('click', (e) => {
+            e.preventDefault();
             modal[i].classList.remove('hidden');
             setTimeout(() => {
                 modal[i].classList.remove('opacity-0')
             }, 10);
-
-
         });
-        modalClose[i].addEventListener('click', () => {
+
+        modalClose[i].addEventListener('click', (e) => {
+            e.preventDefault();
             modal[i].classList.add('opacity-0');
             setTimeout(() => {
                 modal[i].classList.add('hidden')
             }, 500);
-        })
+        });
     }
 
+    // Modal 2 (Content Preview Modal) - FIXED VERSION
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal2 = document.getElementById('modal2');
+        const closeModal2Button = document.getElementById('closeModal2');
 
-    const modalOpenTriggers = document.querySelectorAll('#lihat');
-    const modalElement = document.querySelector('#modal2');
-    const modalCloseButton = document.querySelector('#closeModal2');
-
-    if (modalElement && modalCloseButton) {
-        modalOpenTriggers.forEach(triggerButton => {
-            triggerButton.addEventListener('click', () => {
-                modalElement.classList.remove('hidden');
+        // Function to close modal2
+        function closeModal2() {
+            if (modal2) {
+                modal2.classList.add('opacity-0');
                 setTimeout(() => {
-                    modalElement.classList.remove('opacity-0');
-                }, 10);
-            });
-        });
+                    modal2.classList.add('hidden');
+                }, 500);
+            }
+        }
 
+        // Function to open modal2 and load content
+        function openModal2AndLoadContent(contentId) {
+            const modalTitle = modal2.querySelector('.text-2xl.font-bold');
+            const modalContent = modal2.querySelector('.text-base.font-medium.indent-10');
 
-        modalCloseButton.addEventListener('click', () => {
-            modalElement.classList.add('opacity-0');
+            // Clear previous content first
+            modalTitle.textContent = '';
+            modalContent.textContent = '';
+
+            // Show loading state
+            modalTitle.textContent = 'Loading...';
+            modalContent.textContent = 'Loading content...';
+
+            // Show the modal
+            modal2.classList.remove('hidden');
             setTimeout(() => {
-                modalElement.classList.add('hidden');
-            }, 500);
+                modal2.classList.remove('opacity-0');
+            }, 10);
+
+            // Fetch content data
+            fetch(`/admin/content/${contentId}`, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Update modal with content data
+                    modalTitle.textContent = data.title || 'No Title';
+                    modalContent.textContent = data.content || 'No Content Available';
+                })
+                .catch(error => {
+                    console.error('Error fetching content:', error);
+                    modalTitle.textContent = 'Error Loading Content';
+                    modalContent.textContent = 'Failed to load content. Please try again later.';
+                });
+        }
+
+        // Event delegation for "lihat" buttons (handles dynamically loaded content)
+        document.addEventListener('click', function(event) {
+            if (event.target.closest('#lihat')) {
+                event.preventDefault();
+                const button = event.target.closest('#lihat');
+                const contentId = button.getAttribute('data-content-id');
+
+                if (contentId) {
+                    openModal2AndLoadContent(contentId);
+                }
+            }
         });
 
-    } else {
-
-        if (!modalElement) {
-            console.error("Error: The modal element with ID 'modal2' was not found.");
+        // Close modal2 with close button
+        if (closeModal2Button) {
+            closeModal2Button.addEventListener('click', function(e) {
+                e.preventDefault();
+                closeModal2();
+            });
         }
-        if (!modalCloseButton) {
-            console.error("Error: The modal close button with ID 'closeModal2' was not found.");
+
+        // Close modal2 by clicking outside
+        if (modal2) {
+            modal2.addEventListener('click', function(event) {
+                if (event.target === modal2) {
+                    closeModal2();
+                }
+            });
         }
-    }
 
+        // Close modal2 with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && !modal2.classList.contains('hidden')) {
+                closeModal2();
+            }
+        });
+    });
 
-
+    // Image Preview Functionality
     const imageInput = document.getElementById('image');
     const imagePreviewDiv = document.getElementById('image-preview');
     const previewImage = document.getElementById('preview-img');
 
-    imageInput.addEventListener('change', function() {
-        const file = this.files[0];
+    if (imageInput) {
+        imageInput.addEventListener('change', function() {
+            const file = this.files[0];
 
-        if (file) {
-            if (file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    previewImage.src = e.target.result;
-                    imagePreviewDiv.classList.remove('hidden');
+            if (file) {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        previewImage.src = e.target.result;
+                        imagePreviewDiv.classList.remove('hidden');
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    previewImage.src = '#';
+                    imagePreviewDiv.classList.add('hidden');
+                    alert('Harap pilih file gambar (PNG, JPG, GIF).');
                 }
-                reader.readAsDataURL(file);
             } else {
                 previewImage.src = '#';
                 imagePreviewDiv.classList.add('hidden');
-                alert('Harap pilih file gambar (PNG, JPG, GIF).');
             }
-        } else {
-            previewImage.src = '#';
-            imagePreviewDiv.classList.add('hidden');
-        }
-    });
-</script>
+        });
+    }
 
-
-<script>
+    // Content Selection Functionality
     document.addEventListener('DOMContentLoaded', function() {
         const saveSelectedContentBtn = document.getElementById('saveSelectedContent');
         const selectedContentContainer = document.getElementById('selected-content-container');
         const noContentMessage = document.getElementById('no-content-message');
         const selectedContentIdsInput = document.getElementById('selected_content_ids');
 
-        // Store selected content IDs
         let selectedContents = [];
 
-        // Handle save button click in the modal
         if (saveSelectedContentBtn) {
             saveSelectedContentBtn.addEventListener('click', function() {
-                // Get all checked checkboxes
                 const checkedBoxes = document.querySelectorAll(
-                    'input[name="content_checkbox"]:checked');
-
-                // Clear previous selections
+                'input[name="content_checkbox"]:checked');
                 selectedContents = [];
 
-                // Process each checked box
                 checkedBoxes.forEach(function(checkbox, index) {
                     const contentId = checkbox.value;
                     const contentTitle = checkbox.getAttribute('data-title');
 
-                    // Add to selected contents array
                     selectedContents.push({
                         id: contentId,
                         title: contentTitle,
@@ -408,46 +445,39 @@
                     });
                 });
 
-                // Update the hidden input with selected IDs
                 selectedContentIdsInput.value = JSON.stringify(selectedContents);
-
-                // Update the UI
                 updateSelectedContentDisplay();
 
-                // Close the modal
+                // Close modal
                 const modalElement = document.querySelector('#modal');
-                modalElement.classList.add('opacity-0');
-                setTimeout(() => {
-                    modalElement.classList.add('hidden');
+                if (modalElement) {
+                    modalElement.classList.add('opacity-0');
+                    setTimeout(() => {
+                        modalElement.classList.add('hidden');
 
-                    // Scroll to the content section
-                    const contentSection = document.getElementById('selected-content-container')
-                        .closest('.mb-4');
-                    if (contentSection) {
-                        contentSection.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'center'
-                        });
-                    }
-                }, 500);
+                        const contentSection = document.getElementById(
+                            'selected-content-container').closest('.mb-4');
+                        if (contentSection) {
+                            contentSection.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'center'
+                            });
+                        }
+                    }, 500);
+                }
             });
         }
 
-        // Function to update the selected content display
         function updateSelectedContentDisplay() {
-            // Clear the container
             selectedContentContainer.innerHTML = '';
 
             if (selectedContents.length === 0) {
-                // Show the "no content" message if nothing is selected
                 noContentMessage.classList.remove('hidden');
                 return;
             }
 
-            // Hide the "no content" message
             noContentMessage.classList.add('hidden');
 
-            // Add each selected content to the display
             selectedContents.forEach(function(content, index) {
                 const contentCard = document.createElement('div');
                 contentCard.className =
@@ -455,64 +485,54 @@
                 contentCard.dataset.contentId = content.id;
 
                 contentCard.innerHTML = `
-                    <div class="mr-3">
-                        <div class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center font-bold">
-                            ${index + 1}
-                        </div>
+                <div class="mr-3">
+                    <div class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center font-bold">
+                        ${index + 1}
                     </div>
-                    <div class="flex-1">
-                        <h3 class="font-semibold text-gray-800">${content.title}</h3>
-                        <p class="text-sm text-gray-600">
-                            Selected content item
-                        </p>
-                    </div>
-                    <div class="ml-3 flex flex-col items-center justify-center space-y-1">
-                        <button type="button" class="move-up-btn text-gray-500 hover:text-gray-700" data-index="${index}">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"></path>
-                            </svg>
-                        </button>
-                        <button type="button" class="move-down-btn text-gray-500 hover:text-gray-700" data-index="${index}">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
-                    </div>
-                    <button type="button" class="remove-content-btn ml-3 text-red-500 hover:text-red-700" data-index="${index}">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M6 2a1 1 0 00-1 1v1H3.5a.5.5 0 000 1h.54l.7 10.11A2 2 0 006.73 17h6.54a2 2 0 001.99-1.89L16.96 5H17.5a.5.5 0 000-1H15V3a1 1 0 00-1-1H6zm1 4a.5.5 0 011 0v7a.5.5 0 01-1 0V6zm4 0a.5.5 0 011 0v7a.5.5 0 01-1 0V6z" />
+                </div>
+                <div class="flex-1">
+                    <h3 class="font-semibold text-gray-800">${content.title}</h3>
+                    <p class="text-sm text-gray-600">Selected content item</p>
+                </div>
+                <div class="ml-3 flex flex-col items-center justify-center space-y-1">
+                    <button type="button" class="move-up-btn text-gray-500 hover:text-gray-700" data-index="${index}">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"></path>
                         </svg>
                     </button>
-                `;
+                    <button type="button" class="move-down-btn text-gray-500 hover:text-gray-700" data-index="${index}">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                </div>
+                <button type="button" class="remove-content-btn ml-3 text-red-500 hover:text-red-700" data-index="${index}">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M6 2a1 1 0 00-1 1v1H3.5a.5.5 0 000 1h.54l.7 10.11A2 2 0 006.73 17h6.54a2 2 0 001.99-1.89L16.96 5H17.5a.5.5 0 000-1H15V3a1 1 0 00-1-1H6zm1 4a.5.5 0 011 0v7a.5.5 0 01-1 0V6zm4 0a.5.5 0 011 0v7a.5.5 0 01-1 0V6z" />
+                    </svg>
+                </button>
+            `;
 
                 selectedContentContainer.appendChild(contentCard);
             });
 
-            // Add event listeners for the buttons
             addContentCardEventListeners();
         }
 
-        // Function to add event listeners to content card buttons
         function addContentCardEventListeners() {
-            // Remove content button
             document.querySelectorAll('.remove-content-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     const index = parseInt(this.dataset.index);
                     selectedContents.splice(index, 1);
-                    selectedContentIdsInput.value = selectedContents.map(item => item.id).join(
-                        ',');
+                    selectedContentIdsInput.value = JSON.stringify(selectedContents);
                     updateSelectedContentDisplay();
                 });
             });
 
-            // Move up button
             document.querySelectorAll('.move-up-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     const index = parseInt(this.dataset.index);
                     if (index > 0) {
-                        // Swap with the item above
                         [selectedContents[index], selectedContents[index - 1]] = [
                             selectedContents[index - 1], selectedContents[index]
                         ];
@@ -521,12 +541,10 @@
                 });
             });
 
-            // Move down button
             document.querySelectorAll('.move-down-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     const index = parseInt(this.dataset.index);
                     if (index < selectedContents.length - 1) {
-                        // Swap with the item below
                         [selectedContents[index], selectedContents[index + 1]] = [
                             selectedContents[index + 1], selectedContents[index]
                         ];
@@ -535,21 +553,6 @@
                 });
             });
         }
-
-        // Update the lihat button event listeners
-        document.querySelectorAll('#lihat').forEach(button => {
-            button.addEventListener('click', function() {
-                const contentId = this.getAttribute('data-content-id');
-                const modalElement = document.querySelector('#modal2');
-
-                if (modalElement) {
-                    modalElement.classList.remove('hidden');
-                    setTimeout(() => {
-                        modalElement.classList.remove('opacity-0');
-                    }, 10);
-                }
-            });
-        });
     });
 </script>
 

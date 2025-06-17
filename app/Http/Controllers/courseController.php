@@ -18,20 +18,56 @@ class courseController extends Controller
     public function index(Request $request)
     {
 
+        $query = Course::query();
+        $categories = Category::orderBy('category')->get();
 
-        $courses = Course::orderBy('updated_at', 'desc')->paginate(9)->onEachSide(1);
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%$search%")
+                    ->orWhere('description', 'like', "%$search%");
+            });
+        }
 
 
-        return view('admin.course.index', compact('courses'));
+        if ($request->filled('category')) {
+            $query->where('category_id', $request->category);
+        }
+
+        if ($request->has('status') && $request->status !== '') {
+            $status = $request->input('status');
+            if ($status === '1' || $status === '0') {
+                $query->where('status', $status); // Laravel otomatis konversi string '1'/'0' ke boolean
+            }
+        }
+
+        // Eksekusi query dengan pagination
+        $courses = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
+
+        // Kirim data ke view
+        return view('admin.course.index', compact('courses', 'categories'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+
+    public function create(Request $request)
     {
-        $categories = Category::orderBy('category')->get();
-        $contents = Content::orderBy('updated_at', 'desc')->paginate(10)->onEachSide(1);
+        $categories = Category::all();
+
+        $contentsQuery = Content::query();
+
+        // Handle search functionality
+        if ($request->has('search') && $request->search != '') {
+            $contentsQuery->where('title', 'like', '%' . $request->search . '%');
+        }
+
+        // Handle category filter
+        if ($request->has('category') && $request->category != '') {
+            $contentsQuery->where('category_id', $request->category);
+        }
+
+        // Get the filtered contents
+        $contents = $contentsQuery->orderBy('created_at', 'desc')->get();
+
         return view('admin.course.create', compact('categories', 'contents'));
     }
 

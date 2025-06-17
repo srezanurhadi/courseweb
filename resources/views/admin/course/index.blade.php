@@ -26,34 +26,43 @@
             </div>
             <div class="w-full flex pt-6 pb-2 px-6 justify-between">
                 <div class="flex gap-4">
-                    <form class="flex gap-2">
+                    <form action="{{ url('/admin/course') }}" method="GET" class="flex gap-2">
                         <div class=" flex gap-1 items-center rounded-lg border-gray-400 border-2 pl-2">
                             <i class="fas fa-search text-gray-500"></i>
-                            <input type="text"
+                            <input type="text" name="search" value="{{ request('search') }}"
                                 class="rounded-lg min-w-56 focus:outline-none px-2 placeholder:font-semibold placeholder:italic"
-                                placeholder="Search Content...">
+                                placeholder="Search Course...">
                         </div>
+                        <div class=" flex gap-1 items-center rounded-lg border-gray-400 border-2 px-2">
+                            <i class="fas fa-filter text-gray-500"></i>
+                            <select name="category" id="category"
+                                class="min-w-56 focus:outline-none px-2 text-gray-900" onchange="this.form.submit()">
 
+                                <option value="" {{ request('category') ? '' : 'selected' }}>All Category</option>
+
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}"
+                                        {{ request('category') == $category->id ? 'selected' : '' }}>
+                                        {{ $category->category }}
+                                    </option>
+                                @endforeach`
+                            </select>
+                        </div>
+                        <div class=" flex gap-1 items-center rounded-lg border-gray-400 border-2 px-2">
+                            <i class="fas fa-filter text-gray-500"></i>
+                            <select name="status" onchange="this.form.submit()">
+                                <option value="">Status</option>
+                                <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Published
+                                </option>
+                                <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>Draft</option>
+                            </select>
+                        </div>
                         <button class="bg-sky-600 px-2 rounded-lg">
                             <p class=" font-medium text-base text-white">search</p>
                         </button>
                     </form>
-                    <div class=" flex gap-1 items-center rounded-lg border-gray-400 border-2 px-2">
-                        <i class="fas fa-search text-gray-500"></i>
-                        <select name="category" id="category" class="min-w-56 focus:outline-none px-2 text-gray-900">
-                            <option value="writer" class="min-w-56 gray-900">
-                                All Category
-                            </option>
-                        </select>
-                    </div>
-                    <div class=" flex gap-1 items-center rounded-lg border-gray-400 border-2 px-2">
-                        <i class="fas fa-search text-gray-500"></i>
-                        <select name="category" id="category" class="min-w-42 focus:outline-none px-2 text-gray-900">
-                            <option value="writer" class="min-w-56 gray-900">
-                                Status
-                            </option>
-                        </select>
-                    </div>
+
+
                 </div>
                 <div class="">
                     <a href="course/create" class="px-2 py-1 bg-sky-500 rounded-lg text-white font-semibold"><i
