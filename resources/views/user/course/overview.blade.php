@@ -21,16 +21,18 @@
                             <h1 class="text-3xl font-bold text-gray-800">
                                 @if (isset($from) && $from == 'my-course')
                                     {{-- Jika datang dari halaman My Course --}}
-                                    <a href="{{ route('user.mycourse.index') }}" class="hover:text-indigo-900">My Course</a>
+                                    <a href="{{ route('user.mycourse.index') }}" class="hover:text-indigo-900">My
+                                        Course</a>
                                 @else
                                     {{-- Jika datang dari halaman Course atau default --}}
                                     <a href="{{ route('user.course.index') }}" class="hover:text-indigo-900">Course</a>
                                 @endif
 
                                 <i class="fa-solid fa-chevron-right mx-1 text-2xl"></i>
-                                
+
                                 {{-- Bagian ini tetap sama, menampilkan judul kursus --}}
-                                <span class="text-gray-600">{{ \Illuminate\Support\Str::limit($course->title, 15) }}</span>
+                                <span
+                                    class="text-gray-800">{{ \Illuminate\Support\Str::limit($course->title, 15) }}</span>
                             </h1>
                         </div>
                         <div class="flex
