@@ -69,8 +69,9 @@ Route::prefix('/user')->middleware(participantMiddleware::class)->name('user.')-
 
     Route::get('/course/content', function () {
         return view('user.course.content');
-    })->name('course.content');
+    })->name('course.content'); 
 
+    Route::get('/course/{course:slug}/content/{content}', [UserCourseController::class, 'showContent'])->name('course.content.show');
     Route::get('/course/{course:slug}', [UserCourseController::class, 'show'])->name('course.show');
     Route::post('/enroll/{course:slug}', [EnrollmentController::class, 'store'])->name('course.enroll');
     Route::delete('/unenroll/{course:slug}', [EnrollmentController::class, 'destroy'])->name('course.unenroll');

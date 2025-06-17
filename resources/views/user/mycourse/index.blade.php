@@ -232,7 +232,7 @@
                                             </div>
 
                                             {{-- Judul Course --}}
-                                            <a href="{{ route('user.course.show', $course->slug) }}"
+                                            <a href="{{ route('user.course.show', ['course' => $course->slug, 'from' => 'my-course']) }}"
                                                 class="pl-2 pt-1 font-semibold line-clamp-2 text-lg text-gray-900 hover:text-indigo-900 cursor-pointer">
                                                 {{ \Illuminate\Support\Str::limit($course->title, 40) }}
                                             </a>
@@ -253,19 +253,54 @@
                                                         class="rounded-full h-6 w-6 bg-indigo-700 text-indigo-200 justify-center flex items-center">
                                                         {{ substr($course->user->name, 0, 1) }}
                                                     </div>
-                                                    <div class="text-sm text-gray-600">{{ $course->user->name }}</div>
-                                                </div>
+                                                    </a>
 
-                                                <div class="flex items-center justify-between">
-                                                    <div class="flex-1 bg-gray-200 rounded-full h-2 mr-3">
-                                                        <div class="bg-indigo-700 h-2 rounded-full" style="width: 0%">
+                                                    <div class="h-full w-full p-2 flex flex-col mt-2">
+                                                        {{-- Kategori Course --}}
+                                                        <div class="self-start">
+                                                            <div
+                                                                class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-gray-900">
+                                                                {{ $course->category->category }}
+                                                            </div>
+                                                        </div>
+
+                                                        {{-- Judul Course --}}
+                                                        <a href="{{ route('user.course.show', $course->slug) }}"
+                                                            class="pl-2 pt-1 font-semibold line-clamp-2 text-lg text-gray-900 hover:text-indigo-900 cursor-pointer">
+                                                            {{ \Illuminate\Support\Str::limit($course->title, 40) }}
+                                                        </a>
+
+                                                        {{-- Deskripsi Course --}}
+                                                        <div class="pl-2 pt-1 text-sm text-gray-500 line-clamp-2 h-10">
+                                                            {{ \Illuminate\Support\Str::limit($course->description, 70) }}
+                                                        </div>
+
+                                                        <div class="flex-col space-y-2 m-2 mt-auto">
+                                                            <div class="flex items-center space-x-2">
+                                                                <i class="fas fa-users-line text-indigo-700"></i>
+                                                                <div class="text-sm text-gray-600">30 Participant</div>
+                                                            </div>
+
+                                                            <div class="flex items-center space-x-1">
+                                                                <div
+                                                                    class="rounded-full h-6 w-6 bg-indigo-700 text-indigo-200 justify-center flex items-center">
+                                                                    {{ substr($course->user->name, 0, 1) }}
+                                                                </div>
+                                                                <div class="text-sm text-gray-600">
+                                                                    {{ $course->user->name }}</div>
+                                                            </div>
+
+                                                            <div class="flex items-center justify-between">
+                                                                <div class="flex-1 bg-gray-200 rounded-full h-2 mr-3">
+                                                                    <div class="bg-indigo-700 h-2 rounded-full"
+                                                                        style="width: 0%">
+                                                                    </div>
+                                                                </div>
+                                                                <span class="text-sm font-bold text-gray-900">0%</span>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <span class="text-sm font-bold text-gray-900">0%</span>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 @endforeach
                             </div>
                         @endif
