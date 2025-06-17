@@ -15,7 +15,7 @@
 <body>
     <div class="flex flex-1">
         <x-sidebar></x-sidebar>
-        <div class=" w-full bg-gray-50 border ">
+        <div class=" w-full bg-gray-50 ">
             <div class="p-4 shadow-lg font-bold flex bg-gray-100 flex-row justify-between top-0 sticky">
                 <div class="text-3xl font-bold pl-4">Management Course</div>
                 <div class="profile flex items-center gap-2 pr-4">
@@ -26,11 +26,14 @@
                     <div class="">Admin</div>
                 </div>
             </div>
-            <div class="w-full flex pt-8 px-4 justify-between">
+            <div class="w-full flex pt-8 px-4 justify-between pb-2">
                 <div class="w-full flex flex-wrap gap-2 font-semibold">
                     <div class="w-full flex gap-2 items-center p-2">
-                        <div class=" text-indigo-700"> <i class="fa-solid fa-play rotate-180"></i><span
-                                class="pl-2">Back</span>
+                        <div class=" text-indigo-700"> <a href="{{ url()->previous() }}">
+                                <i class="fa-solid fa-play rotate-180">
+                                </i>
+                                <span class="pl-2">Back</span>
+                            </a>
                         </div>
                         <div class=" py-0.5 px-3 border-amber-500 text-amber-500 bg-amber-100 rounded-sm border-2">
                             <i class="fas fa-pencil-alt"></i> <span class="pl-2">Edit</span>
@@ -67,7 +70,7 @@
                                                 <figure class="my-6">
                                                     <img src="{{ $block['data']['file']['url'] }}"
                                                         alt="{{ $block['data']['caption'] ?? 'Image' }}"
-                                                        class="max-w-full h-auto mx-auto rounded-lg shadow-md {{ $block['data']['stretched'] ? 'w-full' : '' }}">
+                                                        class="max-w-full h-auto mx-auto rounded-lg shadow-md w-200 {{ $block['data']['stretched'] ? 'w-full' : '' }}">
                                                     @if ($block['data']['caption'])
                                                         <figcaption class="text-center text-sm text-gray-600 mt-2">
                                                             {{ $block['data']['caption'] }}</figcaption>
@@ -124,8 +127,6 @@
                                                 </div>
                                             @break
 
-                                            
-
                                             @default
                                                 <p class="text-red-500">
                                                     Tipe blok tidak dikenal: {{ $block['type'] }}
@@ -136,8 +137,6 @@
                                 <p class="text-gray-500 italic">Tidak ada konten yang tersedia.</p>
                             @endif
                         </div>
-                        {{-- --- EDITOR.JS CONTENT RENDERING END --- --}}
-
                     </div>
                 </div>
             </div>

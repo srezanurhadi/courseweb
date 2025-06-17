@@ -93,21 +93,34 @@ class contentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $slug, )
+    public function show(string $slug,)
     {
         $content = Content::where('slug', $slug)->first();
         $contentData = $content->content;
-        $decodedContent = json_decode($contentData, true);
-;
-        return view('admin.content.show',compact('content','decodedContent'));
+        $editorJsData = json_decode($contentData, true);
+        return view('admin.content.show', compact('content', 'editorJsData'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Content $content)
+    public function edit(string $slug)
     {
-        //
+
+        $content = Content::where('slug', $slug)->firstOrFail();
+        $categories = Category::all();
+        dd($content);
+        $editorJsData = null;
+        if ($content->content) {
+            if (is_string($content->content)) {
+                $editorJsData = json_decode($content->content);
+            } else {
+                $editorJsData = $content->content;
+            }
+        }
+
+        // Mengarahkan ke view edit yang terpisah
+        return view('admin.content.edit', compact('content', 'categories', 'editorJsData'));
     }
 
     /**
