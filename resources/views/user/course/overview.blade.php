@@ -21,18 +21,16 @@
                             <h1 class="text-3xl font-bold text-gray-800">
                                 @if (isset($from) && $from == 'my-course')
                                     {{-- Jika datang dari halaman My Course --}}
-                                    <a href="{{ route('user.mycourse.index') }}" class="hover:text-indigo-900">My
-                                        Course</a>
+                                    <a href="{{ route('user.mycourse.index') }}" class="hover:text-indigo-900">My Course</a>
                                 @else
                                     {{-- Jika datang dari halaman Course atau default --}}
                                     <a href="{{ route('user.course.index') }}" class="hover:text-indigo-900">Course</a>
                                 @endif
 
                                 <i class="fa-solid fa-chevron-right mx-1 text-2xl"></i>
-
+                                
                                 {{-- Bagian ini tetap sama, menampilkan judul kursus --}}
-                                <span
-                                    class="text-gray-800">{{ \Illuminate\Support\Str::limit($course->title, 15) }}</span>
+                                <span class="text-gray-600">{{ \Illuminate\Support\Str::limit($course->title, 15) }}</span>
                             </h1>
                         </div>
                         <div class="flex
@@ -148,48 +146,77 @@
                             <div class="bg-gray-100 shadow-lg rounded-xl p-6">
                                 <h3 class="text-2xl font-bold text-gray-900 mb-3">Content</h3>
                                 <ul class="">
-                                    <li class="flex items-center justify-between py-2">
-                                        <a href="{{ route('user.course.content') }}"
-                                            class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">1. Content
-                                            1</a>
-                                        <i
-                                            class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
-                                    </li>
-                                    <li class="flex items-center justify-between py-2">
-                                        <a href="{{ route('user.course.content') }}"
-                                            class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">2. Content
-                                            2</a>
-                                        <i
-                                            class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
-                                    </li>
-                                    <li class="flex items-center justify-between py-2">
-                                        <a href="{{ route('user.course.content') }}"
-                                            class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">3. Content
-                                            3</a>
-                                        <i
-                                            class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
-                                    </li>
-                                    <li class="flex items-center justify-between py-2">
-                                        <a href="{{ route('user.course.content') }}"
-                                            class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">4. Content
-                                            4</a>
-                                        <i
-                                            class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
-                                    </li>
-                                    <li class="flex items-center justify-between py-2">
-                                        <a href="{{ route('user.course.content') }}"
-                                            class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">5. Content
-                                            5</a>
-                                        <i
-                                            class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
-                                    </li>
-                                    <li class="flex items-center justify-between py-2">
-                                        <a href="{{ route('user.course.content') }}"
-                                            class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">6. Content
-                                            6</a>
-                                        <i
-                                            class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
-                                    </li>
+                                    @foreach($course->contents as $content)
+                                        <li class="flex items-center justify-between py-2">
+                                            <a href="{{ route('user.course.content.show', [
+                                                'course' => $course->slug, 
+                                                'content' => $content->id,
+                                                'from' => $from ?? 'course'
+                                            ]) }}"
+                                                class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">
+                                                {{ $loop->iteration }}. {{ $content->title }}
+                                            </a>
+                                            <i class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
+                                        </li>
+                                    @endforeach
+                                    
+                                    {{-- Jika tidak ada content dinamis, biarkan yang statis tapi tambahkan parameter from --}}
+                                    @if($course->contents->isEmpty())
+                                        <li class="flex items-center justify-between py-2">
+                                            <a href="{{ route('user.course.content.show', [
+                                                'course' => $course->slug, 
+                                                'content' => 1,
+                                                'from' => $from ?? 'course'
+                                            ]) }}"
+                                                class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">1. Content 1</a>
+                                            <i class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
+                                        </li>
+                                        <li class="flex items-center justify-between py-2">
+                                            <a href="{{ route('user.course.content.show', [
+                                                'course' => $course->slug, 
+                                                'content' => 2,
+                                                'from' => $from ?? 'course'
+                                            ]) }}"
+                                                class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">2. Content 2</a>
+                                            <i class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
+                                        </li>
+                                        <li class="flex items-center justify-between py-2">
+                                            <a href="{{ route('user.course.content.show', [
+                                                'course' => $course->slug, 
+                                                'content' => 3,
+                                                'from' => $from ?? 'course'
+                                            ]) }}"
+                                                class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">3. Content 3</a>
+                                            <i class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
+                                        </li>
+                                        <li class="flex items-center justify-between py-2">
+                                            <a href="{{ route('user.course.content.show', [
+                                                'course' => $course->slug, 
+                                                'content' => 4,
+                                                'from' => $from ?? 'course'
+                                            ]) }}"
+                                                class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">4. Content 4</a>
+                                            <i class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
+                                        </li>
+                                        <li class="flex items-center justify-between py-2">
+                                            <a href="{{ route('user.course.content.show', [
+                                                'course' => $course->slug, 
+                                                'content' => 5,
+                                                'from' => $from ?? 'course'
+                                            ]) }}"
+                                                class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">5. Content 5</a>
+                                            <i class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
+                                        </li>
+                                        <li class="flex items-center justify-between py-2">
+                                            <a href="{{ route('user.course.content.show', [
+                                                'course' => $course->slug, 
+                                                'content' => 6,
+                                                'from' => $from ?? 'course'
+                                            ]) }}"
+                                                class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">6. Content 6</a>
+                                            <i class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
+                                        </li>
+                                    @endif
                                 </ul>
                             </div>
                             <button
