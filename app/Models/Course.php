@@ -52,4 +52,12 @@ class Course extends Model
             ->withPivot('order')
             ->orderBy('course_contents.order');
     }
+
+    /**
+     * Mendefinisikan relasi bahwa sebuah Course bisa memiliki banyak Pendaftaran (enrollments).
+     */
+    public function enrollments()
+    {
+        return $this->hasMany(enrollments::class, 'course_id');
+    }
 }

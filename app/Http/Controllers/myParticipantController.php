@@ -160,7 +160,7 @@ class myParticipantController extends Controller
         }
 
         // Query dasar untuk semua kursus yang diikuti user
-        $enrolledCoursesQuery = $user->enrolledCourses();
+        $enrolledCoursesQuery = $user->enrolledCourses()->withCount('enrollments');
 
         // Terapkan filter kategori jika ada
         if ($request->has('category') && $request->filled('category')) {

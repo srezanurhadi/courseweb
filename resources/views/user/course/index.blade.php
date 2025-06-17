@@ -139,13 +139,14 @@
                                 <div class="flex-col space-y-2 m-2 mt-auto">
                                     <div class="flex items-center space-x-2">
                                         <i class="fas fa-users-line text-indigo-700"></i>
-                                        <div class="text-sm text-gray-600">30 Participant</div>
+                                        <div class="text-sm text-gray-600">{{ $course->enrollments_count }} Participant
+                                        </div>
                                     </div>
 
                                     <div class="flex items-center space-x-1">
                                         <div
                                             class="rounded-full h-6 w-6 bg-indigo-700 text-indigo-200 justify-center flex items-center">
-                                            {{ substr($course->user->name, 0, 1) }}
+                                            {{ strtoupper(substr($course->user->name, 0, 1)) }}
                                         </div>
                                         <div class="text-sm text-gray-600">{{ $course->user->name }}</div>
                                     </div>

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Models\Course;
 use App\Models\Category;
-USE App\Models\Content;
+use App\Models\Content;
 use App\Models\enrollments as Enrollment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -18,7 +18,7 @@ class CourseController extends Controller
     public function index(Request $request)
     {
         $categories = Category::all();
-        $query = Course::with(['category', 'user'])->where('status', 1);
+        $query = Course::with(['category', 'user'])->withCount('enrollments')->where('status', 1);
 
         if ($request->has('category') && $request->category != '') {
             $query->where('category_id', $request->category);
