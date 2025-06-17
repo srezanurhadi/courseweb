@@ -19,27 +19,38 @@
                     <div class="flex items-center justify-between h-16">
                         <div class="flex items-center px-4">
                             <h1 class="text-3xl font-bold text-gray-800">
-                                <a href="{{ route('user.course.index') }}" class="hover:text-indigo-900">Course</a>
+                                @if (isset($from) && $from == 'my-course')
+                                    {{-- Jika datang dari halaman My Course --}}
+                                    <a href="{{ route('user.mycourse.index') }}" class="hover:text-indigo-900">My Course</a>
+                                @else
+                                    {{-- Jika datang dari halaman Course atau default --}}
+                                    <a href="{{ route('user.course.index') }}" class="hover:text-indigo-900">Course</a>
+                                @endif
+                                
                                 <i class="fa-solid fa-chevron-right mx-1 text-2xl"></i>
-                                <a href="{{ route('user.course.index') }}" class="hover:text-indigo-900">Title</a>
+                                
+                                <a href="{{ route('user.course.show', [
+                                    'course' => $course->slug,
+                                    'from' => $from ?? 'course'
+                                ]) }}" class="hover:text-indigo-900">
+                                    {{ \Illuminate\Support\Str::limit($course->title, 15) }}
+                                </a>
+                                
                                 <i class="fa-solid fa-chevron-right mx-1 text-2xl"></i>
-                                <a href="{{ route('user.course.content') }}" class="hover:text-indigo-900">Content 1</a>
+                                
+                                <span class="text-gray-600">{{ $content->title ?? 'Content 1' }}</span>
                             </h1>
                         </div>
-                        <div class="flex
-                                    items-center space-x-4 px-4">
+                        <div class="flex items-center space-x-4 px-4">
                             <button>
                                 <i class="fa-regular fa-bell fa-lg text-black hover:text-gray-600"></i>
                             </button>
                             <div class="flex items-center space-x-2 px-3">
-                                <span
-                                    class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-neutral-300 overflow-hidden">
+                                <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-neutral-300 overflow-hidden">
                                     @if (Auth::user()->image)
-                                        {{-- Jika user punya foto, tampilkan foto --}}
                                         <img src="{{ asset('storage/' . Auth::user()->image) }}"
                                             alt="{{ Auth::user()->name }}" class="w-full h-full object-cover">
                                     @else
-                                        {{-- Jika tidak ada foto, tampilkan inisial --}}
                                         <span class="text-xl font-semibold leading-none text-gray-700">
                                             {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                                         </span>

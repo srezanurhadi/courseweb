@@ -69,13 +69,24 @@ class CourseController extends Controller
      */
     public function showContent(Course $course, Content $content, Request $request)
     {
-        // Anda bisa menambahkan validasi di sini jika perlu
-        // Contoh: Cek apakah user sudah terdaftar di course ini
+        // Validasi apakah user sudah terdaftar di course ini (opsional)
+        $isEnrolled = false;
+        if (Auth::check()) {
+            $isEnrolled = Enrollment::where('user_id', Auth::id())
+                ->where('course_id', $course->id)
+                ->exists();
+        }
+
+        // Jika ingin memvalidasi enrollment sebelum bisa akses content
+        // if (!$isEnrolled) {
+        //     return redirect()->route('user.course.show', $course->slug)
+        //         ->with('error', 'Anda harus mendaftar terlebih dahulu untuk mengakses konten ini.');
+        // }
 
         // Ambil parameter 'from' dari URL
         $from = $request->query('from');
 
-        // Ganti 'user.course.content.show' dengan nama view Anda yang sebenarnya
-        return view('user.course.content', compact('course', 'content', 'from'));
+        // Kirim semua data yang diperlukan ke view
+        return view('user.course.content', compact('course', 'content', 'from', 'isEnrolled'));
     }
 }
