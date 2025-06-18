@@ -112,7 +112,8 @@
                                         {{ $course->created_at->diffForHumans() }}
                                     </div>
 
-                                    <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-indigo-700">12 Pages
+                                    <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-indigo-700">
+                                        {{ $course->contents_count }} Pages
                                     </div>
                                 </div>
                             </a>

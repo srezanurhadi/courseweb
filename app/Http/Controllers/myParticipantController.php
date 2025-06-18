@@ -159,7 +159,7 @@ class myParticipantController extends Controller
 
             if ($lastEnrollment) {
                 // Load kursus terkait, termasuk category dan user (author)
-                $lastSeenCourse = Course::with(['category', 'user'])->withCount('enrollments')->find($lastEnrollment->course_id);
+                $lastSeenCourse = Course::with(['category', 'user'])->withCount(['enrollments', 'contents'])->find($lastEnrollment->course_id);
 
                 // Tambahkan informasi content terakhir yang dilihat jika ada
                 if ($lastEnrollment->last_content_id) {
@@ -200,7 +200,7 @@ class myParticipantController extends Controller
         }
 
         // Query dasar untuk semua kursus yang diikuti user (kecuali lastSeenCourse jika ada)
-        $enrolledCoursesQuery = $user->enrolledCourses()->withCount('enrollments')->with(['category', 'user']);
+        $enrolledCoursesQuery = $user->enrolledCourses()->withCount(['enrollments', 'contents'])->with(['category', 'user']);
 
         // Hanya kecualikan 'lastSeenCourse' dari daftar utama jika 'lastSeenCourse' ada dan tidak dalam mode filtering/searching.
         if ($lastSeenCourse && !$isFilteringOrSearching) {

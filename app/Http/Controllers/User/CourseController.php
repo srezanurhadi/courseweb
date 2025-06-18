@@ -18,7 +18,7 @@ class CourseController extends Controller
     public function index(Request $request)
     {
         $categories = Category::all();
-        $query = Course::with(['category', 'user'])->withCount('enrollments')->where('status', 1);
+        $query = Course::with(['category', 'user'])->withCount(['enrollments', 'contents'])->where('status', 1);
 
         if ($request->has('category') && $request->category != '') {
             $query->where('category_id', $request->category);
