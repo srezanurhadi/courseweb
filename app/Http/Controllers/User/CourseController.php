@@ -44,17 +44,27 @@ class CourseController extends Controller
      * Menampilkan halaman detail sebuah course.
      * Menggunakan Route Model Binding dengan 'slug'.
      */
-    public function show(Course $course, Request $request) // <-- TAMBAHKAN Request $request
+    public function show(Course $course, Request $request)
     {
         if (!$course->status) {
             return redirect()->route('user.course.index')->with('error', 'Kursus tidak ditemukan.');
         }
 
         $isEnrolled = false;
+        $enrollment = null;
         if (Auth::check()) {
-            $isEnrolled = Enrollment::where('user_id', Auth::id())
+            $enrollment = Enrollment::where('user_id', Auth::id())
                 ->where('course_id', $course->id)
-                ->exists();
+                ->first(); // Ambil objek enrollment, bukan hanya cek exists
+            $isEnrolled = (bool) $enrollment; // Cek apakah enrollment ada
+        }
+
+        // Jika user terdaftar di kursus ini, update last_content_id menjadi null (overview)
+        // Atau jika kursus ini baru di-enroll dan belum ada last_content_id yang spesifik,
+        // ini akan menandakan bahwa user sedang melihat kursus secara umum.
+        if ($enrollment) {
+            $enrollment->last_content_id = null; // Set ke null untuk menandakan overview
+            $enrollment->touch();
         }
 
         // Ambil parameter 'from' dari URL
@@ -70,50 +80,54 @@ class CourseController extends Controller
      */
     public function showContent(Course $course, $contentId, Request $request)
     {
-        // Validasi apakah user sudah terdaftar di course ini (opsional)
         $isEnrolled = false;
+        $enrollment = null; // Inisialisasi enrollment
         if (Auth::check()) {
-            $isEnrolled = Enrollment::where('user_id', Auth::id())
+            $enrollment = Enrollment::where('user_id', Auth::id())
                 ->where('course_id', $course->id)
-                ->exists();
+                ->first(); // Ambil objek enrollment
+            $isEnrolled = (bool) $enrollment;
         }
 
-        // Jika ingin memvalidasi enrollment sebelum bisa akses content
+        // Jika user tidak terdaftar dan Anda ingin membatasi akses konten, aktifkan ini:
         // if (!$isEnrolled) {
         //     return redirect()->route('user.course.show', $course->slug)
         //         ->with('error', 'Anda harus mendaftar terlebih dahulu untuk mengakses konten ini.');
         // }
 
-        // Get all course contents ordered by their order or id
-        $allContents = $course->contents()->orderBy('id')->get();
-        
-        // If no dynamic contents exist, create static content structure
-        if ($allContents->isEmpty()) {
-            // Create static content data for pagination
+        // Ambil semua konten kursus yang terkait dengan course ini, diurutkan.
+        // Gunakan relasi `contents()` yang sudah ada di model Course untuk memastikan urutan pivot.
+        $allContents = $course->contents()->get(); // Menggunakan relasi BelongsToMany dengan pivot 'order'
+
+        $currentContent = null;
+        if ($allContents->isNotEmpty()) {
+            $currentContent = $allContents->firstWhere('id', $contentId);
+        }
+
+        // Jika tidak ada konten dinamis atau konten tidak ditemukan, gunakan konten statis.
+        // Ini adalah fallback dari kode Anda yang sudah ada.
+        if (!$currentContent) {
             $staticContents = collect([
-                (object)['id' => 1, 'title' => 'Content 1'],
-                (object)['id' => 2, 'title' => 'Content 2'],
-                (object)['id' => 3, 'title' => 'Content 3'],
-                (object)['id' => 4, 'title' => 'Content 4'],
-                (object)['id' => 5, 'title' => 'Content 5'],
-                (object)['id' => 6, 'title' => 'Content 6'],
-                (object)['id' => 7, 'title' => 'Content 7'],
-                (object)['id' => 8, 'title' => 'Content 8'],
-                (object)['id' => 9, 'title' => 'Content 9'],
-                (object)['id' => 10, 'title' => 'Content 10'],
+                (object)['id' => 1, 'title' => 'Content 1', 'content' => 'Lorem ipsum dolor sit amet...'],
+                (object)['id' => 2, 'title' => 'Content 2', 'content' => 'Consectetur adipiscing elit...'],
+                (object)['id' => 3, 'title' => 'Content 3', 'content' => 'Sed do eiusmod tempor...'],
+                (object)['id' => 4, 'title' => 'Content 4', 'content' => 'Incididunt ut labore et dolore...'],
+                (object)['id' => 5, 'title' => 'Content 5', 'content' => 'Magna aliqua. Ut enim ad minim...'],
+                (object)['id' => 6, 'title' => 'Content 6', 'content' => 'Veniam, quis nostrud exercitation...'],
             ]);
-            
             $currentContent = $staticContents->firstWhere('id', $contentId);
             if (!$currentContent) {
                 abort(404, 'Content not found');
             }
-            
-            $allContents = $staticContents;
-        } else {
-            // Find current content from database
-            $currentContent = $allContents->firstWhere('id', $contentId);
-            if (!$currentContent) {
-                abort(404, 'Content not found');
+            $allContents = $staticContents; // Update allContents juga untuk pagination statis
+        }
+
+        // Jika user terdaftar dan content berhasil ditemukan, update last_content_id
+        if ($isEnrolled && $currentContent) {
+            // Pastikan ada objek enrollment sebelum mencoba mengupdate
+            if ($enrollment) {
+                $enrollment->last_content_id = $currentContent->id;
+                $enrollment->save();
             }
         }
 
@@ -125,7 +139,7 @@ class CourseController extends Controller
         // Calculate pagination info
         $totalContents = $allContents->count();
         $currentPage = $currentIndex + 1;
-        
+
         // Find previous and next content
         $previousContent = $currentIndex > 0 ? $allContents[$currentIndex - 1] : null;
         $nextContent = $currentIndex < $totalContents - 1 ? $allContents[$currentIndex + 1] : null;
@@ -138,13 +152,11 @@ class CourseController extends Controller
             'has_next' => $nextContent !== null,
             'previous_content_id' => $previousContent ? $previousContent->id : null,
             'next_content_id' => $nextContent ? $nextContent->id : null,
-            'all_contents' => $allContents
+            'all_contents' => $allContents // Kirim semua konten untuk membangun paginasi
         ];
 
-        // Ambil parameter 'from' dari URL
         $from = $request->query('from');
 
-        // Kirim semua data yang diperlukan ke view
         return view('user.course.content', compact('course', 'currentContent', 'from', 'isEnrolled', 'pagination'));
     }
 }
