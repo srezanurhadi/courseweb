@@ -100,7 +100,7 @@ class contentController extends Controller
         $editorJsData = json_decode($contentData, true);
         return view('admin.content.show', compact('content', 'editorJsData'));
     }
-
+ 
     /**
      * Show the form for editing the specified resource.
      */

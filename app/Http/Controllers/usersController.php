@@ -34,6 +34,7 @@ class usersController extends Controller
             $category = $request->input('category');
             $query->where('role', $category);
         }
+        
         $users = $query->orderBy('name')->paginate(10)->onEachSide(1);
         return view('admin.users.index', compact('users', 'admincount', 'usercount', 'authorcount','userscount'));
     }

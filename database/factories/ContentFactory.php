@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\User;
+use App\Models\Category;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -23,8 +25,11 @@ class ContentFactory extends Factory
 
 
         return [
+            'category_id' => Category::inRandomOrder()->first()->id,
+
             'created_by' => $author->id,
             'title' => $title,
+            'slug' => Str::slug($title),
             'content' => $this->faker->text(200),
         ];
     }
