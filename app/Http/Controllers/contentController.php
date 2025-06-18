@@ -93,34 +93,30 @@ class contentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $slug,)
+    public function show(string $slug)
     {
         $content = Content::where('slug', $slug)->first();
+        // Check if request wants JSON (for the modal preview)
+        if (request()->ajax() || request()->wantsJson()) {
+            return response()->json([
+                'title' => $content->title,
+                'content' => $content->content ?? 'Tidak ada konten.',
+                'category' => $content->category->category ?? 'Tidak ada kategori',
+                'created_at' => $content->created_at->format('d-m-Y')
+            ]);
+        }
         $contentData = $content->content;
         $editorJsData = json_decode($contentData, true);
+        // Regular view for non-AJAX requests
         return view('admin.content.show', compact('content', 'editorJsData'));
     }
- 
+
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $slug)
+    public function edit(Content $content)
     {
-
-        $content = Content::where('slug', $slug)->firstOrFail();
-        $categories = Category::all();
-        dd($content);
-        $editorJsData = null;
-        if ($content->content) {
-            if (is_string($content->content)) {
-                $editorJsData = json_decode($content->content);
-            } else {
-                $editorJsData = $content->content;
-            }
-        }
-
-        // Mengarahkan ke view edit yang terpisah
-        return view('admin.content.edit', compact('content', 'categories', 'editorJsData'));
+        //
     }
 
     /**
