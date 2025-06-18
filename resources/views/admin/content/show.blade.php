@@ -50,7 +50,7 @@
                         </p>
 
                         {{-- --- EDITOR.JS CONTENT RENDERING START --- --}}
-                        <div class="prose max-w-none w-full"> {{-- Gunakan Tailwind Typography Plugin di sini --}}
+                        <div class=" max-w-none w-full"> {{-- Gunakan Tailwind Typography Plugin di sini --}}
                             @if (isset($editorJsData) && is_array($editorJsData['blocks']))
                                 @foreach ($editorJsData['blocks'] as $block)
                                     @switch ($block['type'])
@@ -70,7 +70,7 @@
                                                 <figure class="my-6">
                                                     <img src="{{ $block['data']['file']['url'] }}"
                                                         alt="{{ $block['data']['caption'] ?? 'Image' }}"
-                                                        class="max-w-full h-auto mx-auto rounded-lg shadow-md w-200 {{ $block['data']['stretched'] ? 'w-full' : '' }}">
+                                                        class=" mx-auto rounded-lg shadow-md  {{ $block['data']['stretched'] ? 'w-full' : 'max-w-200' }}">
                                                     @if ($block['data']['caption'])
                                                         <figcaption class="text-center text-sm text-gray-600 mt-2">
                                                             {{ $block['data']['caption'] }}</figcaption>
