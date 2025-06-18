@@ -64,7 +64,7 @@ class CourseController extends Controller
         // ini akan menandakan bahwa user sedang melihat kursus secara umum.
         if ($enrollment) {
             $enrollment->last_content_id = null; // Set ke null untuk menandakan overview
-            $enrollment->save();
+            $enrollment->touch();
         }
 
         // Ambil parameter 'from' dari URL
@@ -122,7 +122,6 @@ class CourseController extends Controller
             $allContents = $staticContents; // Update allContents juga untuk pagination statis
         }
 
-        // ✨ LOGIKA BARU UNTUK LAST SEEN ✨
         // Jika user terdaftar dan content berhasil ditemukan, update last_content_id
         if ($isEnrolled && $currentContent) {
             // Pastikan ada objek enrollment sebelum mencoba mengupdate
