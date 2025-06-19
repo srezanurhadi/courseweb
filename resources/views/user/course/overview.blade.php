@@ -145,9 +145,9 @@
                     <div class="grid grid-cols-3 gap-10">
                         <!-- Content Sidebar -->
                         <div class="col-span-1">
-                            <div class="bg-gray-100 shadow-lg rounded-xl p-6">
+                            <div class="bg-gray-100 shadow-lg rounded-xl p-6 relative">
                                 <h3 class="text-2xl font-bold text-gray-900 mb-3">Content</h3>
-
+                                {{-- limited content --}}
                                 <ul class="">
                                     @if ($isEnrolled)
                                         {{-- JIKA SUDAH ENROLL: Tampilkan semua konten --}}
@@ -165,7 +165,7 @@
                                                     class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
                                             </li>
                                         @empty
-                                            <li class="text-gray-500">Konten belum tersedia untuk kursus ini.</li>
+                                            <li class="text-gray-500">Content Unavailable.</li>
                                         @endforelse
                                     @else
                                         {{-- JIKA BELUM ENROLL: Tampilkan konten lock --}}
@@ -178,11 +178,22 @@
                                                 <i class="fa-solid fa-lock text-gray-400 text-xl"></i>
                                             </li>
                                         @empty
-                                            <li class="text-gray-500">Konten belum tersedia untuk kursus ini.</li>
+                                            <li class="text-gray-500">Content Unavailable.</li>
                                         @endforelse
                                     @endif
                                 </ul>
+                                {{-- gradient kotak content --}}
+                                @if (!$isEnrolled && $allContents->count() > 1)
+                                    <div
+                                        class="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-gray-100 from-30% to-transparent rounded-b-xl pointer-events-none">
+                                    </div>
 
+                                    <div class="absolute bottom-6 left-0 w-full text-center px-6 pointer-events-none">
+                                        <p class="text-base font-semibold text-gray-800 ">
+                                            Enroll to access all content!
+                                        </p>
+                                    </div>
+                                @endif
                             </div>
                             <button
                                 class="w-full mt-6 bg-indigo-100 hover:bg-indigo-300 text-gray-700 font-semibold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 shadow-lg">
