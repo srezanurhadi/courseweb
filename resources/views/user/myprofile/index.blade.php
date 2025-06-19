@@ -159,97 +159,77 @@
 
                 <!-- Course Table Section -->
                 <div class="flex justify-center px-4 lg:px-16">
-                    <div class="w-full max-w-6xl">
-                        <!-- Course Title positioned outside section but aligned with content -->
-                        <div class="mb-2">
-                            <h2 class="text-xl font-bold text-gray-800">Course Progress</h2>
-                        </div>
+                <div class="w-full max-w-6xl">
+                    <div class="mb-2">
+                        <h2 class="text-xl font-bold text-gray-800">Course Progress</h2>
+                    </div>
 
-                        <section class="mb-8 rounded-md border border-gray-300 shadow-md bg-white">
-
-                            <!-- Table Content -->
-                            <div class="overflow-hidden rounded-md">
-                                <!-- Table Header -->
+                    <section class="mb-8 rounded-md border border-gray-300 shadow-md bg-white">
+                        <div class="overflow-x-auto rounded-md">
+                            <div class="min-w-full">
                                 <div class="bg-indigo-700 text-white rounded-t-md">
-                                    <div
-                                        class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 p-2.5 font-semibold text-xs sm:text-sm">
-                                        <div>Course Name</div>
-                                        <div class="hidden sm:block">Progress</div>
+                                    <div class="grid grid-cols-4 gap-4 p-3 font-semibold text-sm">
+                                        <div class="col-span-2 sm:col-span-1">Course Name</div>
+                                        <div class="col-span-2 sm:col-span-1">Progress</div>
                                         <div class="text-center">Status</div>
                                         <div class="text-center">About</div>
                                     </div>
                                 </div>
 
-                                <!-- Table Rows -->
                                 <div class="divide-y divide-gray-200">
-                                    <!-- Row 1 -->
-                                    <div
-                                        class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 p-3 sm:p-4 items-center bg-gray-50">
-                                        <div class="font-semibold text-gray-800 text-sm">Introducing to Figma</div>
-                                        <div class="hidden sm:flex items-center gap-2">
-                                            <div class="flex-1 bg-gray-300 rounded-full h-2">
-                                                <div class="bg-indigo-700 h-2 rounded-full" style="width: 100%"></div>
+                                    @forelse ($enrolledCourses as $course)
+                                        <div class="grid grid-cols-4 gap-4 p-3 items-center hover:bg-gray-50">
+                                            {{-- Course Name --}}
+                                            <div class="font-semibold text-gray-800 text-sm col-span-2 sm:col-span-1">
+                                                {{ $course->title }}
                                             </div>
-                                            <span class="text-sm text-gray-700">100%</span>
-                                        </div>
-                                        <div class="flex justify-center">
-                                            <span
-                                                class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                Finished
-                                            </span>
-                                        </div>
-                                        <div class="text-center">
-                                            <a href="{{ route('user.course.detail', ['id' => 1]) }}"
-                                                class="text-indigo-700 hover:underline text-sm font-medium">Detail</a>
-                                        </div>
-                                    </div>
 
-                                    <!-- Row 2 -->
-                                    <div
-                                        class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 p-3 sm:p-4 items-center bg-gray-50">
-                                        <div class="font-semibold text-gray-800 text-sm">Internet Introduction</div>
-                                        <div class="hidden sm:flex items-center gap-2">
-                                            <div class="flex-1 bg-gray-300 rounded-full h-2">
-                                                <div class="bg-indigo-700 h-2 rounded-full" style="width: 90%"></div>
+                                            {{-- Progress Bar --}}
+                                            <div class="flex items-center gap-2 col-span-2 sm:col-span-1">
+                                                <div class="flex-1 bg-gray-300 rounded-full h-2">
+                                                    <div class="bg-indigo-700 h-2 rounded-full" style="width: {{ $course->progress_percentage ?? 0 }}%"></div>
+                                                </div>
+                                                <span class="text-sm text-gray-700">{{ $course->progress_percentage ?? 0 }}%</span>
                                             </div>
-                                            <span class="text-sm text-gray-700">90%</span>
-                                        </div>
-                                        <div class="flex justify-center">
-                                            <span
-                                                class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                                Ongoing
-                                            </span>
-                                        </div>
-                                        <div class="text-center">
-                                            <span class="text-gray-500 text-sm font-medium">Detail</span>
-                                        </div>
-                                    </div>
 
-                                    <!-- Row 3 -->
-                                    <div
-                                        class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 p-3 sm:p-4 items-center bg-gray-50">
-                                        <div class="font-semibold text-gray-800 text-sm">Understanding Data</div>
-                                        <div class="hidden sm:flex items-center gap-2">
-                                            <div class="flex-1 bg-gray-300 rounded-full h-2">
-                                                <div class="bg-indigo-700 h-2 rounded-full" style="width: 50%"></div>
+                                            {{-- Status Badge --}}
+                                            <div class="flex justify-center">
+                                                @if (($course->progress_percentage ?? 0) >= 100)
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                        Finished
+                                                    </span>
+                                                @else
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                        Ongoing
+                                                    </span>
+                                                @endif
                                             </div>
-                                            <span class="text-sm text-gray-700">50%</span>
+
+                                            {{-- Detail Link --}}
+                                            <div class="text-center">
+                                                @if (($course->progress_percentage ?? 0) >= 100)
+                                                    {{-- JIKA PROGRES SUDAH 100%, tampilkan link ke halaman detail certificate --}}
+                                                    <a href="{{ route('user.course.detail', ['id' => $course->id]) }}" class="text-indigo-700 hover:underline text-sm font-medium">
+                                                        Detail
+                                                    </a>
+                                                @else
+                                                    {{-- JIKA PROGRES KURANG DARI 100%, tampilkan teks yang tidak bisa di-klik --}}
+                                                    <span class="text-gray-400 cursor-not-allowed text-sm font-medium">Detail</span>
+                                                @endif
+                                            </div>
                                         </div>
-                                        <div class="flex justify-center">
-                                            <span
-                                                class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                                Ongoing
-                                            </span>
+                                    @empty
+                                        {{-- Pesan jika user belum terdaftar di kursus manapun --}}
+                                        <div class="p-4 text-center text-gray-500">
+                                            You are not enrolled in any courses yet.
                                         </div>
-                                        <div class="text-center">
-                                            <span class="text-gray-500 text-sm font-medium">Detail</span>
-                                        </div>
-                                    </div>
+                                    @endforelse
                                 </div>
                             </div>
-                        </section>
-                    </div>
+                        </div>
+                    </section>
                 </div>
+            </div>
             </main>
         </div>
     </div>

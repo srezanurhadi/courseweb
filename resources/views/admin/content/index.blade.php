@@ -14,7 +14,7 @@
         <x-sidebar></x-sidebar>
         <div class=" w-full bg-gray-50 ">
             <div class="p-4 shadow-lg font-bold flex bg-gray-100 flex-row justify-between top-0 sticky">
-                <div class="text-3xl font-bold pl-4">Management Course</div>
+                <div class="text-3xl font-bold pl-4">Management Content</div>
                 <div class="profile flex items-center gap-2 pr-4">
                     <i class="fas fa-bell text-xl"></i>
                     <div class="rounded-full justify-center flex bg-gray-300 h-8 w-8">
@@ -129,7 +129,7 @@
                                     </div>
                                 </div>
                                 <div class="px-6 py-3 w-2/12 text-gray-700 truncate">{{ optional($content->creator)->name ?? 'Tidak diketahui' }}</div>
-                                <div class="px-6 py-3 w-2/12 text-gray-700 truncate">Laravel</div>
+                                <div class="px-6 py-3 w-2/12 text-gray-700 truncate">{{ $content->category->category }}</div>
                                 <div class="px-6 py-3 w-2/12 text-gray-700">{{ $content->created_at->format('d-m-Y') }}</div>
                                 <div class="px-6 py-3 w-2/12">
                                     <div class="flex items-center space-x-2">
@@ -138,11 +138,11 @@
                                             aria-label="Lihat">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <button
+                                        <a href="content/{{ $content->slug }}/edit"
                                             class="w-8 h-8 rounded-sm bg-amber-400 hover:bg-amber-500 text-white flex items-center justify-center"
                                             aria-label="Ubah">
                                             <i class="fas fa-pencil-alt"></i>
-                                        </button>
+                                        </a>
                                         <button
                                             class="w-8 h-8 rounded-sm bg-red-500 hover:bg-red-600 text-white flex items-center justify-center"
                                             aria-label="Hapus">

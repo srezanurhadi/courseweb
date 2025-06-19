@@ -16,7 +16,7 @@ class contentController extends Controller
      */
     public function index(Request $request)
     {
-        $contents = Content::orderBy('updated_at', 'desc')->paginate(10)->onEachSide(1);
+        $contents = Content::with('category')->orderBy('updated_at', 'desc')->paginate(10)->onEachSide(1);
         return view('admin.content.index', compact('contents'));
     }
 
@@ -90,9 +90,6 @@ class contentController extends Controller
             ->with('success', 'Konten Berhasil Ditambahkan');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $slug,)
     {
         $content = Content::where('slug', $slug)->first();
@@ -100,16 +97,16 @@ class contentController extends Controller
         $editorJsData = json_decode($contentData, true);
         return view('admin.content.show', compact('content', 'editorJsData'));
     }
- 
+
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $slug)
+    public function edit(Content $content)
     {
 
         $content = Content::where('slug', $slug)->firstOrFail();
         $categories = Category::all();
-        dd($content);
+
         $editorJsData = null;
         if ($content->content) {
             if (is_string($content->content)) {
@@ -119,16 +116,59 @@ class contentController extends Controller
             }
         }
 
-        // Mengarahkan ke view edit yang terpisah
         return view('admin.content.edit', compact('content', 'categories', 'editorJsData'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Content $content)
+
+    public function update(Request $request, string $slug)
     {
-        //
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:150',
+            'content' => 'required|json', // Pastikan konten Editor.js adalah JSON
+            'category' => 'required|exists:categories,id', // Pastikan category_id valid
+        ]);
+        $content = Content::where('slug', $slug)->firstOrFail();
+        $content->title = $validatedData['title'];
+        if ($content->title !== $validatedData['title']) {
+            $newSlug = Str::slug($validatedData['title']);
+            $uniqueSlug = $newSlug;
+            $counter = 1;
+            while (Content::where('slug', $uniqueSlug)->where('id', '!=', $content->id)->exists()) {
+                $uniqueSlug = $newSlug . '-' . $counter;
+                $counter++;
+            }
+            $content->slug = $uniqueSlug;
+        }
+        $content->content = $validatedData['content'];
+        $content->category_id = $validatedData['category'];
+        $content->save();
+
+        $contentJson = json_decode($validatedData['content'], true);
+        $newImageUrlsInContent = [];
+
+        // Kumpulkan semua URL gambar yang ada di konten Editor.js yang baru
+        foreach (($contentJson['blocks'] ?? []) as $block) {
+            if ($block['type'] === 'image' && isset($block['data']['file']['url'])) {
+                $newImageUrlsInContent[] = $block['data']['file']['url'];
+            }
+        }
+
+        $currentAssociatedImages = $content->images()->pluck('url')->toArray();
+        $imagesToDetachUrls = array_diff($currentAssociatedImages, $newImageUrlsInContent);
+        $imagesToAttachUrls = array_diff($newImageUrlsInContent, $currentAssociatedImages);
+
+        if (!empty($imagesToDetachUrls)) {
+            $imagesToDetach = UploadedImage::whereIn('url', $imagesToDetachUrls)->get();
+            $content->images()->detach($imagesToDetach->pluck('id'));
+        }
+
+        if (!empty($imagesToAttachUrls)) {
+            $imagesToAttach = UploadedImage::whereIn('url', $imagesToAttachUrls)->get();
+            $content->images()->attach($imagesToAttach->pluck('id'));
+        }
+
+        return redirect('/admin/content')
+            ->with('success', 'Konten berhasil diperbarui!');
     }
 
     /**

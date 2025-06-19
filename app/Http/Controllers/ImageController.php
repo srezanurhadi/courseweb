@@ -18,7 +18,7 @@ class ImageController extends Controller
             ]);
 
             $file = $request->file('image');
-            $path = $file->store('public/content_images');
+            $path = $file->store('content_images', 'public');
             $url = Storage::url($path);
 
             UploadedImage::create([
@@ -34,7 +34,6 @@ class ImageController extends Controller
                     'url' => $url,
                 ]
             ]);
-
         } catch (ValidationException $e) {
             // Jika validasi gagal
             return response()->json([
@@ -42,7 +41,7 @@ class ImageController extends Controller
                 'message' => 'Validasi gagal',
                 'errors' => $e->errors()
             ], 422); // 422 Unprocessable Entity
-        
+
         } catch (\Exception $e) {
             // Untuk error lainnya (misal: gagal menyimpan file)
             // Log errornya agar bisa ditelusuri
