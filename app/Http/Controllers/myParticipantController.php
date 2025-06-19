@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\MyParticipant;
 use App\Models\Course;
+use App\Models\Content;
 use App\Models\Category;
 use App\Models\enrollments as Enrollment;
 use Illuminate\Http\Request;
@@ -144,30 +145,60 @@ class myParticipantController extends Controller
         $lastSeenCourse = null;
         $categories = Category::all();
 
-        // Cek apakah ada filter atau search yang aktif.
         $isFilteringOrSearching = ($request->has('search') && $request->filled('search')) ||
             ($request->has('category') && $request->filled('category'));
 
-        // Hanya ambil 'lastSeenCourse' jika TIDAK sedang memfilter atau mencari.
         if (!$isFilteringOrSearching && $user->enrolledCourses()->exists()) {
             $lastEnrollment = Enrollment::where('user_id', $user->id)
-                ->latest('updated_at')
+                ->orderBy('updated_at', 'desc')
                 ->first();
 
             if ($lastEnrollment) {
-                $lastSeenCourse = Course::withCount('enrollments')->find($lastEnrollment->course_id);
+                $lastSeenCourse = Course::with(['category', 'user'])->withCount(['enrollments', 'contents'])->find($lastEnrollment->course_id);
+
+                // === LOGIKA PROGRES UNTUK LAST SEEN COURSE ===
+                $allContentsForLastSeen = $lastSeenCourse->contents()->get(); // Ambil semua konten yang terurut
+                $totalContents = $allContentsForLastSeen->count();
+                $lastSeenCourse->progress_percentage = 0; // Default progress 0
+
+                if ($lastEnrollment->last_content_id && $totalContents > 0) {
+                    // Cari index (posisi) dari konten yang terakhir dilihat
+                    $lastSeenContentIndex = $allContentsForLastSeen->search(function ($content) use ($lastEnrollment) {
+                        return $content->id == $lastEnrollment->last_content_id;
+                    });
+
+                    // Jika konten ditemukan, hitung progresnya
+                    if ($lastSeenContentIndex !== false) {
+                        $completedContentsCount = $lastSeenContentIndex + 1; // Index dimulai dari 0, jadi +1
+                        $lastSeenCourse->progress_percentage = round(($completedContentsCount / $totalContents) * 100);
+                    }
+                }
+                // ===============================================
+
+                // Tambahkan informasi content terakhir yang dilihat (sudah ada di kode Anda)
+                if ($lastEnrollment->last_content_id) {
+                    $lastSeenContent = Content::find($lastEnrollment->last_content_id);
+                    if ($lastSeenContent) {
+                        $lastSeenCourse->last_seen_content_title = $lastSeenContent->title;
+                        $lastSeenCourse->last_seen_content_id = $lastSeenContent->id;
+                    }
+                } else {
+                    $lastSeenCourse->last_seen_content_title = 'Overview';
+                    $lastSeenCourse->last_seen_content_id = null;
+                }
             }
         }
 
-        // Query dasar untuk semua kursus yang diikuti user
-        $enrolledCoursesQuery = $user->enrolledCourses()->withCount('enrollments');
+        $enrolledCoursesQuery = $user->enrolledCourses()->withCount(['enrollments', 'contents'])->with(['category', 'user']);
 
-        // Terapkan filter kategori jika ada
+        if ($lastSeenCourse && !$isFilteringOrSearching) {
+            $enrolledCoursesQuery->where('courses.id', '!=', $lastSeenCourse->id);
+        }
+
         if ($request->has('category') && $request->filled('category')) {
             $enrolledCoursesQuery->where('category_id', $request->category);
         }
 
-        // Terapkan filter pencarian jika ada
         if ($request->has('search') && $request->filled('search')) {
             $searchTerm = $request->search;
             $enrolledCoursesQuery->where(function ($q) use ($searchTerm) {
@@ -176,25 +207,41 @@ class myParticipantController extends Controller
             });
         }
 
-        // Hanya kecualikan 'lastSeenCourse' dari daftar utama jika 'lastSeenCourse' ada.
-        if ($lastSeenCourse) {
-            $enrolledCoursesQuery->where('courses.id', '!=', $lastSeenCourse->id);
+        $courses = $enrolledCoursesQuery->latest('enrollments.created_at')->paginate(8);
+
+        // === LOGIKA PROGRES UNTUK DAFTAR KURSUS LAINNYA ===
+        foreach ($courses as $courseItem) {
+            // Ambil data enrollment yang relevan
+            $enrollment = Enrollment::where('user_id', $user->id)
+                ->where('course_id', $courseItem->id)
+                ->first();
+            
+            $courseItem->progress_percentage = 0; // Default progress 0
+
+            if ($enrollment && $enrollment->last_content_id) {
+                $allContents = $courseItem->contents()->get(); // Ambil semua konten yang terurut
+                $totalContents = $allContents->count();
+
+                if ($totalContents > 0) {
+                    // Cari index dari konten yang terakhir dilihat
+                    $lastSeenContentIndex = $allContents->search(function ($content) use ($enrollment) {
+                        return $content->id == $enrollment->last_content_id;
+                    });
+                    
+                    if ($lastSeenContentIndex !== false) {
+                         $completedContentsCount = $lastSeenContentIndex + 1; // Index dimulai dari 0, jadi +1
+                         $courseItem->progress_percentage = round(($completedContentsCount / $totalContents) * 100);
+                    }
+                }
+            }
         }
-
-        // Query yang dipaginasi
-        $courses = $enrolledCoursesQuery->latest()->paginate(8);
-
-        // Debug: Tambahkan informasi untuk debugging
-        $totalCourses = $user->enrolledCourses()->count();
-        $hasMoreThanOnePage = $courses->hasPages();
+        // ===============================================
 
         return view('user.mycourse.index', compact(
             'courses',
             'lastSeenCourse',
             'categories',
-            'isFilteringOrSearching',
-            'totalCourses',
-            'hasMoreThanOnePage'
+            'isFilteringOrSearching'
         ));
     }
 }

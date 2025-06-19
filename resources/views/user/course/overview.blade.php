@@ -21,16 +21,18 @@
                             <h1 class="text-3xl font-bold text-gray-800">
                                 @if (isset($from) && $from == 'my-course')
                                     {{-- Jika datang dari halaman My Course --}}
-                                    <a href="{{ route('user.mycourse.index') }}" class="hover:text-indigo-900">My Course</a>
+                                    <a href="{{ route('user.mycourse.index') }}" class="hover:text-indigo-900">My
+                                        Course</a>
                                 @else
                                     {{-- Jika datang dari halaman Course atau default --}}
                                     <a href="{{ route('user.course.index') }}" class="hover:text-indigo-900">Course</a>
                                 @endif
 
                                 <i class="fa-solid fa-chevron-right mx-1 text-2xl"></i>
-                                
+
                                 {{-- Bagian ini tetap sama, menampilkan judul kursus --}}
-                                <span class="text-gray-600">{{ \Illuminate\Support\Str::limit($course->title, 15) }}</span>
+                                <span
+                                    class="text-gray-600">{{ \Illuminate\Support\Str::limit($course->title, 15) }}</span>
                             </h1>
                         </div>
                         <div class="flex
@@ -83,12 +85,27 @@
                                 <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ $course->title }}</h1>
                                 <span class="text-gray-900 mb-2">By: {{ $course->user->name }}</span>
                                 <!-- Progress Bar -->
-                                <div class="flex items-center gap-4">
-                                    <div class="flex-1 bg-gray-300 rounded-full h-3 mr-3">
-                                        <div class="bg-indigo-700 h-3 rounded-full" style="width: 50%"></div>
+                                @if ($isEnrolled)
+                                    <div class="flex items-center gap-4">
+                                        <div class="flex-1 bg-gray-300 rounded-full h-3 mr-3">
+                                            <div class="bg-indigo-700 h-3 rounded-full"
+                                                style="width: {{ $progressPercentage }}%"></div>
+                                        </div>
+                                        <span class="text-xl font-bold text-gray-900">{{ $progressPercentage }}%</span>
                                     </div>
-                                    <span class="text-xl font-bold text-gray-900">50%</span>
-                                </div>
+                                @elseif (!$isEnrolled)
+                                    <div class="flex flex-col ">
+                                        <p class="text-gray-500 mt-2">Not started yet...</p>
+                                        <div class="flex flex-row items-center gap-4">
+                                            <div class="flex-1 bg-gray-300 rounded-full h-3 mr-3">
+                                                <div class="bg-indigo-700 h-3 rounded-full"
+                                                    style="width: {{ $progressPercentage }}%"></div>
+                                            </div>
+                                            <span
+                                                class="text-xl font-bold text-gray-900">{{ $progressPercentage }}%</span>
+                                        </div>
+                                    </div>
+                                @endif
                                 {{-- enrollmernt start --}}
                                 <div class="flex-1">
                                     @if (session('success'))
@@ -143,81 +160,62 @@
                     <div class="grid grid-cols-3 gap-10">
                         <!-- Content Sidebar -->
                         <div class="col-span-1">
-                            <div class="bg-gray-100 shadow-lg rounded-xl p-6">
+                            <div class="bg-gray-100 shadow-lg rounded-xl p-6 relative">
                                 <h3 class="text-2xl font-bold text-gray-900 mb-3">Content</h3>
+                                {{-- limited content --}}
                                 <ul class="">
-                                    @foreach($course->contents as $content)
-                                        <li class="flex items-center justify-between py-2">
-                                            <a href="{{ route('user.course.content.show', [
-                                                'course' => $course->slug, 
-                                                'content' => $content->id,
-                                                'from' => $from ?? 'course'
-                                            ]) }}"
-                                                class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">
-                                                {{ $loop->iteration }}. {{ $content->title }}
-                                            </a>
-                                            <i class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
-                                        </li>
-                                    @endforeach
-                                    
-                                    {{-- Jika tidak ada content dinamis, biarkan yang statis tapi tambahkan parameter from --}}
-                                    @if($course->contents->isEmpty())
-                                        <li class="flex items-center justify-between py-2">
-                                            <a href="{{ route('user.course.content.show', [
-                                                'course' => $course->slug, 
-                                                'content' => 1,
-                                                'from' => $from ?? 'course'
-                                            ]) }}"
-                                                class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">1. Content 1</a>
-                                            <i class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
-                                        </li>
-                                        <li class="flex items-center justify-between py-2">
-                                            <a href="{{ route('user.course.content.show', [
-                                                'course' => $course->slug, 
-                                                'content' => 2,
-                                                'from' => $from ?? 'course'
-                                            ]) }}"
-                                                class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">2. Content 2</a>
-                                            <i class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
-                                        </li>
-                                        <li class="flex items-center justify-between py-2">
-                                            <a href="{{ route('user.course.content.show', [
-                                                'course' => $course->slug, 
-                                                'content' => 3,
-                                                'from' => $from ?? 'course'
-                                            ]) }}"
-                                                class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">3. Content 3</a>
-                                            <i class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
-                                        </li>
-                                        <li class="flex items-center justify-between py-2">
-                                            <a href="{{ route('user.course.content.show', [
-                                                'course' => $course->slug, 
-                                                'content' => 4,
-                                                'from' => $from ?? 'course'
-                                            ]) }}"
-                                                class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">4. Content 4</a>
-                                            <i class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
-                                        </li>
-                                        <li class="flex items-center justify-between py-2">
-                                            <a href="{{ route('user.course.content.show', [
-                                                'course' => $course->slug, 
-                                                'content' => 5,
-                                                'from' => $from ?? 'course'
-                                            ]) }}"
-                                                class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">5. Content 5</a>
-                                            <i class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
-                                        </li>
-                                        <li class="flex items-center justify-between py-2">
-                                            <a href="{{ route('user.course.content.show', [
-                                                'course' => $course->slug, 
-                                                'content' => 6,
-                                                'from' => $from ?? 'course'
-                                            ]) }}"
-                                                class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">6. Content 6</a>
-                                            <i class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
-                                        </li>
+                                    @if ($isEnrolled)
+                                        {{-- JIKA SUDAH ENROLL: Tampilkan semua konten --}}
+                                        @forelse($allContents as $content)
+                                            @if (in_array($content->id, $completedContentIds))
+                                                {{-- JIKA SUDAH SELESAI: Tampilkan ikon tercentang dan teks berwarna --}}
+                                                <li class="flex items-center justify-between py-2">
+                                                    <a href="{{ route('user.course.content.show', ['course' => $course->slug, 'content' => $content->id, 'from' => $from ?? 'course']) }}"
+                                                        class="text-indigo-700 font-semibold text-xl">
+                                                        {{ $loop->iteration }}. {{ $content->title }}
+                                                    </a>
+                                                    <i class="fas fa-check-square text-indigo-700 text-2xl"></i>
+                                                </li>
+                                            @else
+                                                {{-- JIKA BELUM SELESAI: Tampilkan seperti biasa --}}
+                                                <li class="flex items-center justify-between py-2">
+                                                    <a href="{{ route('user.course.content.show', ['course' => $course->slug, 'content' => $content->id, 'from' => $from ?? 'course']) }}"
+                                                        class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">
+                                                        {{ $loop->iteration }}. {{ $content->title }}
+                                                    </a>
+                                                    <i class="far fa-square text-gray-400 text-2xl"></i>
+                                                </li>
+                                            @endif
+                                        @empty
+                                            <li class="text-gray-500">Content Unavailable.</li>
+                                        @endforelse
+                                    @else
+                                        {{-- JIKA BELUM ENROLL: Tampilkan konten lock --}}
+                                        @forelse($limitedContents as $content)
+                                            <li class="flex items-center justify-between py-2">
+                                                <a href="#"
+                                                    class="text-gray-700 font-semibold text-xl cursor-not-allowed">
+                                                    {{ $loop->iteration }}. {{ $content->title }}
+                                                </a>
+                                                <i class="fa-solid fa-lock text-gray-400 text-xl"></i>
+                                            </li>
+                                        @empty
+                                            <li class="text-gray-500">Content Unavailable.</li>
+                                        @endforelse
                                     @endif
                                 </ul>
+                                {{-- gradient kotak content --}}
+                                @if (!$isEnrolled && $allContents->count() > 1)
+                                    <div
+                                        class="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-gray-100 from-30% to-transparent rounded-b-xl pointer-events-none">
+                                    </div>
+
+                                    <div class="absolute bottom-6 left-0 w-full text-center px-6 pointer-events-none">
+                                        <p class="text-base font-semibold text-gray-800 ">
+                                            Enroll to access all content!
+                                        </p>
+                                    </div>
+                                @endif
                             </div>
                             <button
                                 class="w-full mt-6 bg-indigo-100 hover:bg-indigo-300 text-gray-700 font-semibold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 shadow-lg">
@@ -241,27 +239,6 @@
             <x-footer></x-footer>
         </div>
     </div>
-    <script>
-        const checklistIcons = document.querySelectorAll('.checklist-icon');
-
-        checklistIcons.forEach(icon => {
-            icon.addEventListener('click', function() {
-                if (this.classList.contains('fa-square')) {
-                    this.classList.remove('fa-square');
-                    this.classList.remove('text-gray-400');
-
-                    this.classList.add('fa-check-square');
-                    this.classList.add('text-indigo-700');
-                } else if (this.classList.contains('fa-check-square')) {
-                    this.classList.remove('fa-check-square'); // Hapus kelas ikon tercentang
-                    this.classList.remove('text-indigo-700'); // Hapus warna biru
-
-                    this.classList.add('fa-square'); // Tambah kelas ikon kosong
-                    this.classList.add('text-gray-400'); // Tambah warna abu-abu
-                }
-            });
-        });
-    </script>
 </body>
 
 </html>

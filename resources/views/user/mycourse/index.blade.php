@@ -134,10 +134,10 @@
                                         </p>
                                         <div class="flex items-center justify-between">
                                             <div class="flex-1 bg-gray-200 rounded-full h-2.5">
-                                                <div class="bg-indigo-600 h-2.5 rounded-full" style="width: 45%">
+                                                <div class="bg-indigo-600 h-2.5 rounded-full" style="width: {{ $lastSeenCourse->progress_percentage }}%">
                                                 </div>
                                             </div>
-                                            <span class="ml-4 text-sm font-medium text-gray-700">45%</span>
+                                            <span class="ml-4 text-sm font-medium text-gray-700">{{ $lastSeenCourse->progress_percentage }}%</span>
                                         </div>
                                     </div>
                                 </div>
@@ -227,8 +227,7 @@
 
                                                 <div
                                                     class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-indigo-700">
-                                                    12
-                                                    Pages
+                                                    {{ $course->contents_count }} Pages
                                                 </div>
                                             </div>
                                         </a>
@@ -269,10 +268,10 @@
 
                                                 <div class="flex items-center justify-between">
                                                     <div class="flex-1 bg-gray-200 rounded-full h-2 mr-3">
-                                                        <div class="bg-indigo-700 h-2 rounded-full" style="width: 0%">
+                                                        <div class="bg-indigo-700 h-2 rounded-full" style="width: {{ $course->progress_percentage }}%">
                                                         </div>
                                                     </div>
-                                                    <span class="text-sm font-bold text-gray-900">0%</span>
+                                                    <span class="text-sm font-bold text-gray-900">{{ $course->progress_percentage }}%</span>
                                                 </div>
                                             </div>
                                         </div>
