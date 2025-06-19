@@ -93,21 +93,11 @@ class contentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $slug)
+    public function show(string $slug,)
     {
         $content = Content::where('slug', $slug)->first();
-        // Check if request wants JSON (for the modal preview)
-        if (request()->ajax() || request()->wantsJson()) {
-            return response()->json([
-                'title' => $content->title,
-                'content' => $content->content ?? 'Tidak ada konten.',
-                'category' => $content->category->category ?? 'Tidak ada kategori',
-                'created_at' => $content->created_at->format('d-m-Y')
-            ]);
-        }
         $contentData = $content->content;
         $editorJsData = json_decode($contentData, true);
-        // Regular view for non-AJAX requests
         return view('admin.content.show', compact('content', 'editorJsData'));
     }
 

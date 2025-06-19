@@ -51,24 +51,57 @@ class courseController extends Controller
 
     public function create(Request $request)
     {
-        $categories = Category::all();
-
-        $contentsQuery = Content::query();
+        // Bagian query ini sudah benar dan bisa digunakan untuk kedua skenario
+        $contentsQuery = Content::with('category')->orderBy('created_at', 'desc');
 
         // Handle search functionality
-        if ($request->has('search') && $request->search != '') {
+        if ($request->filled('search')) { // ->filled() lebih baik dari ->has()
             $contentsQuery->where('title', 'like', '%' . $request->search . '%');
         }
 
         // Handle category filter
-        if ($request->has('category') && $request->category != '') {
+        if ($request->filled('category')) {
             $contentsQuery->where('category_id', $request->category);
         }
 
         // Get the filtered contents
-        $contents = $contentsQuery->orderBy('created_at', 'desc')->get();
+        $contents = $contentsQuery->get();
 
-        return view('admin.course.create', compact('categories', 'contents'));
+        // --- LOGIKA KONDISIONAL DIMULAI DI SINI ---
+
+        // 1. Jika ini adalah permintaan AJAX dari JavaScript kita...
+        if ($request->ajax()) {
+
+            // Format data agar bersih dan sesuai untuk JSON
+            $formattedContents = $contents->map(function ($content) {
+                return [
+                    'id' => $content->id,
+                    'title' => $content->title,
+                    'slug' => $content->slug,
+                    'category_name' => $content->category->category,
+                    'created_at' => $content->created_at->format('d-m-Y'),
+                ];
+            });
+
+            // Kembalikan hanya data JSON
+            return response()->json(['contents' => $formattedContents]);
+        }
+
+        // 2. Jika ini adalah permintaan biasa (load halaman pertama kali)...
+        // maka lanjutkan kode Anda yang sebelumnya untuk merender view.
+
+        $categories = Category::all();
+
+        $contentDetails = [];
+        foreach ($contents as $content) {
+            $contentDetails[$content->id] = [
+                'title' => $content->title,
+                'blocks' => json_decode($content->content, true)['blocks'] ?? []
+            ];
+        }
+
+        // Kembalikan view lengkap dengan semua data yang dibutuhkan
+        return view('admin.course.create', compact('categories', 'contents', 'contentDetails'));
     }
 
     /**
@@ -121,6 +154,33 @@ class courseController extends Controller
         }
 
         return redirect("/admin/course")->with('success', 'Course Berhasil Ditambahkan');
+    }
+
+    public function search(Request $request)
+    {
+        $contentsQuery = Content::with('category')->orderBy('created_at', 'desc');
+
+        if ($request->filled('search')) {
+            $contentsQuery->where('title', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('category')) {
+            $contentsQuery->where('category_id', $request->category);
+        }
+
+        $contents = $contentsQuery->get();
+
+        $formattedContents = $contents->map(function ($content) {
+            return [
+                'id' => $content->id,
+                'title' => $content->title,
+                'slug' => $content->slug,
+                'category_name' => $content->category->category,
+                'created_at' => $content->created_at->format('d-m-Y'),
+            ];
+        });
+
+        return response()->json(['contents' => $formattedContents]);
     }
 
     /**

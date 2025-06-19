@@ -18,11 +18,8 @@ class ImageController extends Controller
             ]);
 
             $file = $request->file('image');
-            $path = $file->store('public/content_images');
+            $path = $file->store('content_images', 'public');
             $url = Storage::url($path);
-
-            $filename = basename($path);
-            $url = '/storage/content_images/' . $filename;
 
             UploadedImage::create([
                 'filename' => $file->getClientOriginalName(),

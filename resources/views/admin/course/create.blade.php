@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Document</title>
     <x-headcomponent></x-headcomponent>
 </head>
@@ -25,7 +26,7 @@
                         <input type="text" name="title" id="title" value="{{ old('title') }}"
                             class="@error('title') is-invalid @enderror w-full
                                 px-3 py-2 border-2 border-gray-300 bg-gray-50 rounded-md focus:outline-none focus:border-indigo-500"
-                            required>
+                            placeholder="Course Title..." required>
                         @error('title')
                             <div class="invalid-feedback text-red-600 italic">
                                 {{ $message }}
@@ -35,7 +36,7 @@
 
                     {{-- image --}}
                     <div class="mb-4">
-                        <label for="image" lass="block text-sm font-medium text-gray-700 mb-1">Upload Gambar
+                        <label for="image" class="block text-sm font-medium text-gray-700 mb-1">Upload Gambar
                             Galeri <span class="text-red-500">*</span></label>
                         <div
                             class="mt-1 w-100 aspect-4/3 flex justify-center items-center px-6 pt-5 pb-6 border-2 bg-gray-50 border-gray-300 border-dashed rounded-md">
@@ -130,44 +131,43 @@
                 </div>
             </form>
         </div>
+
+
         <div id="modal"
             class="modal ml-54 hidden opacity-0 fixed inset-0 bg-black/50 backdrop-blur-xs transition-all duration-500 ease-in-out flex items-center justify-center z-50 p-25">
             <div class="p-4 w-full max-w-6xl bg-gray-100 rounded-lg ">
-                {{-- Search dll --}}
-                <div class="w-full bg-gray-100 flex pt-2 pb-4 px-1 justify-between">
-                    <div class="flex gap-4 justify-between">
-                        <form action={{ url('/admin/course/create#modal') }} method="GET" class="flex gap-2">
-                            <div class=" flex gap-1 items-center rounded-lg border-gray-400 border-2 pl-2">
-                                <i class="fas fa-search text-gray-500"></i>
-                                <input type="text" name="search" value="{{ request('search') }}"
-                                    class="rounded-lg min-w-56 focus:outline-none px-2 placeholder:font-semibold placeholder:italic"
-                                    placeholder="Search Course...">
-                            </div>
-                            <div class=" flex gap-1 items-center rounded-lg border-gray-400 border-2 px-2">
-                                <i class="fas fa-filter text-gray-500"></i>
-                                <select name="category" id="category"
-                                    class="min-w-56 focus:outline-none px-2 text-gray-900"
-                                    onchange="this.form.submit()">
 
-                                    <option value="" {{ request('category') ? '' : 'selected' }}>All Category
-                                    </option>
-
-                                    @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}"
-                                            {{ request('category') == $category->id ? 'selected' : '' }}>
-                                            {{ $category->category }}
-                                        </option>
-                                    @endforeach`
-                                </select>
+                <!-- SOLUTION 2: AJAX SEARCH (HIDDEN BY DEFAULT) -->
+                <div id="ajax-solution">
+                    <div class="w-full bg-gray-100 flex pt-2 pb-4 px-1 justify-between">
+                        <div class="flex gap-4 justify-between">
+                            <div class="flex gap-2">
+                                <div class=" flex gap-1 items-center rounded-lg border-gray-400 border-2 pl-2">
+                                    <i class="fas fa-search text-gray-500"></i>
+                                    <input type="text" id="ajax-search"
+                                        class="rounded-lg min-w-56 focus:outline-none px-2 placeholder:font-semibold placeholder:italic"
+                                        placeholder="Search Course...">
+                                </div>
+                                <div class=" flex gap-1 items-center rounded-lg border-gray-400 border-2 px-2">
+                                    <i class="fas fa-filter text-gray-500"></i>
+                                    <select id="ajax-category-filter"
+                                        class="min-w-56 focus:outline-none px-2 text-gray-900">
+                                        <option value="">All Category</option>
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->id }}">{{ $category->category }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <button id="ajax-search-btn" class="bg-sky-600 px-2 rounded-lg">
+                                    <p class=" font-medium text-base text-white">search</p>
+                                </button>
                             </div>
-                            <button class="bg-sky-600 px-2 rounded-lg">
-                                <p class=" font-medium text-base text-white">search</p>
-                            </button>
-                        </form>
+                        </div>
                     </div>
                 </div>
-                <div class="bg-gray-50 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl overflow-hidden pb-5">
 
+                <!-- Content List Container -->
+                <div class="bg-gray-50 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl overflow-hidden pb-5">
                     {{-- header --}}
                     <div
                         class="relative flex bg-indigo-600 text-gray-50 text-xs font-semibold uppercase tracking-wider">
@@ -175,17 +175,13 @@
                         <div class="px-6 py-3 w-2/12 text-left">Category</div>
                         <div class="px-6 py-3 w-2/12 text-left">Created At</div>
                         <div class="px-6 py-3 w-2/12 text-left">Status</div>
-                        <div class="px-6 py-3 w-2/12 text-left flex flex-col mr-6">
-                            <div>Action</div>
-                        </div>
-
+                        <div class="px-6 py-3 w-2/12 text-left flex flex-col mr-6">Action</div>
                     </div>
-                    {{-- data --}}
-                    <div class="space-y-4 px-4 py-4 overflow-y-auto h-100">
 
+                    {{-- Content List --}}
+                    <div id="content-list" class="space-y-4 px-4 py-4 overflow-y-auto h-100">
                         @forelse ($contents as $content)
                             <div class="flex items-center bg-amber-100 rounded-lg shadow-md text-sm font-medium">
-
                                 <div class="px-6 py-3 w-4/12 text-gray-900">
                                     <div class="flex items-center">
                                         <div
@@ -197,18 +193,15 @@
                                                     d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L1.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09l2.846.813-.813 2.846a4.5 4.5 0 00-3.09 3.09zM18.25 12L17 14.25l-1.25-2.25L13.5 11l2.25-1.25L17 7.5l1.25 2.25L20.5 11l-2.25 1.25z" />
                                             </svg>
                                         </div>
-                                        <div class="ml-4 truncate">
-                                            {{ $content->title }}
-                                        </div>
+                                        <div class="ml-4 truncate">{{ $content->title }}</div>
                                     </div>
                                 </div>
                                 <div class="px-6 py-3 w-2/12 text-gray-700 truncate">
                                     {{ $content->category->category }}</div>
                                 <div class="px-6 py-3 w-2/12 text-gray-700">
-                                    {{ $content->created_at->format('d-m-Y') }}
-                                </div>
-                                <div class="px-6 py-3 w-2/12 text-gray-700 ">Belum pernah dipilih</div>
-                                <div class="px-6 py-3 w-2/12 ">
+                                    {{ $content->created_at->format('d-m-Y') }}</div>
+                                <div class="px-6 py-3 w-2/12 text-gray-700">Belum pernah dipilih</div>
+                                <div class="px-6 py-3 w-2/12">
                                     <div class="flex items-center space-x-2">
                                         <div class="flex justify-center w-full">
                                             <input type="checkbox" id="content_{{ $content->id }}"
@@ -216,275 +209,313 @@
                                                 data-title="{{ $content->title }}"
                                                 class="h-6 w-6 border-gray-300 rounded focus:ring-indigo-700 text-indigo-700">
                                         </div>
-                                        <button id="lihat"
-                                            class="w-6 h-6 p-2 rounded-sm bg-sky-500 hover:bg-sky-600 text-white flex items-center justify-center"
-                                            aria-label="Lihat" data-content-id="{{ $content->id }}">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
+                                        <a href="{{ url('admin/content/' . $content->slug) }}" target="_blank">
+                                            <button
+                                                class="lihat-btn w-6 h-6 p-2 rounded-sm bg-sky-500 hover:bg-sky-600 text-white flex items-center justify-center"
+                                                aria-label="Lihat" data-content-id="{{ $content->id }}">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
                         @empty
-                            <div class="text-center text-gray-600 py-4">
-                                Tidak ada konten yang ditemukan.
-                            </div>
+                            <div class="text-center text-gray-600 py-4">Tidak ada konten yang ditemukan.</div>
                         @endforelse
                     </div>
+
+                    <!-- Loading indicator for AJAX -->
+                    <div id="loading-indicator" class="hidden text-center py-4">
+                        <div
+                            class="inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md text-gray-500 bg-white">
+                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-500"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10"
+                                    stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
+                            </svg>
+                            Loading...
+                        </div>
+                    </div>
                 </div>
+
                 <div class="mt-4">
                     <div class="flex flex-row justify-end gap-4">
                         <button id="closeModal"
-                            class="py-1 w-34 text-indigo-700 bg-gray-50 border-2 border-indigo-700 rounded-lg text-center">
-                            Cancel</button>
+                            class="py-1 w-34 text-indigo-700 bg-gray-50 border-2 border-indigo-700 rounded-lg text-center">Cancel</button>
                         <button id="saveSelectedContent" type="button"
-                            class="py-1 w-34 text-gray-50 bg-indigo-700 border-2 border-indigo-700 rounded-lg text-center">
-                            Save</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="modal2"
-            class="modal2 ml-54 hidden opacity-0 fixed inset-0 bg-black/50 backdrop-blur-xs transition-all duration-500 ease-in-out flex items-center justify-center z-50 p-25">
-            <div class="p-4 w-full max-w-6xl relative">
-                <button id="closeModal2" title="Close modal"
-                    class="absolute top-0 right-0 transform -translate-y-1/2 text-gray-200 hover:text-white p-1 rounded-full bg-indigo-700">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-                <div class="bg-gray shadow-lg rounded-xl overflow-hidden">
-                    <div
-                        class="w-full h-120 overflow-y-auto p-8 bg-gray-100 rounded-lg shadow-[0px_1px_2px_1px_rgba(0,0,0,0.4)] flex flex-col gap-4">
-                        <p class="text-2xl font-bold">
-                            <!-- Content title will be loaded here -->
-                        </p>
-                        <p class="text-base font-medium indent-10">
-                            <!-- Content body will be loaded here -->
-                        </p>
+                            class="py-1 w-34 text-gray-50 bg-indigo-700 border-2 border-indigo-700 rounded-lg text-center">Save</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        // Gunakan nama yang benar dari hasil "php artisan route:list"
+        const SEARCH_URL = '{{ route('course.search') }}';
+    </script>
+
+    <script>
+        // AJAX Search Implementation
+        const ajaxSearchInput = document.getElementById('ajax-search');
+        const ajaxCategoryFilter = document.getElementById('ajax-category-filter');
+        const ajaxSearchBtn = document.getElementById('ajax-search-btn');
+        const contentList = document.getElementById('content-list');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        let selectedContents = [];
+
+        function performAjaxSearch() {
+            const searchTerm = ajaxSearchInput.value;
+            const categoryId = ajaxCategoryFilter.value;
+
+            // Show loading
+            loadingIndicator.classList.remove('hidden');
+            contentList.style.opacity = '0.5';
+
+            const params = new URLSearchParams();
+            if (searchTerm) params.append('search', searchTerm);
+            if (categoryId) params.append('category', categoryId);
+            // params.append('ajax', '1'); // Ini tidak wajib jika Anda menggunakan header
+
+            // URL endpoint yang kita buat di Laravel
+            const url = `${SEARCH_URL}?${params.toString()}`;
 
 
-</body>
-<script>
-    const modalOpen = document.querySelectorAll('#add_content');
-    const modal = document.querySelectorAll('#modal');
-    const modalClose = document.querySelectorAll('#closeModal');
+            console.log('SEARCH_URL:', SEARCH_URL);
+            console.log('Final URL:', url)
 
-    for (let i = 0; i < modalOpen.length; i++) {
-        modalOpen[i].addEventListener('click', (e) => {
-            e.preventDefault();
-            modal[i].classList.remove('hidden');
-            setTimeout(() => {
-                modal[i].classList.remove('opacity-0')
-            }, 10);
-        });
-
-        modalClose[i].addEventListener('click', (e) => {
-            e.preventDefault();
-            modal[i].classList.add('opacity-0');
-            setTimeout(() => {
-                modal[i].classList.add('hidden')
-            }, 500);
-        });
-    }
-
-    // Modal 2 (Content Preview Modal) - FIXED VERSION
-    document.addEventListener('DOMContentLoaded', function() {
-        const modal2 = document.getElementById('modal2');
-        const closeModal2Button = document.getElementById('closeModal2');
-
-        // Function to close modal2
-        function closeModal2() {
-            if (modal2) {
-                modal2.classList.add('opacity-0');
-                setTimeout(() => {
-                    modal2.classList.add('hidden');
-                }, 500);
-            }
-        }
-
-        // Function to open modal2 and load content
-        function openModal2AndLoadContent(contentId) {
-            const modalTitle = modal2.querySelector('.text-2xl.font-bold');
-            const modalContent = modal2.querySelector('.text-base.font-medium.indent-10');
-
-            // Clear previous content first
-            modalTitle.textContent = '';
-            modalContent.textContent = '';
-
-            // Show loading state
-            modalTitle.textContent = 'Loading...';
-            modalContent.textContent = 'Loading content...';
-
-            // Show the modal
-            modal2.classList.remove('hidden');
-            setTimeout(() => {
-                modal2.classList.remove('opacity-0');
-            }, 10);
-
-            // Fetch content data
-            fetch(`/admin/content/${contentId}`, {
+            fetch(url, {
+                    method: 'GET',
                     headers: {
+                        // Header ini penting agar Laravel tahu ini adalah request AJAX
+                        'X-Requested-With': 'XMLHttpRequest',
                         'Accept': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
                     }
                 })
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
+                        throw new Error('Network response was not ok');
                     }
                     return response.json();
                 })
                 .then(data => {
-                    // Update modal with content data
-                    modalTitle.textContent = data.title || 'No Title';
-                    modalContent.textContent = data.content || 'No Content Available';
+                    // Panggil fungsi baru kita untuk update list
+                    updateContentList(data.contents);
                 })
                 .catch(error => {
-                    console.error('Error fetching content:', error);
-                    modalTitle.textContent = 'Error Loading Content';
-                    modalContent.textContent = 'Failed to load content. Please try again later.';
+                    console.error('Error:', error);
+                    // Sekarang kita tahu errornya adalah SyntaxError, kita bisa lebih yakin masalahnya di sini.
+                    contentList.innerHTML =
+                        `<div class="text-center text-red-600 py-4">Terjadi kesalahan saat memuat data (Format salah).</div>`;
+                })
+                .finally(() => {
+                    // Selalu sembunyikan loading setelah selesai
+                    hideLoading();
                 });
         }
 
-        // Event delegation for "lihat" buttons (handles dynamically loaded content)
-        document.addEventListener('click', function(event) {
-            if (event.target.closest('#lihat')) {
-                event.preventDefault();
-                const button = event.target.closest('#lihat');
-                const contentId = button.getAttribute('data-content-id');
-
-                if (contentId) {
-                    openModal2AndLoadContent(contentId);
-                }
-            }
-        });
-
-        // Close modal2 with close button
-        if (closeModal2Button) {
-            closeModal2Button.addEventListener('click', function(e) {
-                e.preventDefault();
-                closeModal2();
-            });
+        function hideLoading() {
+            loadingIndicator.classList.add('hidden');
+            contentList.style.opacity = '1';
         }
 
-        // Close modal2 by clicking outside
-        if (modal2) {
-            modal2.addEventListener('click', function(event) {
-                if (event.target === modal2) {
-                    closeModal2();
-                }
-            });
-        }
+        function updateContentList(contents) {
+            // Kosongkan daftar konten saat ini
+            contentList.innerHTML = '';
 
-        // Close modal2 with Escape key
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape' && !modal2.classList.contains('hidden')) {
-                closeModal2();
-            }
-        });
-    });
-
-    // Image Preview Functionality
-    const imageInput = document.getElementById('image');
-    const imagePreviewDiv = document.getElementById('image-preview');
-    const previewImage = document.getElementById('preview-img');
-
-    if (imageInput) {
-        imageInput.addEventListener('change', function() {
-            const file = this.files[0];
-
-            if (file) {
-                if (file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        previewImage.src = e.target.result;
-                        imagePreviewDiv.classList.remove('hidden');
-                    }
-                    reader.readAsDataURL(file);
-                } else {
-                    previewImage.src = '#';
-                    imagePreviewDiv.classList.add('hidden');
-                    alert('Harap pilih file gambar (PNG, JPG, GIF).');
-                }
-            } else {
-                previewImage.src = '#';
-                imagePreviewDiv.classList.add('hidden');
-            }
-        });
-    }
-
-    // Content Selection Functionality
-    document.addEventListener('DOMContentLoaded', function() {
-        const saveSelectedContentBtn = document.getElementById('saveSelectedContent');
-        const selectedContentContainer = document.getElementById('selected-content-container');
-        const noContentMessage = document.getElementById('no-content-message');
-        const selectedContentIdsInput = document.getElementById('selected_content_ids');
-
-        let selectedContents = [];
-
-        if (saveSelectedContentBtn) {
-            saveSelectedContentBtn.addEventListener('click', function() {
-                const checkedBoxes = document.querySelectorAll(
-                'input[name="content_checkbox"]:checked');
-                selectedContents = [];
-
-                checkedBoxes.forEach(function(checkbox, index) {
-                    const contentId = checkbox.value;
-                    const contentTitle = checkbox.getAttribute('data-title');
-
-                    selectedContents.push({
-                        id: contentId,
-                        title: contentTitle,
-                        order: index + 1
-                    });
-                });
-
-                selectedContentIdsInput.value = JSON.stringify(selectedContents);
-                updateSelectedContentDisplay();
-
-                // Close modal
-                const modalElement = document.querySelector('#modal');
-                if (modalElement) {
-                    modalElement.classList.add('opacity-0');
-                    setTimeout(() => {
-                        modalElement.classList.add('hidden');
-
-                        const contentSection = document.getElementById(
-                            'selected-content-container').closest('.mb-4');
-                        if (contentSection) {
-                            contentSection.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'center'
-                            });
-                        }
-                    }, 500);
-                }
-            });
-        }
-
-        function updateSelectedContentDisplay() {
-            selectedContentContainer.innerHTML = '';
-
-            if (selectedContents.length === 0) {
-                noContentMessage.classList.remove('hidden');
+            // Jika tidak ada konten yang ditemukan, tampilkan pesan
+            if (!contents || contents.length === 0) {
+                contentList.innerHTML =
+                    `<div class="text-center text-gray-600 py-4">Tidak ada konten yang ditemukan.</div>`;
                 return;
             }
 
-            noContentMessage.classList.add('hidden');
+            const currentlyChecked = [];
+            document.querySelectorAll('input[name="content_checkbox"]:checked').forEach(checkbox => {
+                currentlyChecked.push({
+                    id: parseInt(checkbox.value),
+                    title: checkbox.getAttribute('data-title')
+                });
+            });
 
-            selectedContents.forEach(function(content, index) {
-                const contentCard = document.createElement('div');
-                contentCard.className =
-                    'flex items-start p-4 border border-gray-300 rounded-md bg-white shadow-sm';
-                contentCard.dataset.contentId = content.id;
+            let html = '';
+            contents.forEach(content => {
+                // **PENTING: Cek apakah konten ini sudah dipilih sebelumnya**
+                // Kita menggunakan array 'selectedContents' dari script Anda sebelumnya
+                const isChecked = selectedContents.some(item => item.id == content.id);
 
-                contentCard.innerHTML = `
+                html += `
+            <div class="flex items-center bg-amber-100 rounded-lg shadow-md text-sm font-medium">
+                <div class="px-6 py-3 w-4/12 text-gray-900">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 h-8 w-8 rounded-md bg-amber-500 flex items-center justify-center text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L1.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09l2.846.813-.813 2.846a4.5 4.5 0 00-3.09 3.09zM18.25 12L17 14.25l-1.25-2.25L13.5 11l2.25-1.25L17 7.5l1.25 2.25L20.5 11l-2.25 1.25z" />
+                            </svg>
+                        </div>
+                        <div class="ml-4 truncate">${content.title}</div>
+                    </div>
+                </div>
+                <div class="px-6 py-3 w-2/12 text-gray-700 truncate">${content.category_name}</div>
+                <div class="px-6 py-3 w-2/12 text-gray-700">${content.created_at}</div>
+                <div class="px-6 py-3 w-2/12 text-gray-700">Belum pernah dipilih</div>
+                <div class="px-6 py-3 w-2/12">
+                    <div class="flex items-center space-x-2">
+                        <div class="flex justify-center w-full">
+                            <input type="checkbox" name="content_checkbox" value="${content.id}" data-title="${content.title}"
+                                class="h-6 w-6 border-gray-300 rounded focus:ring-indigo-700 text-indigo-700"
+                                ${isChecked ? 'checked' : ''}> 
+                        </div>
+                        <a href="/admin/content/${content.slug}" target="_blank">
+                            <button class="lihat-btn w-6 h-6 p-2 rounded-sm bg-sky-500 hover:bg-sky-600 text-white flex items-center justify-center" aria-label="Lihat">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `;
+            });
+
+            // Masukkan semua HTML yang sudah digenerate ke dalam list
+            contentList.innerHTML = html;
+        }
+
+        // Event listeners for AJAX search
+        ajaxSearchBtn.addEventListener('click', performAjaxSearch);
+        ajaxSearchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                performAjaxSearch();
+            }
+        });
+        ajaxCategoryFilter.addEventListener('change', performAjaxSearch);
+
+
+        // Original modal functionality
+        const modalOpen = document.querySelectorAll('#add_content');
+        const modal = document.querySelectorAll('#modal');
+        const modalClose = document.querySelectorAll('#closeModal');
+
+        for (let i = 0; i < modalOpen.length; i++) {
+            modalOpen[i].addEventListener('click', (e) => {
+                e.preventDefault();
+                modal[i].classList.remove('hidden');
+                setTimeout(() => {
+                    modal[i].classList.remove('opacity-0');
+                }, 10);
+            });
+
+            modalClose[i].addEventListener('click', (e) => {
+                e.preventDefault();
+                modal[i].classList.add('opacity-0');
+                setTimeout(() => {
+                    modal[i].classList.add('hidden');
+                    // Remove hash from URL when closing modal
+                    if (window.location.hash === '#modal') {
+                        window.history.replaceState(null, null, window.location.pathname);
+                    }
+                }, 500);
+            });
+        }
+
+        // Image Preview Functionality
+        const imageInput = document.getElementById('image');
+        const imagePreviewDiv = document.getElementById('image-preview');
+        const previewImage = document.getElementById('preview-img');
+
+        if (imageInput) {
+            imageInput.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            previewImage.src = e.target.result;
+                            imagePreviewDiv.classList.remove('hidden');
+                        }
+                        reader.readAsDataURL(file);
+                    } else {
+                        previewImage.src = '#';
+                        imagePreviewDiv.classList.add('hidden');
+                        alert('Harap pilih file gambar (PNG, JPG, GIF).');
+                    }
+                } else {
+                    previewImage.src = '#';
+                    imagePreviewDiv.classList.add('hidden');
+                }
+            });
+        }
+
+        // Content Selection Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const saveSelectedContentBtn = document.getElementById('saveSelectedContent');
+            const selectedContentContainer = document.getElementById('selected-content-container');
+            const noContentMessage = document.getElementById('no-content-message');
+            const selectedContentIdsInput = document.getElementById('selected_content_ids'); 
+
+            if (saveSelectedContentBtn) {
+                saveSelectedContentBtn.addEventListener('click', function() {
+                    const checkedBoxes = document.querySelectorAll(
+                        'input[name="content_checkbox"]:checked');
+                    selectedContents = [];
+
+                    checkedBoxes.forEach(function(checkbox, index) {
+                        const contentId = checkbox.value;
+                        const contentTitle = checkbox.getAttribute('data-title');
+
+                        selectedContents.push({
+                            id: contentId,
+                            title: contentTitle,
+                            order: index + 1
+                        });
+                    });
+
+                    selectedContentIdsInput.value = JSON.stringify(selectedContents);
+                    updateSelectedContentDisplay();
+
+                    // Close modal
+                    const modalElement = document.querySelector('#modal');
+                    if (modalElement) {
+                        modalElement.classList.add('opacity-0');
+                        setTimeout(() => {
+                            modalElement.classList.add('hidden');
+                            // Remove hash from URL
+                            if (window.location.hash === '#modal') {
+                                window.history.replaceState(null, null, window.location.pathname);
+                            }
+                            const contentSection = document.getElementById(
+                                'selected-content-container').closest('.mb-4');
+                            if (contentSection) {
+                                contentSection.scrollIntoView({
+                                    behavior: 'smooth',
+                                    block: 'center'
+                                });
+                            }
+                        }, 500);
+                    }
+                });
+            }
+
+            function updateSelectedContentDisplay() {
+                selectedContentContainer.innerHTML = '';
+
+                if (selectedContents.length === 0) {
+                    noContentMessage.classList.remove('hidden');
+                    return;
+                }
+
+                noContentMessage.classList.add('hidden');
+
+                selectedContents.forEach(function(content, index) {
+                    const contentCard = document.createElement('div');
+                    contentCard.className =
+                        'flex items-start p-4 border border-gray-300 rounded-md bg-white shadow-sm';
+                    contentCard.dataset.contentId = content.id;
+
+                    contentCard.innerHTML = `
                 <div class="mr-3">
                     <div class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center font-bold">
                         ${index + 1}
@@ -513,47 +544,65 @@
                 </button>
             `;
 
-                selectedContentContainer.appendChild(contentCard);
-            });
-
-            addContentCardEventListeners();
-        }
-
-        function addContentCardEventListeners() {
-            document.querySelectorAll('.remove-content-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const index = parseInt(this.dataset.index);
-                    selectedContents.splice(index, 1);
-                    selectedContentIdsInput.value = JSON.stringify(selectedContents);
-                    updateSelectedContentDisplay();
+                    selectedContentContainer.appendChild(contentCard);
                 });
-            });
 
-            document.querySelectorAll('.move-up-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const index = parseInt(this.dataset.index);
-                    if (index > 0) {
-                        [selectedContents[index], selectedContents[index - 1]] = [
-                            selectedContents[index - 1], selectedContents[index]
-                        ];
+                addContentCardEventListeners();
+            }
+
+            function addContentCardEventListeners() {
+                document.querySelectorAll('.remove-content-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const index = parseInt(this.dataset.index);
+
+                        if (selectedContents[index]) {
+                            const contentIdToRemove = selectedContents[index].id;
+
+                            const checkboxToUncheck = document.querySelector(
+                                `input[name="content_checkbox"][value="${contentIdToRemove}"]`);
+                            if (checkboxToUncheck) {
+                                checkboxToUncheck.checked = false;
+                            }
+                        }
+
+                        selectedContents.splice(index, 1);
+                        selectedContentIdsInput.value = JSON.stringify(selectedContents);
                         updateSelectedContentDisplay();
-                    }
+                        const correspondingCheckbox = document.querySelector(
+                            `input[name="content_checkbox"][value="${removedItem.id}"]`);
+                        if (correspondingCheckbox) {
+                            correspondingCheckbox.checked = false;
+                        }
+                    });
                 });
-            });
 
-            document.querySelectorAll('.move-down-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const index = parseInt(this.dataset.index);
-                    if (index < selectedContents.length - 1) {
-                        [selectedContents[index], selectedContents[index + 1]] = [
-                            selectedContents[index + 1], selectedContents[index]
-                        ];
-                        updateSelectedContentDisplay();
-                    }
+                document.querySelectorAll('.move-up-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const index = parseInt(this.dataset.index);
+                        if (index > 0) {
+                            [selectedContents[index], selectedContents[index - 1]] = [
+                                selectedContents[index - 1], selectedContents[index]
+                            ];
+                            updateSelectedContentDisplay();
+                        }
+                    });
                 });
-            });
-        }
-    });
-</script>
+
+                document.querySelectorAll('.move-down-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const index = parseInt(this.dataset.index);
+                        if (index < selectedContents.length - 1) {
+                            [selectedContents[index], selectedContents[index + 1]] = [
+                                selectedContents[index + 1], selectedContents[index]
+                            ];
+                            updateSelectedContentDisplay();
+                        }
+                    });
+                });
+            }
+        });
+
+        ;
+    </script>
 
 </html>
