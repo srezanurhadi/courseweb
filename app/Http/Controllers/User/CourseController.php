@@ -18,7 +18,7 @@ class CourseController extends Controller
     public function index(Request $request)
     {
         $categories = Category::all();
-        $query = Course::with(['category', 'user'])->withCount('enrollments')->where('status', 1);
+        $query = Course::with(['category', 'user'])->withCount(['enrollments', 'contents'])->where('status', 1);
 
         if ($request->has('category') && $request->category != '') {
             $query->where('category_id', $request->category);
@@ -26,7 +26,6 @@ class CourseController extends Controller
 
         if ($request->has('search') && $request->search != '') {
             $searchTerm = $request->search;
-            // Cari di judul ATAU deskripsi
             $query->where(function ($q) use ($searchTerm) {
                 $q->where('title', 'like', '%' . $searchTerm . '%')
                     ->orWhere('description', 'like', '%' . $searchTerm . '%');
@@ -34,6 +33,53 @@ class CourseController extends Controller
         }
 
         $courses = $query->latest()->paginate(8);
+
+        // === LOGIKA BARU UNTUK MENGHITUNG PROGRES PENGGUNA ===
+        if (Auth::check()) {
+            /** @var \App\Models\User $user */
+            $user = Auth::user();
+            
+            // Ambil SEMUA enrollment milik user dalam satu query untuk efisiensi.
+            $userEnrollments = Enrollment::where('user_id', $user->id)
+                                ->get()
+                                ->keyBy('course_id');
+
+            // Setelah mendapatkan semua kursus, kita iterasikan untuk menambahkan info progres
+            foreach ($courses as $course) {
+                // Set progres default ke 0
+                $course->progress_percentage = 0;
+
+                // Cek apakah user terdaftar di kursus ini
+                if ($userEnrollments->has($course->id)) {
+                    $enrollment = $userEnrollments->get($course->id);
+
+                    // Lakukan kalkulasi hanya jika user pernah membuka konten
+                    if ($enrollment && $enrollment->last_content_id) {
+                        // Kita butuh daftar konten untuk menghitung, jadi kita ambil di sini
+                        $allContents = $course->contents()->get();
+                        $totalContents = $allContents->count();
+
+                        if ($totalContents > 0) {
+                            $lastSeenContentIndex = $allContents->search(function ($content) use ($enrollment) {
+                                return $content->id == $enrollment->last_content_id;
+                            });
+
+                            if ($lastSeenContentIndex !== false) {
+                                $completedContentsCount = $lastSeenContentIndex + 1;
+                                $course->progress_percentage = round(($completedContentsCount / $totalContents) * 100);
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            // Jika tidak ada user yang login, pastikan semua progress 0
+            foreach ($courses as $course) {
+                $course->progress_percentage = 0;
+            }
+        }
+        // ========================================================
+
         return view('user.course.index', [
             'courses' => $courses,
             'categories' => $categories
@@ -52,26 +98,52 @@ class CourseController extends Controller
 
         $isEnrolled = false;
         $enrollment = null;
+        $progressPercentage = 0;
+        $completedContentIds = []; // Inisialisasi array kosong untuk ID konten yang selesai
+
         if (Auth::check()) {
             $enrollment = Enrollment::where('user_id', Auth::id())
                 ->where('course_id', $course->id)
-                ->first(); // Ambil objek enrollment, bukan hanya cek exists
-            $isEnrolled = (bool) $enrollment; // Cek apakah enrollment ada
+                ->first();
+            $isEnrolled = (bool) $enrollment;
+
+            if ($isEnrolled && $enrollment->last_content_id) {
+                $allContents = $course->contents()->get();
+                $totalContents = $allContents->count();
+
+                if ($totalContents > 0) {
+                    $lastSeenContentIndex = $allContents->search(function ($content) use ($enrollment) {
+                        return $content->id == $enrollment->last_content_id;
+                    });
+
+                    if ($lastSeenContentIndex !== false) {
+                        // Hitung persentase progres (sudah ada)
+                        $completedContentsCount = $lastSeenContentIndex + 1;
+                        $progressPercentage = round(($completedContentsCount / $totalContents) * 100);
+
+                        // === LOGIKA BARU UNTUK CHECKLIST ===
+                        // Ambil semua konten dari awal sampai konten terakhir yang dilihat
+                        $completedContents = $allContents->slice(0, $completedContentsCount);
+                        // Ambil hanya ID dari konten-konten tersebut dan ubah menjadi array
+                        $completedContentIds = $completedContents->pluck('id')->toArray();
+                        // ===================================
+                    }
+                }
+            }
         }
 
-        // Jika user terdaftar di kursus ini, update last_content_id menjadi null (overview)
-        // Atau jika kursus ini baru di-enroll dan belum ada last_content_id yang spesifik,
-        // ini akan menandakan bahwa user sedang melihat kursus secara umum.
+        // Ambil semua konten yang diurutkan
+        $allContents = $course->contents()->get();
+        $limitedContents = $allContents;
+
         if ($enrollment) {
-            $enrollment->last_content_id = null; // Set ke null untuk menandakan overview
             $enrollment->touch();
         }
 
-        // Ambil parameter 'from' dari URL
         $from = $request->query('from');
 
-        // Kirim semua variabel yang diperlukan ke view, termasuk 'from'
-        return view('user.course.overview', compact('course', 'isEnrolled', 'from'));
+        // Kirim semua variabel, TERMASUK $completedContentIds
+        return view('user.course.overview', compact('course', 'isEnrolled', 'from', 'progressPercentage', 'completedContentIds', 'allContents', 'limitedContents'));
     }
 
     /**
@@ -88,12 +160,6 @@ class CourseController extends Controller
                 ->first(); // Ambil objek enrollment
             $isEnrolled = (bool) $enrollment;
         }
-
-        // Jika user tidak terdaftar dan Anda ingin membatasi akses konten, aktifkan ini:
-        // if (!$isEnrolled) {
-        //     return redirect()->route('user.course.show', $course->slug)
-        //         ->with('error', 'Anda harus mendaftar terlebih dahulu untuk mengakses konten ini.');
-        // }
 
         // Ambil semua konten kursus yang terkait dengan course ini, diurutkan.
         // Gunakan relasi `contents()` yang sudah ada di model Course untuk memastikan urutan pivot.

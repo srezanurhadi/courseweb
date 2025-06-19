@@ -112,7 +112,8 @@
                                         {{ $course->created_at->diffForHumans() }}
                                     </div>
 
-                                    <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-indigo-700">12 Pages
+                                    <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-indigo-700">
+                                        {{ $course->contents_count }} Pages
                                     </div>
                                 </div>
                             </a>
@@ -153,9 +154,12 @@
 
                                     <div class="flex items-center justify-between">
                                         <div class="flex-1 bg-gray-200 rounded-full h-2 mr-3">
-                                            <div class="bg-indigo-700 h-2 rounded-full" style="width: 0%"></div>
+                                            {{-- Gunakan variabel progress_percentage yang baru untuk mengatur lebar bar --}}
+                                            <div class="bg-indigo-700 h-2 rounded-full" style="width: {{ $course->progress_percentage ?? 0 }}%">
+                                            </div>
                                         </div>
-                                        <span class="text-sm font-bold text-gray-900">0%</span>
+                                        {{-- Tampilkan juga angka progresnya --}}
+                                        <span class="text-sm font-bold text-gray-900">{{ $course->progress_percentage ?? 0 }}%</span>
                                     </div>
                                 </div>
                             </div>
