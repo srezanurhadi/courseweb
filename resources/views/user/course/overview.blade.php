@@ -88,7 +88,8 @@
                                 @if ($isEnrolled)
                                     <div class="flex items-center gap-4">
                                         <div class="flex-1 bg-gray-300 rounded-full h-3 mr-3">
-                                            <div class="bg-indigo-700 h-3 rounded-full" style="width: {{ $progressPercentage }}%"></div>
+                                            <div class="bg-indigo-700 h-3 rounded-full"
+                                                style="width: {{ $progressPercentage }}%"></div>
                                         </div>
                                         <span class="text-xl font-bold text-gray-900">{{ $progressPercentage }}%</span>
                                     </div>
@@ -151,102 +152,28 @@
                                 <h3 class="text-2xl font-bold text-gray-900 mb-3">Content</h3>
                                 {{-- limited content --}}
                                 <ul class="">
-<<<<<<< HEAD
-                                    @foreach($course->contents as $content)
-                                        {{-- Cek apakah ID konten saat ini ada di dalam array konten yang sudah selesai --}}
-                                        @if(in_array($content->id, $completedContentIds))
-                                            {{-- JIKA SUDAH SELESAI: Tampilkan ikon tercentang dan teks berwarna --}}
-                                            <li class="flex items-center justify-between py-2">
-                                                <a href="{{ route('user.course.content.show', ['course' => $course->slug, 'content' => $content->id, 'from' => $from ?? 'course']) }}"
-                                                    class="text-indigo-700 font-semibold text-xl">
-                                                    {{ $loop->iteration }}. {{ $content->title }}
-                                                </a>
-                                                <i class="fas fa-check-square text-indigo-700 text-2xl"></i>
-                                            </li>
-                                        @else
-                                            {{-- JIKA BELUM SELESAI: Tampilkan seperti biasa --}}
-                                            <li class="flex items-center justify-between py-2">
-                                                <a href="{{ route('user.course.content.show', ['course' => $course->slug, 'content' => $content->id, 'from' => $from ?? 'course']) }}"
-                                                    class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">
-                                                    {{ $loop->iteration }}. {{ $content->title }}
-                                                </a>
-                                                <i class="far fa-square text-gray-400 text-2xl"></i>
-                                            </li>
-                                        @endif
-                                    @endforeach
-                                    
-                                    {{-- Jika tidak ada content dinamis, biarkan yang statis tapi tambahkan parameter from --}}
-                                    @if($course->contents->isEmpty())
-                                        <li class="flex items-center justify-between py-2">
-                                            <a href="{{ route('user.course.content.show', [
-                                                'course' => $course->slug, 
-                                                'content' => 1,
-                                                'from' => $from ?? 'course'
-                                            ]) }}"
-                                                class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">1. Content 1</a>
-                                            <i class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
-                                        </li>
-                                        <li class="flex items-center justify-between py-2">
-                                            <a href="{{ route('user.course.content.show', [
-                                                'course' => $course->slug, 
-                                                'content' => 2,
-                                                'from' => $from ?? 'course'
-                                            ]) }}"
-                                                class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">2. Content 2</a>
-                                            <i class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
-                                        </li>
-                                        <li class="flex items-center justify-between py-2">
-                                            <a href="{{ route('user.course.content.show', [
-                                                'course' => $course->slug, 
-                                                'content' => 3,
-                                                'from' => $from ?? 'course'
-                                            ]) }}"
-                                                class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">3. Content 3</a>
-                                            <i class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
-                                        </li>
-                                        <li class="flex items-center justify-between py-2">
-                                            <a href="{{ route('user.course.content.show', [
-                                                'course' => $course->slug, 
-                                                'content' => 4,
-                                                'from' => $from ?? 'course'
-                                            ]) }}"
-                                                class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">4. Content 4</a>
-                                            <i class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
-                                        </li>
-                                        <li class="flex items-center justify-between py-2">
-                                            <a href="{{ route('user.course.content.show', [
-                                                'course' => $course->slug, 
-                                                'content' => 5,
-                                                'from' => $from ?? 'course'
-                                            ]) }}"
-                                                class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">5. Content 5</a>
-                                            <i class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
-                                        </li>
-                                        <li class="flex items-center justify-between py-2">
-                                            <a href="{{ route('user.course.content.show', [
-                                                'course' => $course->slug, 
-                                                'content' => 6,
-                                                'from' => $from ?? 'course'
-                                            ]) }}"
-                                                class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">6. Content 6</a>
-                                            <i class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
-                                        </li>
-=======
                                     @if ($isEnrolled)
                                         {{-- JIKA SUDAH ENROLL: Tampilkan semua konten --}}
                                         @forelse($allContents as $content)
-                                            <li class="flex items-center justify-between py-2">
-                                                <a href="{{ route('user.course.content.show', [
-                                                    'course' => $course->slug,
-                                                    'content' => $content->id,
-                                                    'from' => $from ?? 'course',
-                                                ]) }}"
-                                                    class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">
-                                                    {{ $loop->iteration }}. {{ $content->title }}
-                                                </a>
-                                                <i
-                                                    class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
-                                            </li>
+                                            @if (in_array($content->id, $completedContentIds))
+                                                {{-- JIKA SUDAH SELESAI: Tampilkan ikon tercentang dan teks berwarna --}}
+                                                <li class="flex items-center justify-between py-2">
+                                                    <a href="{{ route('user.course.content.show', ['course' => $course->slug, 'content' => $content->id, 'from' => $from ?? 'course']) }}"
+                                                        class="text-indigo-700 font-semibold text-xl">
+                                                        {{ $loop->iteration }}. {{ $content->title }}
+                                                    </a>
+                                                    <i class="fas fa-check-square text-indigo-700 text-2xl"></i>
+                                                </li>
+                                            @else
+                                                {{-- JIKA BELUM SELESAI: Tampilkan seperti biasa --}}
+                                                <li class="flex items-center justify-between py-2">
+                                                    <a href="{{ route('user.course.content.show', ['course' => $course->slug, 'content' => $content->id, 'from' => $from ?? 'course']) }}"
+                                                        class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">
+                                                        {{ $loop->iteration }}. {{ $content->title }}
+                                                    </a>
+                                                    <i class="far fa-square text-gray-400 text-2xl"></i>
+                                                </li>
+                                            @endif
                                         @empty
                                             <li class="text-gray-500">Content Unavailable.</li>
                                         @endforelse
@@ -263,7 +190,6 @@
                                         @empty
                                             <li class="text-gray-500">Content Unavailable.</li>
                                         @endforelse
->>>>>>> 06a902ab67e881c06aed96b90aa1afea31d259f6
                                     @endif
                                 </ul>
                                 {{-- gradient kotak content --}}
