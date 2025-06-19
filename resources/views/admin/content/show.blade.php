@@ -42,51 +42,61 @@
                             <i class="fas fa-trash"></i> <span class="pl-2">Delete</span>
                         </div>
                     </div>
-                    <div
-                        class="w-full p-4 bg-gray-100 rounded-lg shadow-[0px_1px_2px_1px_rgba(0,0,0,0.4)] flex flex-wrap gap-2 h-200">
-                        {{-- ini bagian judul --}}
-                        <p class="w-full">
-                            1. Content 1 {{-- Anda mungkin ingin mengganti ini dengan judul dinamis dari data Anda --}}
-                        </p>
 
-                        {{-- --- EDITOR.JS CONTENT RENDERING START --- --}}
-                        <div class=" max-w-none w-full"> {{-- Gunakan Tailwind Typography Plugin di sini --}}
+                    <div class="w-full p-4 bg-gray-100 rounded-lg shadow-[0px_1px_2px_1px_rgba(0,0,0,0.4)]">
+                        <div class="font-bold text-xl mb-6">
+                            1. Content 1 {{-- Judul dari database --}}
+                        </div>
+                        <div class="w-full max-w-5xl mx-auto"> 
                             @if (isset($editorJsData) && is_array($editorJsData['blocks']))
                                 @foreach ($editorJsData['blocks'] as $block)
                                     @switch ($block['type'])
                                         @case('paragraph')
-                                            <p>{!! $block['data']['text'] !!}</p>
+                                            {{-- Beri jarak bawah pada setiap paragraf --}}
+                                            <p class="mb-4 text-gray-700 leading-relaxed">{!! $block['data']['text'] !!}</p>
                                         @break
 
                                         @case('header')
                                             @php
                                                 $level = $block['data']['level'];
                                                 $tag = 'h' . $level;
+                                                // Atur ukuran dan jarak sesuai level heading
+                                                $classes = [
+                                                    'h1' => 'text-4xl font-bold mt-8 mb-4',
+                                                    'h2' => 'text-3xl font-bold mt-8 mb-4 border-b pb-2',
+                                                    'h3' => 'text-2xl font-bold mt-6 mb-3',
+                                                    'h4' => 'text-xl font-bold mt-6 mb-3',
+                                                    'h5' => 'text-lg font-bold mt-4 mb-2',
+                                                    'h6' => 'text-base font-bold mt-4 mb-2',
+                                                ];
                                             @endphp
-                                            <{!! $tag !!}>{!! $block['data']['text'] !!}</{!! $tag !!}>
+                                            {{-- Terapkan class yang sesuai --}}
+                                            <{!! $tag !!} class="{{ $classes[$tag] ?? '' }}">{!! $block['data']['text'] !!}
+                                                </{!! $tag !!}>
                                             @break
 
                                             @case('image')
-                                                <figure class="my-6">
+                                                <figure class="my-8"> {{-- Beri jarak atas/bawah yang lebih besar untuk gambar --}}
                                                     <img src="{{ $block['data']['file']['url'] }}"
                                                         alt="{{ $block['data']['caption'] ?? 'Image' }}"
-                                                        class=" mx-auto rounded-lg shadow-md  {{ $block['data']['stretched'] ? 'w-full' : 'max-w-200' }}">
+                                                        class="w-full h-auto rounded-lg shadow-md"> {{-- Gambar akan mengisi lebar kontainer --}}
                                                     @if ($block['data']['caption'])
-                                                        <figcaption class="text-center text-sm text-gray-600 mt-2">
+                                                        <figcaption class="text-center text-sm text-gray-500 mt-2 italic">
                                                             {{ $block['data']['caption'] }}</figcaption>
                                                     @endif
                                                 </figure>
                                             @break
 
                                             @case('list')
+                                                {{-- Beri style untuk list dan jarak antar item --}}
                                                 @if ($block['data']['style'] === 'unordered')
-                                                    <ul>
+                                                    <ul class="list-disc pl-5 mb-4 space-y-2">
                                                         @foreach ($block['data']['items'] as $item)
                                                             <li>{!! $item !!}</li>
                                                         @endforeach
                                                     </ul>
-                                                @elseif ($block['data']['style'] === 'ordered')
-                                                    <ol>
+                                                @else
+                                                    <ol class="list-decimal pl-5 mb-4 space-y-2">
                                                         @foreach ($block['data']['items'] as $item)
                                                             <li>{!! $item !!}</li>
                                                         @endforeach
@@ -94,43 +104,23 @@
                                                 @endif
                                             @break
 
-                                            @case('delimiter')
-                                                <hr class="my-8 border-t-2 border-gray-300 w-24 mx-auto">
-                                            @break
-
                                             @case('quote')
-                                                <blockquote>
-                                                    <p>{!! $block['data']['text'] !!}</p>
+                                                {{-- Buat blockquote menonjol --}}
+                                                <blockquote class="my-6 p-4 border-l-4 border-gray-400 bg-gray-50 italic">
+                                                    <p class="text-xl font-medium leading-relaxed text-gray-800">
+                                                        {!! $block['data']['text'] !!}</p>
                                                     @if ($block['data']['caption'])
-                                                        <footer>— {{ $block['data']['caption'] }}</footer>
+                                                        <footer class="mt-2 text-base text-gray-600">—
+                                                            {{ $block['data']['caption'] }}</footer>
                                                     @endif
                                                 </blockquote>
                                             @break
 
-                                            @case('code')
-                                                <pre><code>{!! htmlspecialchars($block['data']['code']) !!}</code></pre>
+                                            @case('delimiter')
+                                                <hr class="my-8">
                                             @break
 
-                                            @case('table')
-                                                <div class="overflow-x-auto my-6">
-                                                    <table>
-                                                        <tbody>
-                                                            @foreach ($block['data']['content'] as $row)
-                                                                <tr>
-                                                                    @foreach ($row as $cell)
-                                                                        <td>{!! $cell !!}</td>
-                                                                    @endforeach
-                                                                </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            @break
-
-                                            @default
-                                                <p class="text-red-500">
-                                                    Tipe blok tidak dikenal: {{ $block['type'] }}
-                                                </p>
+                                            {{-- Anda bisa menambahkan styling untuk 'code', 'table', dll. --}}
                                         @endswitch
                                 @endforeach
                             @else
