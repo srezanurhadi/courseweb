@@ -26,7 +26,6 @@ class CourseController extends Controller
 
         if ($request->has('search') && $request->search != '') {
             $searchTerm = $request->search;
-            // Cari di judul ATAU deskripsi
             $query->where(function ($q) use ($searchTerm) {
                 $q->where('title', 'like', '%' . $searchTerm . '%')
                     ->orWhere('description', 'like', '%' . $searchTerm . '%');
@@ -34,6 +33,53 @@ class CourseController extends Controller
         }
 
         $courses = $query->latest()->paginate(8);
+
+        // === LOGIKA BARU UNTUK MENGHITUNG PROGRES PENGGUNA ===
+        if (Auth::check()) {
+            /** @var \App\Models\User $user */
+            $user = Auth::user();
+            
+            // Ambil SEMUA enrollment milik user dalam satu query untuk efisiensi.
+            $userEnrollments = Enrollment::where('user_id', $user->id)
+                                ->get()
+                                ->keyBy('course_id');
+
+            // Setelah mendapatkan semua kursus, kita iterasikan untuk menambahkan info progres
+            foreach ($courses as $course) {
+                // Set progres default ke 0
+                $course->progress_percentage = 0;
+
+                // Cek apakah user terdaftar di kursus ini
+                if ($userEnrollments->has($course->id)) {
+                    $enrollment = $userEnrollments->get($course->id);
+
+                    // Lakukan kalkulasi hanya jika user pernah membuka konten
+                    if ($enrollment && $enrollment->last_content_id) {
+                        // Kita butuh daftar konten untuk menghitung, jadi kita ambil di sini
+                        $allContents = $course->contents()->get();
+                        $totalContents = $allContents->count();
+
+                        if ($totalContents > 0) {
+                            $lastSeenContentIndex = $allContents->search(function ($content) use ($enrollment) {
+                                return $content->id == $enrollment->last_content_id;
+                            });
+
+                            if ($lastSeenContentIndex !== false) {
+                                $completedContentsCount = $lastSeenContentIndex + 1;
+                                $course->progress_percentage = round(($completedContentsCount / $totalContents) * 100);
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            // Jika tidak ada user yang login, pastikan semua progress 0
+            foreach ($courses as $course) {
+                $course->progress_percentage = 0;
+            }
+        }
+        // ========================================================
+
         return view('user.course.index', [
             'courses' => $courses,
             'categories' => $categories
