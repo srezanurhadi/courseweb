@@ -83,12 +83,14 @@
                                 <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ $course->title }}</h1>
                                 <span class="text-gray-900 mb-2">By: {{ $course->user->name }}</span>
                                 <!-- Progress Bar -->
-                                <div class="flex items-center gap-4">
-                                    <div class="flex-1 bg-gray-300 rounded-full h-3 mr-3">
-                                        <div class="bg-indigo-700 h-3 rounded-full" style="width: 50%"></div>
+                                @if ($isEnrolled)
+                                    <div class="flex items-center gap-4">
+                                        <div class="flex-1 bg-gray-300 rounded-full h-3 mr-3">
+                                            <div class="bg-indigo-700 h-3 rounded-full" style="width: {{ $progressPercentage }}%"></div>
+                                        </div>
+                                        <span class="text-xl font-bold text-gray-900">{{ $progressPercentage }}%</span>
                                     </div>
-                                    <span class="text-xl font-bold text-gray-900">50%</span>
-                                </div>
+                                @endif
                                 {{-- enrollmernt start --}}
                                 <div class="flex-1">
                                     @if (session('success'))
@@ -147,17 +149,26 @@
                                 <h3 class="text-2xl font-bold text-gray-900 mb-3">Content</h3>
                                 <ul class="">
                                     @foreach($course->contents as $content)
-                                        <li class="flex items-center justify-between py-2">
-                                            <a href="{{ route('user.course.content.show', [
-                                                'course' => $course->slug, 
-                                                'content' => $content->id,
-                                                'from' => $from ?? 'course'
-                                            ]) }}"
-                                                class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">
-                                                {{ $loop->iteration }}. {{ $content->title }}
-                                            </a>
-                                            <i class="far fa-square text-gray-400 text-2xl checklist-icon cursor-pointer"></i>
-                                        </li>
+                                        {{-- Cek apakah ID konten saat ini ada di dalam array konten yang sudah selesai --}}
+                                        @if(in_array($content->id, $completedContentIds))
+                                            {{-- JIKA SUDAH SELESAI: Tampilkan ikon tercentang dan teks berwarna --}}
+                                            <li class="flex items-center justify-between py-2">
+                                                <a href="{{ route('user.course.content.show', ['course' => $course->slug, 'content' => $content->id, 'from' => $from ?? 'course']) }}"
+                                                    class="text-indigo-700 font-semibold text-xl">
+                                                    {{ $loop->iteration }}. {{ $content->title }}
+                                                </a>
+                                                <i class="fas fa-check-square text-indigo-700 text-2xl"></i>
+                                            </li>
+                                        @else
+                                            {{-- JIKA BELUM SELESAI: Tampilkan seperti biasa --}}
+                                            <li class="flex items-center justify-between py-2">
+                                                <a href="{{ route('user.course.content.show', ['course' => $course->slug, 'content' => $content->id, 'from' => $from ?? 'course']) }}"
+                                                    class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">
+                                                    {{ $loop->iteration }}. {{ $content->title }}
+                                                </a>
+                                                <i class="far fa-square text-gray-400 text-2xl"></i>
+                                            </li>
+                                        @endif
                                     @endforeach
                                     
                                     {{-- Jika tidak ada content dinamis, biarkan yang statis tapi tambahkan parameter from --}}
@@ -241,27 +252,6 @@
             <x-footer></x-footer>
         </div>
     </div>
-    <script>
-        const checklistIcons = document.querySelectorAll('.checklist-icon');
-
-        checklistIcons.forEach(icon => {
-            icon.addEventListener('click', function() {
-                if (this.classList.contains('fa-square')) {
-                    this.classList.remove('fa-square');
-                    this.classList.remove('text-gray-400');
-
-                    this.classList.add('fa-check-square');
-                    this.classList.add('text-indigo-700');
-                } else if (this.classList.contains('fa-check-square')) {
-                    this.classList.remove('fa-check-square'); // Hapus kelas ikon tercentang
-                    this.classList.remove('text-indigo-700'); // Hapus warna biru
-
-                    this.classList.add('fa-square'); // Tambah kelas ikon kosong
-                    this.classList.add('text-gray-400'); // Tambah warna abu-abu
-                }
-            });
-        });
-    </script>
 </body>
 
 </html>
