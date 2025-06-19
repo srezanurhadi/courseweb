@@ -24,9 +24,7 @@ class MyCourseController extends Controller
         $categories = Category::all();
 
         // --- FUNGSI PERHITUNGAN PROGRES YANG KONSISTEN ---
-        // Kita akan menggunakan fungsi ini untuk semua perhitungan progres.
         $calculateProgress = function ($course, $userId) {
-            // Gunakan contents_count yang sudah di-load untuk efisiensi.
             $totalContents = $course->contents_count;
             if ($totalContents === 0) {
                 return 0;
@@ -37,7 +35,6 @@ class MyCourseController extends Controller
                 ->count();
             return round(($completedContentsCount / $totalContents) * 100);
         };
-        // ------------------------------------------------
 
         $isFilteringOrSearching = ($request->has('search') && $request->filled('search')) ||
             ($request->has('category') && $request->filled('category'));
@@ -53,7 +50,6 @@ class MyCourseController extends Controller
                 if ($lastSeenCourse) {
                     // === GUNAKAN LOGIKA PROGRES YANG BARU ===
                     $lastSeenCourse->progress_percentage = $calculateProgress($lastSeenCourse, $user->id);
-                    // =======================================
 
                     if ($lastEnrollment->last_content_id) {
                         $lastSeenContent = Content::find($lastEnrollment->last_content_id);
@@ -89,11 +85,9 @@ class MyCourseController extends Controller
 
         $courses = $enrolledCoursesQuery->latest('enrollments.created_at')->paginate(8);
 
-        // === LOGIKA PROGRES UNTUK DAFTAR KURSUS LAINNYA (SUDAH DISAMAKAN) ===
         foreach ($courses as $courseItem) {
             $courseItem->progress_percentage = $calculateProgress($courseItem, $user->id);
         }
-        // =================================================================
 
         return view('user.mycourse.index', compact(
             'courses',
