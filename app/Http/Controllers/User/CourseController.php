@@ -52,11 +52,38 @@ class CourseController extends Controller
 
         $isEnrolled = false;
         $enrollment = null;
+        $progressPercentage = 0;
+        $completedContentIds = []; // Inisialisasi array kosong untuk ID konten yang selesai
+
         if (Auth::check()) {
             $enrollment = Enrollment::where('user_id', Auth::id())
                 ->where('course_id', $course->id)
-                ->first(); // Ambil objek enrollment, bukan hanya cek exists
-            $isEnrolled = (bool) $enrollment; // Cek apakah enrollment ada
+                ->first();
+            $isEnrolled = (bool) $enrollment;
+
+            if ($isEnrolled && $enrollment->last_content_id) {
+                $allContents = $course->contents()->get();
+                $totalContents = $allContents->count();
+
+                if ($totalContents > 0) {
+                    $lastSeenContentIndex = $allContents->search(function ($content) use ($enrollment) {
+                        return $content->id == $enrollment->last_content_id;
+                    });
+
+                    if ($lastSeenContentIndex !== false) {
+                        // Hitung persentase progres (sudah ada)
+                        $completedContentsCount = $lastSeenContentIndex + 1;
+                        $progressPercentage = round(($completedContentsCount / $totalContents) * 100);
+
+                        // === LOGIKA BARU UNTUK CHECKLIST ===
+                        // Ambil semua konten dari awal sampai konten terakhir yang dilihat
+                        $completedContents = $allContents->slice(0, $completedContentsCount);
+                        // Ambil hanya ID dari konten-konten tersebut dan ubah menjadi array
+                        $completedContentIds = $completedContents->pluck('id')->toArray();
+                        // ===================================
+                    }
+                }
+            }
         }
 
         // Ambil semua konten yang diurutkan
@@ -64,14 +91,13 @@ class CourseController extends Controller
         $limitedContents = $allContents;
 
         if ($enrollment) {
-            $enrollment->last_content_id = null; // Set ke null untuk menandakan overview
             $enrollment->touch();
         }
 
         $from = $request->query('from');
 
-        // Kirim semua variabel yang diperlukan ke view, termasuk 'from'
-        return view('user.course.overview', compact('course', 'isEnrolled', 'from', 'allContents', 'limitedContents'));
+        // Kirim semua variabel, TERMASUK $completedContentIds
+        return view('user.course.overview', compact('course', 'isEnrolled', 'from', 'progressPercentage', 'completedContentIds', 'allContents', 'limitedContents'));
     }
 
     /**
