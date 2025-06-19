@@ -59,21 +59,15 @@ class CourseController extends Controller
             $isEnrolled = (bool) $enrollment; // Cek apakah enrollment ada
         }
 
-
-        // BARU
         // Ambil semua konten yang diurutkan
         $allContents = $course->contents()->get();
         $limitedContents = $allContents;
 
-        // Jika user terdaftar di kursus ini, update last_content_id menjadi null (overview)
-        // Atau jika kursus ini baru di-enroll dan belum ada last_content_id yang spesifik,
-        // ini akan menandakan bahwa user sedang melihat kursus secara umum.
         if ($enrollment) {
             $enrollment->last_content_id = null; // Set ke null untuk menandakan overview
             $enrollment->touch();
         }
 
-        // Ambil parameter 'from' dari URL
         $from = $request->query('from');
 
         // Kirim semua variabel yang diperlukan ke view, termasuk 'from'
@@ -94,12 +88,6 @@ class CourseController extends Controller
                 ->first(); // Ambil objek enrollment
             $isEnrolled = (bool) $enrollment;
         }
-
-        // Jika user tidak terdaftar dan Anda ingin membatasi akses konten, aktifkan ini:
-        // if (!$isEnrolled) {
-        //     return redirect()->route('user.course.show', $course->slug)
-        //         ->with('error', 'Anda harus mendaftar terlebih dahulu untuk mengakses konten ini.');
-        // }
 
         // Ambil semua konten kursus yang terkait dengan course ini, diurutkan.
         // Gunakan relasi `contents()` yang sudah ada di model Course untuk memastikan urutan pivot.
