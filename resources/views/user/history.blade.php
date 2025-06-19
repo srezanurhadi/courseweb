@@ -56,38 +56,48 @@
                 <div class="absolute top-[25px] left-1/2 transform -translate-x-1/2">
                     <div class="bg-white rounded-3xl shadow-md py-3 px-5 flex items-center">
                         <div class="flex items-center gap-3">
-                            <form class="flex items-center gap-2">
+                            <form method="GET" action="{{ route('user.history') }}" class="flex items-center gap-2">
                                 <div class=" flex gap-1 items-center rounded-3xl border-gray-300 border-2 pl-2">
                                     <i class="fas fa-search text-gray-500"></i>
-                                    <input type="text"
+                                    <input type="text" name="search"
                                         class="rounded-lg w-48 focus:outline-none px-2 placeholder:font-semibold placeholder:italic text-gray-400"
-                                        placeholder="Search Content...">
+                                        placeholder="Search Content..." value="{{ request('search') }}">
                                 </div>
 
                                 <button class="bg-sky-600 px-2 rounded-3xl">
-                                    <p class=" font-medium text-base text-white">Search</p>
+                                    <p class="font-medium text-base text-white cursor-pointer">Search</p>
                                 </button>
+
+                                @if (request('category'))
+                                    <input type="hidden" name="category" value="{{ request('category') }}">
+                                @endif
                             </form>
                             <div class="w-[1px] h-[30px] bg-gray-300"></div>
-                            <p class="flex items-center font-medium text-base text-gray-900 whitespace-nowrap">Choose
-                                Category :</p>
+                            <p class="flex items-center font-medium text-base text-gray-900 whitespace-nowrap">
+                                Choose Category :
+                            </p>
                             <div class=" flex gap-1 items-center rounded-3xl border-gray-300 border-2 px-2">
                                 <i class="fas fa-search text-gray-500"></i>
-                                <select name="category" id="category"
-                                    class="w-40 focus:outline-none px-2 text-gray-900">
-                                    <option value="all" class="text-gray-900">
+                                <select id="categoryFilterMyCourse"
+                                    class="w-40 focus:outline-none px-2 text-gray-900 bg-transparent">
+                                    <option value="{{ route('user.history', ['search' => request('search')]) }}"
+                                        @if (!request('category')) selected @endif>
                                         All Category
                                     </option>
-                                    <option value="uiux" class="text-gray-900">
-                                        UI/UX Design
-                                    </option>
+                                    @foreach ($categories as $category)
+                                        <option
+                                            value="{{ route('user.history', ['category' => $category->id, 'search' => request('search')]) }}"
+                                            @if (request('category') == $category->id) selected @endif>
+                                            {{ $category->category }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="m-10 p-4 grid grid-cols-4 gap-10 justify-around">
+                {{-- <div class="m-10 p-4 grid grid-cols-4 gap-10 justify-around">
                     <div
                         class=" bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden">
                         <div
@@ -334,7 +344,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
             <x-footer></x-footer>
         </div>
