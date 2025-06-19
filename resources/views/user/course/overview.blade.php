@@ -93,6 +93,18 @@
                                         </div>
                                         <span class="text-xl font-bold text-gray-900">{{ $progressPercentage }}%</span>
                                     </div>
+                                @elseif (!$isEnrolled)
+                                    <div class="flex flex-col ">
+                                        <p class="text-gray-500 mt-2">Not started yet...</p>
+                                        <div class="flex flex-row items-center gap-4">
+                                            <div class="flex-1 bg-gray-300 rounded-full h-3 mr-3">
+                                                <div class="bg-indigo-700 h-3 rounded-full"
+                                                    style="width: {{ $progressPercentage }}%"></div>
+                                            </div>
+                                            <span
+                                                class="text-xl font-bold text-gray-900">{{ $progressPercentage }}%</span>
+                                        </div>
+                                    </div>
                                 @endif
                                 {{-- enrollmernt start --}}
                                 <div class="flex-1">
