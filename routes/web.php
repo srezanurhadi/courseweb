@@ -92,9 +92,7 @@ Route::prefix('/user')->middleware(participantMiddleware::class)->name('user.')-
     Route::get('/profile/edit', [myParticipantController::class, 'editProfile'])->name('profile.edit');
     Route::post('/profile/update', [myParticipantController::class, 'updateProfile'])->name('profile.update'); // Nama sudah benar
 
-    Route::get('/profile/course/{id}', function ($id) {
-        return view('user.myprofile.detail', ['courseId' => $id]);
-    })->name('course.detail');
+    Route::get('/profile/course/{id}', [myParticipantController::class, 'showCourseDetail'])->name('course.detail');
 });
 
 // AUDENA PUNYA

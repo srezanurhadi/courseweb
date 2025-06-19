@@ -75,8 +75,40 @@ class myParticipantController extends Controller
      */
     public function showProfile()
     {
+        /** @var \App\Models\User $user */
         $user = Auth::user(); // Ambil data pengguna yang sedang login
-        return view('user.myprofile.index', compact('user')); // Kirim data ke view 'index'
+
+        // Ambil semua kursus yang diikuti oleh user
+        $enrolledCourses = $user->enrolledCourses()->with(['category', 'user'])->get();
+
+        // Lakukan iterasi untuk menghitung progres setiap kursus
+        foreach ($enrolledCourses as $course) {
+            // Set progres default ke 0
+            $course->progress_percentage = 0;
+
+            // Ambil data enrollment yang spesifik untuk kursus ini
+            $enrollment = $user->enrollments()->where('course_id', $course->id)->first();
+
+            // Jika ada enrollment dan pernah membuka konten, hitung progresnya
+            if ($enrollment && $enrollment->last_content_id) {
+                $allContents = $course->contents()->get();
+                $totalContents = $allContents->count();
+
+                if ($totalContents > 0) {
+                    $lastSeenContentIndex = $allContents->search(function ($content) use ($enrollment) {
+                        return $content->id == $enrollment->last_content_id;
+                    });
+
+                    if ($lastSeenContentIndex !== false) {
+                        $completedContentsCount = $lastSeenContentIndex + 1;
+                        $course->progress_percentage = round(($completedContentsCount / $totalContents) * 100);
+                    }
+                }
+            }
+        }
+
+        // Kirim data user DAN data kursus yang sudah dihitung progresnya ke view
+        return view('user.myprofile.index', compact('user', 'enrolledCourses'));
     }
 
     /**
@@ -133,6 +165,49 @@ class myParticipantController extends Controller
         $user->update($validatedData);
 
         return redirect()->route('user.profile')->with('success', 'Profile berhasil diperbarui!');
+    }
+
+    /**
+     * Menampilkan halaman detail certificate untuk course yang sudah selesai.
+     */
+    public function showCourseDetail($id)
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        
+        // Ambil data course berdasarkan ID
+        $course = Course::findOrFail($id);
+        
+        // Pastikan user sudah enroll di course ini
+        $enrollment = $user->enrollments()->where('course_id', $course->id)->first();
+        
+        if (!$enrollment) {
+            abort(404, 'Course not found or not enrolled');
+        }
+        
+        // Hitung progress untuk memastikan sudah 100%
+        $allContents = $course->contents()->get();
+        $totalContents = $allContents->count();
+        $progressPercentage = 0;
+        
+        if ($enrollment->last_content_id && $totalContents > 0) {
+            $lastSeenContentIndex = $allContents->search(function ($content) use ($enrollment) {
+                return $content->id == $enrollment->last_content_id;
+            });
+            
+            if ($lastSeenContentIndex !== false) {
+                $completedContentsCount = $lastSeenContentIndex + 1;
+                $progressPercentage = round(($completedContentsCount / $totalContents) * 100);
+            }
+        }
+        
+        // Pastikan progress sudah 100% sebelum bisa melihat detail
+        if ($progressPercentage < 100) {
+            return redirect()->route('user.profile')->with('error', 'You need to complete the course first to view the certificate.');
+        }
+        
+        // Kirim data course dan user ke view detail
+        return view('user.myprofile.detail', compact('course', 'user', 'progressPercentage'));
     }
 
     /**
