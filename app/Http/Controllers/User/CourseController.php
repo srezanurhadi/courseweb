@@ -86,14 +86,31 @@ class CourseController extends Controller
             }
         }
 
+<<<<<<< HEAD
+=======
+
+        // BARU
+        // Ambil semua konten yang diurutkan
+        $allContents = $course->contents()->get();
+        $limitedContents = $allContents;
+
+        // Jika user terdaftar di kursus ini, update last_content_id menjadi null (overview)
+        // Atau jika kursus ini baru di-enroll dan belum ada last_content_id yang spesifik,
+        // ini akan menandakan bahwa user sedang melihat kursus secara umum.
+>>>>>>> 06a902ab67e881c06aed96b90aa1afea31d259f6
         if ($enrollment) {
             $enrollment->touch();
         }
 
         $from = $request->query('from');
 
+<<<<<<< HEAD
         // Kirim semua variabel, TERMASUK $completedContentIds
         return view('user.course.overview', compact('course', 'isEnrolled', 'from', 'progressPercentage', 'completedContentIds'));
+=======
+        // Kirim semua variabel yang diperlukan ke view, termasuk 'from'
+        return view('user.course.overview', compact('course', 'isEnrolled', 'from', 'allContents', 'limitedContents'));
+>>>>>>> 06a902ab67e881c06aed96b90aa1afea31d259f6
     }
 
     /**
