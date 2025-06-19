@@ -18,6 +18,10 @@ use App\Http\Controllers\User\CourseController as UserCourseController;
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
 
 Route::prefix('/admin')->middleware(adminMiddleware::class)->group(function () {
+
+    // Route khusus untuk AJAX search
+    Route::get('/course/search', [courseController::class, 'search'])->name('course.search');
+
     Route::get('/', [homecontroller::class, 'index']);
     Route::post('/upload-image', [ImageController::class, 'store'])->name('image.store');
     Route::resource('/users', usersController::class);
@@ -25,7 +29,6 @@ Route::prefix('/admin')->middleware(adminMiddleware::class)->group(function () {
     Route::resource('/content', contentController::class);
     Route::resource('/myparticipant', myParticipantController::class);
 });
-
 
 Route::prefix('/author')->middleware(authorMiddleware::class)->group(function () {
     Route::get('/', [homecontroller::class, 'index']);

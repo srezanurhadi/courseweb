@@ -10,4 +10,12 @@ export default defineConfig({
         }),
         tailwindcss(),
     ],
+    server: {
+        host: 'courseweb.test',
+        port: 5173,
+        hmr: {
+            host: 'courseweb.test',
+        },
+    },
+
 });

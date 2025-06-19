@@ -101,7 +101,7 @@ class contentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $slug)
+    public function edit(Content $content)
     {
 
         $content = Content::where('slug', $slug)->firstOrFail();
