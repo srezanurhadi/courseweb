@@ -21,24 +21,27 @@
                             <h1 class="text-3xl font-bold text-gray-800">
                                 @if (isset($from) && $from == 'my-course')
                                     {{-- Jika datang dari halaman My Course --}}
-                                    <a href="{{ route('user.mycourse.index') }}" class="hover:text-indigo-900">My Course</a>
+                                    <a href="{{ route('user.mycourse.index') }}" class="hover:text-indigo-900">My
+                                        Course</a>
                                 @else
                                     {{-- Jika datang dari halaman Course atau default --}}
                                     <a href="{{ route('user.course.index') }}" class="hover:text-indigo-900">Course</a>
                                 @endif
-                                
+
                                 <i class="fa-solid fa-chevron-right mx-1 text-2xl"></i>
-                                
+
                                 <a href="{{ route('user.course.show', [
                                     'course' => $course->slug,
-                                    'from' => $from ?? 'course'
-                                ]) }}" class="hover:text-indigo-900">
+                                    'from' => $from ?? 'course',
+                                ]) }}"
+                                    class="hover:text-indigo-900">
                                     {{ \Illuminate\Support\Str::limit($course->title, 15) }}
                                 </a>
-                                
+
                                 <i class="fa-solid fa-chevron-right mx-1 text-2xl"></i>
-                                
-                                <span class="text-gray-600">{{ $currentContent->title ?? 'Content 1' }}</span>
+
+                                <span
+                                    class="text-gray-600">{{ \Illuminate\Support\Str::limit($currentContent->title ?? 'Content 1', 15) }}</span>
                             </h1>
                         </div>
                         <div class="flex items-center space-x-4 px-4">
@@ -46,7 +49,8 @@
                                 <i class="fa-regular fa-bell fa-lg text-black hover:text-gray-600"></i>
                             </button>
                             <div class="flex items-center space-x-2 px-3">
-                                <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-neutral-300 overflow-hidden">
+                                <span
+                                    class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-neutral-300 overflow-hidden">
                                     @if (Auth::user()->image)
                                         <img src="{{ asset('storage/' . Auth::user()->image) }}"
                                             alt="{{ Auth::user()->name }}" class="w-full h-full object-cover">
@@ -73,7 +77,8 @@
                     Back
                 </a>
                 <div class="bg-gray-100 border-gray-200 border-2 rounded-xl shadow-lg p-8">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-6">{{ $pagination['current_page'] }}. {{ $currentContent->title ?? 'Content 1' }}</h2>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">{{ $pagination['current_page'] }}.
+                        {{ $currentContent->title ?? 'Content 1' }}</h2>
                     <p class="text-gray-600 text-lg leading-relaxed text-justify">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
                         incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
@@ -87,7 +92,8 @@
                         <div class="w-150 overflow-hidden">
                             <img src="https://picsum.photos/900/600" alt="Course Image"
                                 class="w-full h-auto rounded-lg object-cover">
-                            <p class="flex justify-center mt-1 text-gray-600 text-sm italic">Fig.{{ $pagination['current_page'] }} Lorem picsum</p>
+                            <p class="flex justify-center mt-1 text-gray-600 text-sm italic">
+                                Fig.{{ $pagination['current_page'] }} Lorem picsum</p>
                         </div>
                     </div>
                     <p class="text-gray-600 text-lg leading-relaxed text-justify">
@@ -100,15 +106,15 @@
                         sunt in culpa qui officia deserunt mollit anim id est laborum.
                     </p>
                 </div>
-                
+
                 {{-- Updated Pagination Section --}}
                 <div class="flex items-center justify-center gap-63 mt-8">
                     {{-- Previous Button --}}
-                    @if($pagination['has_previous'])
+                    @if ($pagination['has_previous'])
                         <a href="{{ route('user.course.content.show', [
                             'course' => $course->slug,
                             'content' => $pagination['previous_content_id'],
-                            'from' => $from ?? 'course'
+                            'from' => $from ?? 'course',
                         ]) }}"
                             class="bg-indigo-700 hover:bg-indigo-800 text-white font-semibold px-6 py-2 rounded-lg transition-colors">
                             Previous
@@ -130,52 +136,55 @@
                         @endphp
 
                         {{-- Show first page if not in range --}}
-                        @if($startPage > 1)
+                        @if ($startPage > 1)
                             <a href="{{ route('user.course.content.show', [
                                 'course' => $course->slug,
                                 'content' => $pagination['all_contents'][0]->id,
-                                'from' => $from ?? 'course'
+                                'from' => $from ?? 'course',
                             ]) }}"
                                 class="w-6 h-6 text-indigo-700 rounded-lg font-medium hover:bg-gray-300 transition-colors flex items-center justify-center">1</a>
-                            @if($startPage > 2)
-                                <span class="w-6 h-6 text-indigo-700 rounded-lg font-medium flex items-center justify-center">...</span>
+                            @if ($startPage > 2)
+                                <span
+                                    class="w-6 h-6 text-indigo-700 rounded-lg font-medium flex items-center justify-center">...</span>
                             @endif
                         @endif
 
                         {{-- Show page range --}}
-                        @for($i = $startPage; $i <= $endPage; $i++)
-                            @if($i == $currentPage)
-                                <button class="w-6 h-6 bg-indigo-700 text-white rounded-lg font-medium">{{ $i }}</button>
+                        @for ($i = $startPage; $i <= $endPage; $i++)
+                            @if ($i == $currentPage)
+                                <button
+                                    class="w-6 h-6 bg-indigo-700 text-white rounded-lg font-medium">{{ $i }}</button>
                             @else
                                 <a href="{{ route('user.course.content.show', [
                                     'course' => $course->slug,
-                                    'content' => $pagination['all_contents'][$i-1]->id,
-                                    'from' => $from ?? 'course'
+                                    'content' => $pagination['all_contents'][$i - 1]->id,
+                                    'from' => $from ?? 'course',
                                 ]) }}"
                                     class="w-6 h-6 text-indigo-700 rounded-lg font-medium hover:bg-gray-300 transition-colors flex items-center justify-center">{{ $i }}</a>
                             @endif
                         @endfor
 
                         {{-- Show last page if not in range --}}
-                        @if($endPage < $totalPages)
-                            @if($endPage < $totalPages - 1)
-                                <span class="w-6 h-6 text-indigo-700 rounded-lg font-medium flex items-center justify-center">...</span>
+                        @if ($endPage < $totalPages)
+                            @if ($endPage < $totalPages - 1)
+                                <span
+                                    class="w-6 h-6 text-indigo-700 rounded-lg font-medium flex items-center justify-center">...</span>
                             @endif
                             <a href="{{ route('user.course.content.show', [
                                 'course' => $course->slug,
-                                'content' => $pagination['all_contents'][$totalPages-1]->id,
-                                'from' => $from ?? 'course'
+                                'content' => $pagination['all_contents'][$totalPages - 1]->id,
+                                'from' => $from ?? 'course',
                             ]) }}"
                                 class="w-6 h-6 text-indigo-700 rounded-lg font-medium hover:bg-gray-300 transition-colors flex items-center justify-center">{{ $totalPages }}</a>
                         @endif
                     </div>
 
                     {{-- Next Button --}}
-                    @if($pagination['has_next'])
+                    @if ($pagination['has_next'])
                         <a href="{{ route('user.course.content.show', [
                             'course' => $course->slug,
                             'content' => $pagination['next_content_id'],
-                            'from' => $from ?? 'course'
+                            'from' => $from ?? 'course',
                         ]) }}"
                             class="bg-indigo-700 hover:bg-indigo-800 text-white font-semibold px-6 py-2 rounded-lg transition-colors">
                             Next
