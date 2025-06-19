@@ -59,6 +59,12 @@ class CourseController extends Controller
             $isEnrolled = (bool) $enrollment; // Cek apakah enrollment ada
         }
 
+
+        // BARU
+        // Ambil semua konten yang diurutkan
+        $allContents = $course->contents()->get();
+        $limitedContents = $allContents;
+
         // Jika user terdaftar di kursus ini, update last_content_id menjadi null (overview)
         // Atau jika kursus ini baru di-enroll dan belum ada last_content_id yang spesifik,
         // ini akan menandakan bahwa user sedang melihat kursus secara umum.
@@ -71,7 +77,7 @@ class CourseController extends Controller
         $from = $request->query('from');
 
         // Kirim semua variabel yang diperlukan ke view, termasuk 'from'
-        return view('user.course.overview', compact('course', 'isEnrolled', 'from'));
+        return view('user.course.overview', compact('course', 'isEnrolled', 'from', 'allContents', 'limitedContents'));
     }
 
     /**
