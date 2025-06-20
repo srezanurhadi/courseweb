@@ -26,6 +26,8 @@ Route::prefix('/admin')->middleware(adminMiddleware::class)->group(function () {
     Route::post('/upload-image', [ImageController::class, 'store'])->name('image.store');
     Route::resource('/users', usersController::class);
     Route::resource('/course', courseController::class);
+    Route::get('/course/{course:slug}/content/{content}', [CourseController::class, 'showContent'])
+        ->name('admin.course.content.show');
     Route::resource('/content', contentController::class);
     Route::resource('/myparticipant', myParticipantController::class);
 });

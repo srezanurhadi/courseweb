@@ -7,9 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <x-headcomponent></x-headcomponent>
-    {{-- Pastikan Tailwind CSS Typography Plugin diaktifkan di tailwind.config.js Anda --}}
-    @vite('resources/css/app.css') {{-- Jika Anda menggunakan Vite --}}
-    {{-- Atau <link href="{{ asset('css/app.css') }}" rel="stylesheet"> jika Anda menggunakan Mix --}}
+    @vite('resources/css/app.css') 
 </head>
 
 <body>
