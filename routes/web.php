@@ -23,7 +23,10 @@ Route::prefix('/admin')->middleware(adminMiddleware::class)->group(function () {
     Route::get('/course/search', [courseController::class, 'search'])->name('course.search');
 
     Route::get('/', [homecontroller::class, 'index']);
+    // route khusus image di editor
     Route::post('/upload-image', [ImageController::class, 'store'])->name('image.store');
+    Route::post('/admin/delete-image', [ImageController::class, 'destroy'])->name('admin.image.destroy');
+    
     Route::resource('/users', usersController::class);
     Route::resource('/course', courseController::class);
     Route::resource('/content', contentController::class);
