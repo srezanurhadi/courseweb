@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Content;
 use App\Models\enrollments as Enrollment;
 use App\Models\UserCourseProgress;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
+
 
 class MyCourseController extends Controller
 {
@@ -107,11 +110,12 @@ class MyCourseController extends Controller
         $user = Auth::user();
         $categories = Category::all();
 
-        // Logika yang sama persis dengan yang kita buat sebelumnya untuk history
+        // Query untuk mengambil semua kursus yang diikuti user
         $enrolledCoursesQuery = $user->enrolledCourses()
-            ->withCount(['enrollments', 'contents'])
+            ->withCount(['enrollments', 'contents']) // Hitung total konten dan partisipan
             ->with(['category', 'user']);
 
+        // Terapkan filter dari request (search & category)
         if ($request->has('search') && $request->filled('search')) {
             $searchTerm = $request->search;
             $enrolledCoursesQuery->where(function ($q) use ($searchTerm) {
@@ -124,37 +128,45 @@ class MyCourseController extends Controller
             $enrolledCoursesQuery->where('category_id', $request->category);
         }
 
-        $enrolledCourses = $enrolledCoursesQuery->latest('enrollments.created_at')->get();
+        // 1. Ambil SEMUA kursus yang cocok filter (tanpa pagination dulu)
+        $allEnrolledCourses = $enrolledCoursesQuery->latest('enrollments.created_at')->get();
 
-        $completedCourses = $enrolledCourses->filter(function ($course) use ($user) {
-            $enrollment = $course->enrollments->where('user_id', $user->id)->first();
-            if (!$enrollment || !$enrollment->last_content_id) {
-                return false;
-            }
-
+        // Fungsi untuk menghitung progres yang akurat
+        $calculateProgress = function ($course, $userId) {
             $totalContents = $course->contents_count;
-            if ($totalContents == 0) {
-                return false; // Anggap belum selesai jika tidak ada konten
+            if ($totalContents === 0) {
+                return 0;
             }
+            $completedContentsCount = \App\Models\UserCourseProgress::where('user_id', $userId)
+                ->where('course_id', $course->id)
+                ->count();
+            return round(($completedContentsCount / $totalContents) * 100);
+        };
 
-            $allContents = $course->contents()->get();
-            $lastSeenContentIndex = $allContents->search(fn($content) => $content->id == $enrollment->last_content_id);
-
-            if ($lastSeenContentIndex === false) {
-                return false;
-            }
-
-            $completedContentsCount = $lastSeenContentIndex + 1;
-            $progressPercentage = round(($completedContentsCount / $totalContents) * 100);
-
-            $course->progress_percentage = $progressPercentage;
-
-            return $progressPercentage >= 100;
+        // 2. Filter di PHP untuk mendapatkan HANYA kursus yang selesai
+        $completedCoursesCollection = $allEnrolledCourses->filter(function ($course) use ($user, $calculateProgress) {
+            $progress = $calculateProgress($course, $user->id);
+            $course->progress_percentage = $progress;
+            return $progress >= 100;
         });
 
+        // 3. Buat Paginator secara manual agar sama seperti halaman MyCourse
+        $perPage = 8; // <-- Jumlah item per halaman, sama dengan MyCourse
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $currentItems = $completedCoursesCollection->slice(($currentPage - 1) * $perPage, $perPage)->values();
+
+        $paginatedCourses = new LengthAwarePaginator(
+            $currentItems,
+            $completedCoursesCollection->count(),
+            $perPage,
+            $currentPage,
+            // Opsi untuk memastikan link pagination membawa serta query string (filter)
+            ['path' => $request->url(), 'query' => $request->query()]
+        );
+
         return view('user.history', [
-            'courses' => $completedCourses,
-            'categories' => $categories
+            'courses' => $paginatedCourses, // Kirim hasil pagination ke view
+            'categories' => $categories,
         ]);
     }
 }

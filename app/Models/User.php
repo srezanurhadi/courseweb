@@ -71,6 +71,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserCourseProgress::class);
     }
+
     public function enrollments()
     {
         return $this->hasMany(enrollments::class, 'user_id');
