@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\homecontroller;
 use App\Http\Middleware\adminMiddleware;
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\usersController;
 use App\Http\Middleware\authorMiddleware;
 use App\Http\Controllers\courseController;
@@ -10,8 +11,8 @@ use App\Http\Controllers\contentController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Middleware\participantMiddleware;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\ImageController;
 use App\Http\Controllers\myParticipantController;
+use App\Http\Controllers\User\MyCourseController;
 use App\Http\Controllers\User\EnrollmentController;
 use App\Http\Controllers\User\CourseController as UserCourseController;
 
@@ -23,7 +24,10 @@ Route::prefix('/admin')->middleware(adminMiddleware::class)->group(function () {
     Route::get('/course/search', [courseController::class, 'search'])->name('course.search');
 
     Route::get('/', [homecontroller::class, 'index']);
+    // route khusus image di editor
     Route::post('/upload-image', [ImageController::class, 'store'])->name('image.store');
+    Route::post('/admin/delete-image', [ImageController::class, 'destroy'])->name('admin.image.destroy');
+    
     Route::resource('/users', usersController::class);
     Route::resource('/course', courseController::class);
     Route::get('/course/{course:slug}/content/{content}', [CourseController::class, 'showContent'])
@@ -72,10 +76,6 @@ Route::prefix('/user')->middleware(participantMiddleware::class)->name('user.')-
 
     Route::get('/course', [UserCourseController::class, 'index'])->name('course.index');
 
-    //Route::get('/course/content', function () {
-    //    return view('user.course.content');
-    //})->name('course.content'); 
-
     Route::get('/course/{course:slug}/content/{content}', [UserCourseController::class, 'showContent'])->name('user.course.content.show');
 
     // Updated route for content with pagination support
@@ -86,20 +86,15 @@ Route::prefix('/user')->middleware(participantMiddleware::class)->name('user.')-
     Route::post('/enroll/{course:slug}', [EnrollmentController::class, 'store'])->name('course.enroll');
     Route::delete('/unenroll/{course:slug}', [EnrollmentController::class, 'destroy'])->name('course.unenroll');
 
-    Route::get('/mycourse', [myParticipantController::class, 'myCourses'])->name('mycourse.index');
-
-    Route::get('/history', function () {
-        return view('user.history');
-    })->name('history');
+    Route::get('/mycourse', [MyCourseController::class, 'myCourses'])->name('mycourse.index');
+    Route::get('/history', [MyCourseController::class, 'history'])->name('history');
 
     // Rute Profil yang sudah benar
     Route::get('/profile', [myParticipantController::class, 'showProfile'])->name('profile');
     Route::get('/profile/edit', [myParticipantController::class, 'editProfile'])->name('profile.edit');
     Route::post('/profile/update', [myParticipantController::class, 'updateProfile'])->name('profile.update'); // Nama sudah benar
 
-    Route::get('/profile/course/{id}', function ($id) {
-        return view('user.myprofile.detail', ['courseId' => $id]);
-    })->name('course.detail');
+    Route::get('/profile/course/{id}', [myParticipantController::class, 'showCourseDetail'])->name('course.detail');
 });
 
 // AUDENA PUNYA

@@ -25,8 +25,7 @@
                             <h1 class="text-3xl font-bold text-gray-800">
                                 <a href="{{ route('user.profile') }}" class="hover:text-indigo-900">My Profile</a>
                                 <i class="fa-solid fa-chevron-right mx-1 text-2xl"></i>
-                                <a href="{{ route('user.profile.edit') }}" class="hover:text-indigo-900">Detail
-                                    Introducing to Figma</a>
+                                <a href="{{ route('user.profile.edit') }}" class="hover:text-indigo-900">Detail</a>
                             </h1>
                         </div>
                         <div class="flex items-center space-x-4 px-4">
@@ -60,7 +59,7 @@
                 <!-- Grade Section -->
                 <div class="flex justify-center px-4 lg:px-16">
                     <div class="w-full max-w-6xl bg-white rounded-md border border-gray-300 shadow-md p-8 text-center">
-                        <h2 class="text-2xl font-bold text-gray-800 mb-4">Grade</h2>
+                        <h2 class="text-2xl font-bold text-gray-800 mb-4">Grade - {{ $course->title ?? 'Course' }}</h2>
                         <p class="text-lg text-gray-600 mb-6">Congratulations on completing this class!</p>
                         <p class="text-lg text-gray-600 mb-2">Your grades are:</p>
                         <div class="text-8xl font-bold text-indigo-700 mb-8">98</div>
