@@ -56,290 +56,147 @@
                 <div class="absolute top-[25px] left-1/2 transform -translate-x-1/2">
                     <div class="bg-white rounded-3xl shadow-md py-3 px-5 flex items-center">
                         <div class="flex items-center gap-3">
-                            <form class="flex items-center gap-2">
+                            <form method="GET" action="{{ route('user.history') }}" class="flex items-center gap-2">
                                 <div class=" flex gap-1 items-center rounded-3xl border-gray-300 border-2 pl-2">
                                     <i class="fas fa-search text-gray-500"></i>
-                                    <input type="text"
+                                    <input type="text" name="search"
                                         class="rounded-lg w-48 focus:outline-none px-2 placeholder:font-semibold placeholder:italic text-gray-400"
-                                        placeholder="Search Content...">
+                                        placeholder="Search Content..." value="{{ request('search') }}">
                                 </div>
 
                                 <button class="bg-sky-600 px-2 rounded-3xl">
-                                    <p class=" font-medium text-base text-white">Search</p>
+                                    <p class="font-medium text-base text-white cursor-pointer">Search</p>
                                 </button>
+
+                                @if (request('category'))
+                                    <input type="hidden" name="category" value="{{ request('category') }}">
+                                @endif
                             </form>
                             <div class="w-[1px] h-[30px] bg-gray-300"></div>
-                            <p class="flex items-center font-medium text-base text-gray-900 whitespace-nowrap">Choose
-                                Category :</p>
+                            <p class="flex items-center font-medium text-base text-gray-900 whitespace-nowrap">
+                                Choose Category :
+                            </p>
                             <div class=" flex gap-1 items-center rounded-3xl border-gray-300 border-2 px-2">
                                 <i class="fas fa-search text-gray-500"></i>
-                                <select name="category" id="category"
-                                    class="w-40 focus:outline-none px-2 text-gray-900">
-                                    <option value="all" class="text-gray-900">
+                                <select id="categoryFilterHistory"
+                                    class="w-40 focus:outline-none px-2 text-gray-900 bg-transparent">
+                                    <option value="{{ route('user.history', ['search' => request('search')]) }}"
+                                        @if (!request('category')) selected @endif>
                                         All Category
                                     </option>
-                                    <option value="uiux" class="text-gray-900">
-                                        UI/UX Design
-                                    </option>
+                                    @foreach ($categories as $category)
+                                        <option
+                                            value="{{ route('user.history', ['category' => $category->id, 'search' => request('search')]) }}"
+                                            @if (request('category') == $category->id) selected @endif>
+                                            {{ $category->category }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="m-10 p-4 grid grid-cols-4 gap-10 justify-around">
-                    <div
-                        class=" bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden">
+                <div class="min-h-[400px]">
+                    @if ($courses->isEmpty())
+                        <div class="col-span-full text-center py-15">
+                            <p class="text-gray-500 text-lg">No Completed Courses Yet</p>
+                            <p class="text-gray-400 text-sm">Keep learning! Once you finish a course, it will
+                                appear here.</p>
+                            <a href="{{ route('user.course.index') }}" class="text-indigo-400 text-sm">Find a
+                                Course</a>
+                        </div>
+                    @else
                         <div
-                            class="p-2 h-40 w-full items-start flex justify-between  bg-[url('https://picsum.photos/900/600')] bg-cover bg-center">
-                            <div class="rounded-4xl bg-indigo-200/60 py-1 px-2 text-xs text-indigo-700">12 Month Ago
-                            </div>
-                            <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-indigo-700">12 Pages</div>
-                        </div>
-                        <div class="w-full p-2 flex flex-col mt-2">
-                            <div class="self-start">
-                                <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-gray-900"> Web Development
-                                </div>
-                            </div>
-                            <a href="{{ route('user.course.overview') }}"
-                                class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900 hover:text-indigo-900 cursor-pointer">
-                                Tutorial Laravel 12
-                                100% work no debat dan pasti berhasil realllllll pasti bisa yakn betul html dan lain
-                                lain</a>
-                            <div class="pl-2 pt-2 text-sm text-gray-500 line-clamp-2">Pelajari laravel 12 dengan
-                                sungguh-sungguh
-                                maka anda akan aman dan sehat sentosa</div>
-                            <div class="flex-col space-y-2 m-2">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-users-line text-indigo-700"></i>
-                                    <div class="text-sm text-gray-600">30 Participant</div>
-                                </div>
-                                <div class="flex items-center space-x-1">
-                                    <div
-                                        class="rounded-full h-6 w-6 bg-indigo-700 text-indigo-200 justify-center flex items-center">
-                                        P</div>
-                                    <div class="text-sm text-gray-600">Prawowo</div>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex-1 bg-gray-200 rounded-full h-2 mr-3">
-                                        <div class="bg-indigo-700 h-2 rounded-full" style="width: 100%"></div>
+                            class="mt-10 mx-10 p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 justify-around min-h-[400px]">
+                            @foreach ($courses as $course)
+                                <div
+                                    class="bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden h-105">
+
+                                    {{-- Gambar Course --}}
+                                    <a href="{{ route('user.course.show', ['course' => $course->slug, 'from' => 'history']) }}"
+                                        class="w-full">
+                                        <div class="p-2 h-40 w-full items-start flex justify-between bg-cover bg-center"
+                                            style="background-image: url('{{ asset('storage/' . $course->image) }}')">
+
+                                            <div class="rounded-4xl bg-indigo-200/60 py-1 px-2 text-xs text-indigo-700">
+                                                {{ $course->created_at->diffForHumans() }}
+                                            </div>
+
+                                            <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-indigo-700">
+                                                {{ $course->contents_count }} Pages
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                    <div class="h-full w-full p-2 flex flex-col mt-2">
+                                        {{-- Kategori Course --}}
+                                        <div class="self-start">
+                                            <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-gray-900">
+                                                {{ $course->category->category }}
+                                            </div>
+                                        </div>
+
+                                        {{-- Judul Course --}}
+                                        <a href="{{ route('user.course.show', ['course' => $course->slug, 'from' => 'history']) }}"
+                                            class="pl-2 pt-1 font-semibold line-clamp-2 text-lg text-gray-900 hover:text-indigo-900 cursor-pointer">
+                                            {{ \Illuminate\Support\Str::limit($course->title, 40) }}
+                                        </a>
+
+                                        {{-- Deskripsi Course --}}
+                                        <div class="pl-2 pt-1 text-sm text-gray-500 line-clamp-2 h-10">
+                                            {{ \Illuminate\Support\Str::limit($course->description, 70) }}
+                                        </div>
+
+                                        <div class="flex-col space-y-2 m-2 mt-auto">
+                                            <div class="flex items-center space-x-2">
+                                                <i class="fas fa-users-line text-indigo-700"></i>
+                                                <div class="text-sm text-gray-600">
+                                                    {{ $course->enrollments_count }} Participant</div>
+                                            </div>
+
+                                            <div class="flex items-center space-x-1">
+                                                <div
+                                                    class="rounded-full h-6 w-6 bg-indigo-700 text-indigo-200 justify-center flex items-center">
+                                                    {{ strtoupper(substr($course->user->name, 0, 1)) }}
+                                                </div>
+                                                <div class="text-sm text-gray-600">{{ $course->user->name }}</div>
+                                            </div>
+
+                                            <div class="flex items-center justify-between">
+                                                <div class="flex-1 bg-gray-200 rounded-full h-2 mr-3">
+                                                    <div class="bg-indigo-700 h-2 rounded-full"
+                                                        style="width: {{ $course->progress_percentage }}%">
+                                                    </div>
+                                                </div>
+                                                <span
+                                                    class="text-sm font-bold text-gray-900">{{ $course->progress_percentage }}%</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <span class="text-sm font-bold text-gray-900">100%</span>
                                 </div>
-                            </div>
+                            @endforeach
                         </div>
-                    </div>
-                    <div
-                        class=" bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden">
-                        <div
-                            class="p-2 h-40 w-full items-start flex justify-between  bg-[url('https://picsum.photos/900/600')] bg-cover bg-center">
-                            <div class="rounded-4xl bg-indigo-200/60 py-1 px-2 text-xs text-indigo-700">12 Month Ago
-                            </div>
-                            <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-indigo-700">12 Pages</div>
-                        </div>
-                        <div class="w-full p-2 flex flex-col mt-2">
-                            <div class="self-start">
-                                <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-gray-900"> Web Development
-                                </div>
-                            </div>
-                            <a href="{{ route('user.course.overview') }}"
-                                class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900 hover:text-indigo-900 cursor-pointer">
-                                Tutorial Laravel 12
-                                100% work no debat dan pasti berhasil realllllll pasti bisa yakn betul html dan lain
-                                lain</a>
-                            <div class="pl-2 pt-2 text-sm text-gray-500 line-clamp-2">Pelajari laravel 12 dengan
-                                sungguh-sungguh
-                                maka anda akan aman dan sehat sentosa</div>
-                            <div class="flex-col space-y-2 m-2">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-users-line text-indigo-700"></i>
-                                    <div class="text-sm text-gray-600">30 Participant</div>
-                                </div>
-                                <div class="flex items-center space-x-1">
-                                    <div
-                                        class="rounded-full h-6 w-6 bg-indigo-700 text-indigo-200 justify-center flex items-center">
-                                        P</div>
-                                    <div class="text-sm text-gray-600">Prawowo</div>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex-1 bg-gray-200 rounded-full h-2 mr-3">
-                                        <div class="bg-indigo-700 h-2 rounded-full" style="width: 100%"></div>
-                                    </div>
-                                    <span class="text-sm font-bold text-gray-900">100%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div
-                        class=" bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden">
-                        <div
-                            class="p-2 h-40 w-full items-start flex justify-between  bg-[url('https://picsum.photos/900/600')] bg-cover bg-center">
-                            <div class="rounded-4xl bg-indigo-200/60 py-1 px-2 text-xs text-indigo-700">12 Month Ago
-                            </div>
-                            <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-indigo-700">12 Pages</div>
-                        </div>
-                        <div class="w-full p-2 flex flex-col mt-2">
-                            <div class="self-start">
-                                <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-gray-900"> Web Development
-                                </div>
-                            </div>
-                            <a href="{{ route('user.course.overview') }}"
-                                class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900 hover:text-indigo-900 cursor-pointer">
-                                Tutorial Laravel 12
-                                100% work no debat dan pasti berhasil realllllll pasti bisa yakn betul html dan lain
-                                lain</a>
-                            <div class="pl-2 pt-2 text-sm text-gray-500 line-clamp-2">Pelajari laravel 12 dengan
-                                sungguh-sungguh
-                                maka anda akan aman dan sehat sentosa</div>
-                            <div class="flex-col space-y-2 m-2">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-users-line text-indigo-700"></i>
-                                    <div class="text-sm text-gray-600">30 Participant</div>
-                                </div>
-                                <div class="flex items-center space-x-1">
-                                    <div
-                                        class="rounded-full h-6 w-6 bg-indigo-700 text-indigo-200 justify-center flex items-center">
-                                        P</div>
-                                    <div class="text-sm text-gray-600">Prawowo</div>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex-1 bg-gray-200 rounded-full h-2 mr-3">
-                                        <div class="bg-indigo-700 h-2 rounded-full" style="width: 100%"></div>
-                                    </div>
-                                    <span class="text-sm font-bold text-gray-900">100%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div
-                        class=" bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden">
-                        <div
-                            class="p-2 h-40 w-full items-start flex justify-between  bg-[url('https://picsum.photos/900/600')] bg-cover bg-center">
-                            <div class="rounded-4xl bg-indigo-200/60 py-1 px-2 text-xs text-indigo-700">12 Month Ago
-                            </div>
-                            <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-indigo-700">12 Pages</div>
-                        </div>
-                        <div class="w-full p-2 flex flex-col mt-2">
-                            <div class="self-start">
-                                <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-gray-900"> Web Development
-                                </div>
-                            </div>
-                            <a href="{{ route('user.course.overview') }}"
-                                class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900 hover:text-indigo-900 cursor-pointer">
-                                Tutorial Laravel 12
-                                100% work no debat dan pasti berhasil realllllll pasti bisa yakn betul html dan lain
-                                lain</a>
-                            <div class="pl-2 pt-2 text-sm text-gray-500 line-clamp-2">Pelajari laravel 12 dengan
-                                sungguh-sungguh
-                                maka anda akan aman dan sehat sentosa</div>
-                            <div class="flex-col space-y-2 m-2">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-users-line text-indigo-700"></i>
-                                    <div class="text-sm text-gray-600">30 Participant</div>
-                                </div>
-                                <div class="flex items-center space-x-1">
-                                    <div
-                                        class="rounded-full h-6 w-6 bg-indigo-700 text-indigo-200 justify-center flex items-center">
-                                        P</div>
-                                    <div class="text-sm text-gray-600">Prawowo</div>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex-1 bg-gray-200 rounded-full h-2 mr-3">
-                                        <div class="bg-indigo-700 h-2 rounded-full" style="width: 100%"></div>
-                                    </div>
-                                    <span class="text-sm font-bold text-gray-900">100%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div
-                        class=" bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden">
-                        <div
-                            class="p-2 h-40 w-full items-start flex justify-between  bg-[url('https://picsum.photos/900/600')] bg-cover bg-center">
-                            <div class="rounded-4xl bg-indigo-200/60 py-1 px-2 text-xs text-indigo-700">12 Month Ago
-                            </div>
-                            <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-indigo-700">12 Pages</div>
-                        </div>
-                        <div class="w-full p-2 flex flex-col mt-2">
-                            <div class="self-start">
-                                <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-gray-900"> Web Development
-                                </div>
-                            </div>
-                            <a href="{{ route('user.course.overview') }}"
-                                class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900 hover:text-indigo-900 cursor-pointer">
-                                Tutorial Laravel 12
-                                100% work no debat dan pasti berhasil realllllll pasti bisa yakn betul html dan lain
-                                lain</a>
-                            <div class="pl-2 pt-2 text-sm text-gray-500 line-clamp-2">Pelajari laravel 12 dengan
-                                sungguh-sungguh
-                                maka anda akan aman dan sehat sentosa</div>
-                            <div class="flex-col space-y-2 m-2">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-users-line text-indigo-700"></i>
-                                    <div class="text-sm text-gray-600">30 Participant</div>
-                                </div>
-                                <div class="flex items-center space-x-1">
-                                    <div
-                                        class="rounded-full h-6 w-6 bg-indigo-700 text-indigo-200 justify-center flex items-center">
-                                        P</div>
-                                    <div class="text-sm text-gray-600">Prawowo</div>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex-1 bg-gray-200 rounded-full h-2 mr-3">
-                                        <div class="bg-indigo-700 h-2 rounded-full" style="width: 100%"></div>
-                                    </div>
-                                    <span class="text-sm font-bold text-gray-900">100%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div
-                        class=" bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden">
-                        <div
-                            class="p-2 h-40 w-full items-start flex justify-between  bg-[url('https://picsum.photos/900/600')] bg-cover bg-center">
-                            <div class="rounded-4xl bg-indigo-200/60 py-1 px-2 text-xs text-indigo-700">12 Month Ago
-                            </div>
-                            <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-indigo-700">12 Pages</div>
-                        </div>
-                        <div class="w-full p-2 flex flex-col mt-2">
-                            <div class="self-start">
-                                <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-gray-900"> Web Development
-                                </div>
-                            </div>
-                            <a href="{{ route('user.course.overview') }}"
-                                class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900 hover:text-indigo-900 cursor-pointer">
-                                Tutorial Laravel 12
-                                100% work no debat dan pasti berhasil realllllll pasti bisa yakn betul html dan lain
-                                lain</a>
-                            <div class="pl-2 pt-2 text-sm text-gray-500 line-clamp-2">Pelajari laravel 12 dengan
-                                sungguh-sungguh
-                                maka anda akan aman dan sehat sentosa</div>
-                            <div class="flex-col space-y-2 m-2">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-users-line text-indigo-700"></i>
-                                    <div class="text-sm text-gray-600">30 Participant</div>
-                                </div>
-                                <div class="flex items-center space-x-1">
-                                    <div
-                                        class="rounded-full h-6 w-6 bg-indigo-700 text-indigo-200 justify-center flex items-center">
-                                        P</div>
-                                    <div class="text-sm text-gray-600">Prawowo</div>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex-1 bg-gray-200 rounded-full h-2 mr-3">
-                                        <div class="bg-indigo-700 h-2 rounded-full" style="width: 100%"></div>
-                                    </div>
-                                    <span class="text-sm font-bold text-gray-900">100%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @endif
+
                 </div>
+
+                {{-- Pagination --}}
+                @if ($courses->hasPages())
+                    <div class="mb-4 px-10">
+                        {{ $courses->withQueryString()->links() }}
+                    </div>
+                @endif
+
             </div>
             <x-footer></x-footer>
         </div>
     </div>
-
+    <script>
+        document.getElementById('categoryFilterHistory').addEventListener('change', function() {
+            window.location.href = this.value;
+        });
+    </script>
 </body>
 
 </html>

@@ -60,4 +60,12 @@ class Course extends Model
     {
         return $this->hasMany(enrollments::class, 'course_id');
     }
+
+    /**
+     * Mendapatkan semua progres dari semua pengguna di kursus ini.
+     */
+    public function progresses()
+    {
+        return $this->hasMany(UserCourseProgress::class);
+    }
 }

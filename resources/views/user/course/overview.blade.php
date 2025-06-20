@@ -20,11 +20,11 @@
                         <div class="flex items-center px-4">
                             <h1 class="text-3xl font-bold text-gray-800">
                                 @if (isset($from) && $from == 'my-course')
-                                    {{-- Jika datang dari halaman My Course --}}
                                     <a href="{{ route('user.mycourse.index') }}" class="hover:text-indigo-900">My
                                         Course</a>
+                                @elseif (isset($from) && $from == 'history')
+                                    <a href="{{ route('user.history') }}" class="hover:text-indigo-900">History</a>
                                 @else
-                                    {{-- Jika datang dari halaman Course atau default --}}
                                     <a href="{{ route('user.course.index') }}" class="hover:text-indigo-900">Course</a>
                                 @endif
 
@@ -169,9 +169,9 @@
                                         @forelse($allContents as $content)
                                             @if (in_array($content->id, $completedContentIds))
                                                 {{-- JIKA SUDAH SELESAI: Tampilkan ikon tercentang dan teks berwarna --}}
-                                                <li class="flex items-center justify-between py-2">
+                                                <li class="flex items-center justify-between py-2 ">
                                                     <a href="{{ route('user.course.content.show', ['course' => $course->slug, 'content' => $content->id, 'from' => $from ?? 'course']) }}"
-                                                        class="text-indigo-700 font-semibold text-xl">
+                                                        class="text-indigo-800 hover:text-indigo-700 font-semibold text-xl pr-2">
                                                         {{ $loop->iteration }}. {{ $content->title }}
                                                     </a>
                                                     <i class="fas fa-check-square text-indigo-700 text-2xl"></i>
@@ -180,7 +180,7 @@
                                                 {{-- JIKA BELUM SELESAI: Tampilkan seperti biasa --}}
                                                 <li class="flex items-center justify-between py-2">
                                                     <a href="{{ route('user.course.content.show', ['course' => $course->slug, 'content' => $content->id, 'from' => $from ?? 'course']) }}"
-                                                        class="text-gray-700 hover:text-indigo-800 font-semibold text-xl">
+                                                        class="text-gray-700 hover:text-indigo-800 font-semibold text-xl pr-2">
                                                         {{ $loop->iteration }}. {{ $content->title }}
                                                     </a>
                                                     <i class="far fa-square text-gray-400 text-2xl"></i>
@@ -207,18 +207,18 @@
                                 {{-- gradient kotak content --}}
                                 @if (!$isEnrolled && $allContents->count() > 1)
                                     <div
-                                        class="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-gray-100 from-30% to-transparent rounded-b-xl pointer-events-none">
+                                        class="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-gray-100 from-40% to-transparent rounded-b-xl pointer-events-none">
                                     </div>
 
                                     <div class="absolute bottom-6 left-0 w-full text-center px-6 pointer-events-none">
-                                        <p class="text-base font-semibold text-gray-800 ">
+                                        <p class="text-xl font-semibold text-gray-800 ">
                                             Enroll to access all content!
                                         </p>
                                     </div>
                                 @endif
                             </div>
                             <button
-                                class="w-full mt-6 bg-indigo-100 hover:bg-indigo-300 text-gray-700 font-semibold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 shadow-lg">
+                                class="text-xl w-full mt-6 bg-indigo-100 hover:bg-indigo-300 text-gray-700 font-semibold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 shadow-lg">
                                 <i class="fas fa-users"></i>
                                 Discussion Group
                             </button>

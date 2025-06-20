@@ -63,4 +63,17 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Course::class, 'enrollments', 'user_id', 'course_id')->withTimestamps();
     }
+
+    /**
+     * Mendapatkan semua progres kursus milik pengguna.
+     */
+    public function progress()
+    {
+        return $this->hasMany(UserCourseProgress::class);
+    }
+
+    public function enrollments()
+    {
+        return $this->hasMany(enrollments::class, 'user_id');
+    }
 }
