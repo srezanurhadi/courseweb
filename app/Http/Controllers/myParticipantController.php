@@ -162,4 +162,16 @@ class myParticipantController extends Controller
 
         return redirect()->route('user.profile')->with('success', 'Profile berhasil diperbarui!');
     }
+
+    /**
+     * Menampilkan halaman detail sebuah course dari halaman profil.
+     */
+    public function showCourseDetail($id)
+    {
+        // Cari course berdasarkan ID. Jika tidak ditemukan, akan gagal (404 Not Found).
+        $course = Course::findOrFail($id);
+
+        // Kirim data course ke view
+        return view('user.myprofile.detail', compact('course'));
+    }
 }
