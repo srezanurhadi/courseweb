@@ -78,7 +78,7 @@
                             </p>
                             <div class=" flex gap-1 items-center rounded-3xl border-gray-300 border-2 px-2">
                                 <i class="fas fa-search text-gray-500"></i>
-                                <select id="categoryFilterMyCourse"
+                                <select id="categoryFilterHistory"
                                     class="w-40 focus:outline-none px-2 text-gray-900 bg-transparent">
                                     <option value="{{ route('user.history', ['search' => request('search')]) }}"
                                         @if (!request('category')) selected @endif>
@@ -100,13 +100,11 @@
                 <div class="min-h-[400px]">
                     @if ($courses->isEmpty())
                         <div class="col-span-full text-center py-15">
-                            <p class="text-gray-500 text-lg font-semibold">No Completed Courses Yet</p>
-                            <p class="text-gray-400 text-sm mt-2">Keep learning! Once you finish a course, it will
+                            <p class="text-gray-500 text-lg">No Completed Courses Yet</p>
+                            <p class="text-gray-400 text-sm">Keep learning! Once you finish a course, it will
                                 appear here.</p>
-                            <a href="{{ route('user.course.index') }}"
-                                class="mt-4 inline-block px-6 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700">
-                                Find a Course
-                            </a>
+                            <a href="{{ route('user.course.index') }}" class="text-indigo-400 text-sm">Find a
+                                Course</a>
                         </div>
                     @else
                         <div
@@ -140,7 +138,7 @@
                                         </div>
 
                                         {{-- Judul Course --}}
-                                        <a href="{{ route('user.course.show', ['course' => $course->slug, 'from' => 'my-course']) }}"
+                                        <a href="{{ route('user.course.show', ['course' => $course->slug, 'from' => 'history']) }}"
                                             class="pl-2 pt-1 font-semibold line-clamp-2 text-lg text-gray-900 hover:text-indigo-900 cursor-pointer">
                                             {{ \Illuminate\Support\Str::limit($course->title, 40) }}
                                         </a>
@@ -184,12 +182,12 @@
                 </div>
 
                 {{-- Pagination --}}
-                {{-- @if ($courses->hasPages())
+                @if ($courses->hasPages())
                     <div class="mb-4 px-10">
                         {{ $courses->withQueryString()->links() }}
                     </div>
                 @endif
- --}}
+
             </div>
             <x-footer></x-footer>
         </div>

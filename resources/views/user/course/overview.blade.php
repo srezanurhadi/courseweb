@@ -20,11 +20,11 @@
                         <div class="flex items-center px-4">
                             <h1 class="text-3xl font-bold text-gray-800">
                                 @if (isset($from) && $from == 'my-course')
-                                    {{-- Jika datang dari halaman My Course --}}
                                     <a href="{{ route('user.mycourse.index') }}" class="hover:text-indigo-900">My
                                         Course</a>
+                                @elseif (isset($from) && $from == 'history')
+                                    <a href="{{ route('user.history') }}" class="hover:text-indigo-900">History</a>
                                 @else
-                                    {{-- Jika datang dari halaman Course atau default --}}
                                     <a href="{{ route('user.course.index') }}" class="hover:text-indigo-900">Course</a>
                                 @endif
 
