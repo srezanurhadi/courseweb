@@ -15,6 +15,7 @@ use App\Http\Controllers\myParticipantController;
 use App\Http\Controllers\User\MyCourseController;
 use App\Http\Controllers\User\EnrollmentController;
 use App\Http\Controllers\User\CourseController as UserCourseController;
+use App\Http\Controllers\User\HomeController as UserHomeController;
 
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
 
@@ -27,7 +28,7 @@ Route::prefix('/admin')->middleware(adminMiddleware::class)->group(function () {
     // route khusus image di editor
     Route::post('/upload-image', [ImageController::class, 'store'])->name('image.store');
     Route::post('/admin/delete-image', [ImageController::class, 'destroy'])->name('admin.image.destroy');
-    
+
     Route::resource('/users', usersController::class);
     Route::resource('/course', courseController::class);
     Route::get('/course/{course:slug}/content/{content}', [CourseController::class, 'showContent'])
@@ -70,9 +71,7 @@ Route::get('/coba', function () {
 
 // AUDENA PUNYA
 Route::prefix('/user')->middleware(participantMiddleware::class)->name('user.')->group(function () {
-    Route::get('/home', function () {
-        return view('user.home');
-    })->name('home');
+    Route::get('/home', [UserHomeController::class, 'index'])->name('home');
 
     Route::get('/course', [UserCourseController::class, 'index'])->name('course.index');
 
