@@ -35,9 +35,9 @@
         overflow-wrap: break-word;
     }
 
-    .ce-block__content {
-        max-width: none !important;
-    }
+    .ce-block:not(.image-tool) .ce-block__content {
+      max-width: none !important;
+  }
 
     .ce-toolbar__content {
         margin-left: 0 !important;
@@ -47,9 +47,9 @@
 
 
 @layer components {
-    .image-tool__image {
-        @apply max-w-3xl mx-auto my-8 rounded-lg shadow-md;
-    }
+     .image-tool__image {
+        @apply max-w-3xl  mx-auto rounded-lg shadow-md;
+    } 
 
     .image-tool__image-picture {
         @apply w-full h-auto;
@@ -57,15 +57,42 @@
 
     .image-tool__caption {
         @apply text-center;
+    } 
+    .ce-block--stretched .image-tool__image {
+      @apply max-w-none;
     }
+
+}
+.ce-block__content .image-tool__caption {
+  visibility: visible !important;
+  position: relative !important; 
+  bottom: auto !important;
+  left: auto !important;
+  right: auto !important;
+  margin: 5px 0 0 0 !important;
 }
 
-/* Kustomisasi Scrollbar Anda di sini */
+.ce-toolbox__button .ce-toolbox-button__icon {
+  width: 20px;
+  height: 20px;
+
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.ce-toolbox__button .ce-toolbox-button__icon svg {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+
 .course-created-scrollable {
     scrollbar-width: thin;
-    /* Untuk Firefox */
     scrollbar-color: #6c6c6c #e0e0e0;
-    /* thumb track - Untuk Firefox */
+    
 }
 
 .course-created-scrollable::-webkit-scrollbar {

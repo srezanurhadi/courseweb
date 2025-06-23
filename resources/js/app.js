@@ -6,11 +6,11 @@ import Header from '@editorjs/header';
 import List from '@editorjs/list';
 import ImageTool from '@editorjs/image';
 
-import Paragraph from 'editorjs-paragraph-with-alignment'; // Contoh: tambahkan ini
-import Delimiter from '@editorjs/delimiter'; // Contoh: tambahkan ini
-import Quote from '@editorjs/quote';       // Contoh: tambahkan ini
-import CodeTool from '@editorjs/code';     // Contoh: tambahkan ini
-import Table from '@editorjs/table';       // Contoh: tambahkan ini
+import Paragraph from 'editorjs-paragraph-with-alignment'; 
+import Delimiter from '@editorjs/delimiter';
+import Quote from '@editorjs/quote';
+import CodeTool from '@editorjs/code';
+import Table from '@editorjs/table';
 
 
 // 2. Ambil elemen-elemen penting dari DOM
@@ -22,30 +22,30 @@ const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute
 let initialEditorData = null;
 
 // Tambahkan event listener untuk memastikan DOM sudah dimuat
-document.addEventListener('DOMContentLoaded', () => { // <--- MULAI DOMContentLoaded
+document.addEventListener('DOMContentLoaded', () => { 
 
-    // Dapatkan data inisial untuk Editor.js dari elemen script
+    
     const initialEditorDataElement = document.getElementById('initial-editor-data');
     if (initialEditorDataElement && initialEditorDataElement.textContent) {
         try {
             initialEditorData = JSON.parse(initialEditorDataElement.textContent);
-            console.log("Initial Editor.js data parsed successfully:", initialEditorData); // Debugging: pastikan data terbaca
+            console.log("Initial Editor.js data parsed successfully:", initialEditorData); 
         } catch (e) {
             console.error("Error parsing initial Editor.js data:", e);
         }
     } else {
-        console.warn("Element 'initial-editor-data' not found or empty. Editor.js will start with empty content."); // Debugging
+        console.warn("Element 'initial-editor-data' not found or empty. Editor.js will start with empty content."); 
     }
 
     // 3. Inisialisasi EditorJS
     const editor = new EditorJS({
         holder: 'editorjs',
         tools: {
-            header: { // Konfigurasi lengkap untuk Header
+            header: { 
                 class: Header,
-                inlineToolbar: true, // Pastikan inlineToolbar diaktifkan jika diinginkan
+                inlineToolbar: true, 
             },
-            list: { // Konfigurasi lengkap untuk List
+            list: { 
                 class: List,
                 inlineToolbar: true,
             },
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => { // <--- MULAI DOMContentLo
                             let formData = new FormData();
                             formData.append('image', file);
 
-                            return fetch('/admin/upload-image', { // Pastikan endpoint ini benar dan sudah diimplementasikan
+                            return fetch('/admin/upload-image', { 
                                     method: 'POST',
                                     body: formData,
                                     headers: {
@@ -72,11 +72,11 @@ document.addEventListener('DOMContentLoaded', () => { // <--- MULAI DOMContentLo
                                     alert('Failed to upload image.');
                                     return {
                                         success: 0
-                                    }; // Beri tahu Editor.js bahwa upload gagal
+                                    }; 
                                 });
                         },
-                        // uploadByUrl: Anda juga bisa menambahkan fungsi ini jika ingin mendukung import gambar dari URL
-                    }
+                    },
+                    withCaption: true,
                 }
             },
             // Tambahkan konfigurasi untuk tools lain yang Anda gunakan
@@ -127,4 +127,4 @@ document.addEventListener('DOMContentLoaded', () => { // <--- MULAI DOMContentLo
         });
     }
 
-}); // <--- AKHIR DOMContentLoaded
+}); 
