@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use id;
 use App\Models\Course;
 use App\Models\Content;
 use App\Models\Category;
+use App\Models\enrollments;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -41,6 +43,8 @@ class courseController extends Controller
             }
         }
 
+        $query->withCount('enrollments');
+
         // Eksekusi query dengan pagination
         $courses = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
 
@@ -51,57 +55,13 @@ class courseController extends Controller
 
     public function create(Request $request)
     {
-        // Bagian query ini sudah benar dan bisa digunakan untuk kedua skenario
+
         $contentsQuery = Content::with('category')->orderBy('created_at', 'desc');
-
-        // Handle search functionality
-        if ($request->filled('search')) { // ->filled() lebih baik dari ->has()
-            $contentsQuery->where('title', 'like', '%' . $request->search . '%');
-        }
-
-        // Handle category filter
-        if ($request->filled('category')) {
-            $contentsQuery->where('category_id', $request->category);
-        }
-
-        // Get the filtered contents
         $contents = $contentsQuery->get();
-
-        // --- LOGIKA KONDISIONAL DIMULAI DI SINI ---
-
-        // 1. Jika ini adalah permintaan AJAX dari JavaScript kita...
-        if ($request->ajax()) {
-
-            // Format data agar bersih dan sesuai untuk JSON
-            $formattedContents = $contents->map(function ($content) {
-                return [
-                    'id' => $content->id,
-                    'title' => $content->title,
-                    'slug' => $content->slug,
-                    'category_name' => $content->category->category,
-                    'created_at' => $content->created_at->format('d-m-Y'),
-                ];
-            });
-
-            // Kembalikan hanya data JSON
-            return response()->json(['contents' => $formattedContents]);
-        }
-
-        // 2. Jika ini adalah permintaan biasa (load halaman pertama kali)...
-        // maka lanjutkan kode Anda yang sebelumnya untuk merender view.
-
         $categories = Category::all();
 
-        $contentDetails = [];
-        foreach ($contents as $content) {
-            $contentDetails[$content->id] = [
-                'title' => $content->title,
-                'blocks' => json_decode($content->content, true)['blocks'] ?? []
-            ];
-        }
-
         // Kembalikan view lengkap dengan semua data yang dibutuhkan
-        return view('admin.course.create', compact('categories', 'contents', 'contentDetails'));
+        return view('admin.course.create', compact('categories', 'contents'));
     }
 
     /**
@@ -188,6 +148,7 @@ class courseController extends Controller
      */
     public function show(Course $course)
     {
+        $course = Course::withCount('enrollments')->find($course->id);
         return view('admin.course.show', compact('course'));
     }
 
@@ -245,6 +206,47 @@ class courseController extends Controller
         }
 
         return redirect('/admin/course')->with('success', 'Course berhasil diperbarui!');
+    }
+
+    public function showContent(Course $course, $contentId, Request $request)
+    {
+
+
+        $allContents = $course->contents()->get(); // Menggunakan relasi BelongsToMany dengan pivot 'order'
+
+        $currentContent = null;
+        if ($allContents->isNotEmpty()) {
+            $currentContent = $allContents->firstWhere('id', $contentId);
+        }
+        $editorJsData = json_decode($currentContent->content, true);
+        // dd($editorJsData, $currentContent);
+        // Find current content index
+        $currentIndex = $allContents->search(function ($item) use ($contentId) {
+            return $item->id == $contentId;
+        });
+
+        // Calculate pagination info
+        $totalContents = $allContents->count();
+        $currentPage = $currentIndex + 1;
+
+        // Find previous and next content
+        $previousContent = $currentIndex > 0 ? $allContents[$currentIndex - 1] : null;
+        $nextContent = $currentIndex < $totalContents - 1 ? $allContents[$currentIndex + 1] : null;
+
+        // Create pagination data
+        $pagination = [
+            'current_page' => $currentPage,
+            'total_pages' => $totalContents,
+            'has_previous' => $previousContent !== null,
+            'has_next' => $nextContent !== null,
+            'previous_content_id' => $previousContent ? $previousContent->id : null,
+            'next_content_id' => $nextContent ? $nextContent->id : null,
+            'all_contents' => $allContents // Kirim semua konten untuk membangun paginasi
+        ];
+
+        $from = $request->query('from');
+
+        return view('admin.course.content', compact('course', 'editorJsData', 'from', 'pagination'));
     }
 
     /**

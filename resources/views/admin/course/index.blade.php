@@ -110,7 +110,7 @@
                     <div
                         class=" bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden">
                         <div class="p-2 h-52 w-full items-start flex justify-between  bg-cover bg-center"
-                            style="background-image: url('https://picsum.photos/900/600?random={{ $course->id }}');">
+                            style="background-image: url('{{ $course->image ? asset('storage/' . $course->image) : 'https://picsum.photos/900/600?random=' . $course->id }}');">
 
                             <div class="rounded-4xl bg-indigo-200/60 py-1 px-2 text-xs text-gray-900">
                                 {{ $course->created_at->diffForHumans() }}
@@ -170,7 +170,7 @@
                                 </div>
                                 <div class="flex items-center pt-2 gap-2">
                                     <i class="fas fa-users-line text-indigo-700"></i>
-                                    <div class="text-sm text-gray-600">0.5% Participant</div>
+                                    <div class="text-sm text-gray-600">{{ $course->enrollments_count }} Participant</div>
                                 </div>
                             </div>
 

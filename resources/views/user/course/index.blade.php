@@ -61,7 +61,7 @@
                                 <div class=" flex gap-1 items-center rounded-3xl border-gray-300 border-2 pl-2">
                                     <i class="fas fa-search text-gray-500"></i>
                                     <input type="text" name="search"
-                                        class="rounded-lg w-48 focus:outline-none px-2 placeholder:font-semibold placeholder:italic text-gray-400"
+                                        class="rounded-lg w-48 focus:outline-none px-2 placeholder:font-semibold placeholder:italic text-gray-900"
                                         placeholder="Search Content..." value="{{ request('search') }}">
                                 </div>
 
@@ -98,7 +98,8 @@
                     </div>
                 </div>
 
-                <div class="mt-10 mx-10 p-4 grid grid-cols-4 gap-10 justify-around">
+                <div
+                    class="mt-10 mx-10 p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 justify-around">
                     @forelse ($courses as $course)
                         <div
                             class="bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden h-105">

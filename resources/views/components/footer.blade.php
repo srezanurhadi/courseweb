@@ -18,10 +18,10 @@
                 <h3 class="text-lg font-semibold mb-1">Quick Links</h3>
                 <ul class="text-sm">
                     <li><a href="{{ url('/user/course') }}" class="hover:underline">Courses</a></li>
-                    <li><a href="#" class="hover:underline">About Us</a></li>
-                    <li><a href="#" class="hover:underline">Help Center</a></li>
-                    <li><a href="#" class="hover:underline">Privacy Policy</a></li>
-                    <li><a href="#" class="hover:underline">Terms & Conditions</a></li>
+                    <li><a href="{{ route('about') }}" class="hover:underline">About Us</a></li>
+                    <li><a href="{{ route('help') }}" class="hover:underline">Help Center</a></li>
+                    <li><a href="{{ route('privacy') }}" class="hover:underline">Privacy Policy</a></li>
+                    <li><a href="{{ route('terms') }}" class="hover:underline">Terms & Conditions</a></li>
                 </ul>
             </div>
 
