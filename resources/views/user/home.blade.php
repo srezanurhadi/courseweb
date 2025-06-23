@@ -119,7 +119,7 @@
 </head>
 
 <body>
-    <div class="flex flex-1">
+    <div class="flex flex-1 ">
         <x-sidebar></x-sidebar>
         <div class="flex-1 bg-slate-50">
             {{-- - Navbar - --}}
@@ -329,6 +329,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
+<<<<<<< HEAD
             // Memanggil fungsi chart dengan variabel Blade Anda
             createRadialChart('#finishedChart', {{ $finishedCourseCount }}, 'Finished Course', '#ffffff');
             createRadialChart('#ongoingChart', {{ $ongoingCourseCount }}, 'Ongoing Course', '#ffffff');
@@ -347,6 +348,53 @@
             document.querySelectorAll('.reveal').forEach(el => {
                 observer.observe(el);
             });
+=======
+            var finishedChartOptions = {
+                chart: {
+                    height: 250,
+                    type: "radialBar"
+                },
+                series: [{{ $finishedCoursePercentage }}], // <-- Gunakan PERSENTASE untuk visual
+                plotOptions: {
+                    radialBar: {
+                        hollow: {
+                            margin: 15,
+                            size: "60%"
+                        },
+                        track: {
+                            background: '#f1f5f9',
+                            strokeWidth: '100%'
+                        },
+                        dataLabels: {
+                            showOn: "always",
+                            name: {
+                                show: false
+                            },
+                            value: {
+                                color: "white",
+                                fontSize: "55px",
+                                fontWeight: "600",
+                                show: true,
+                                formatter: function(val) {
+                                    return {{ $finishedCourseCount }};
+                                }
+                            }
+                        }
+                    }
+                },
+                fill: {
+                    colors: ['#5A1495']
+                },
+                stroke: {
+                    lineCap: "round"
+                },
+                labels: ['Finished Course']
+            };
+            var finishedChart = new ApexCharts(document.querySelector("#finishedChart"), finishedChartOptions);
+            finishedChart.render();
+            createRadialChart('#ongoingChart', {{ $ongoingCourseCount }}, 'Ongoing Course', '#5A1495');
+            createRadialChart('#overallChart', {{ $overallProgress }}, 'Progress Overall', '#5A1495');
+>>>>>>> 36990c96e6af313c1348f95012e6c82970f0bdaa
         });
     </script>
 </body>
