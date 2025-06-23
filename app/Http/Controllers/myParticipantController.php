@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Course;
 use App\Models\Content;
 use App\Models\Category;
@@ -11,16 +12,31 @@ use App\Models\UserCourseProgress;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use App\Models\enrollments as Enrollment;
+use Illuminate\Support\Facades\DB;
+
 
 class myParticipantController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('admin.myParticipant.index');
+        $query = Course::query();
+
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%$search%")
+                    ->orWhere('description', 'like', "%$search%");
+            });
+        }
+
+        $query->withCount('enrollments');
+
+        $courses = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
+
+        return view('admin.myParticipant.index', compact('courses'));
     }
 
     /**
@@ -42,9 +58,28 @@ class myParticipantController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(MyParticipant $myParticipant)
+    // app/Http/Controllers/MyParticipantController.php
+    public function show($slug)
     {
-        return view('admin.myParticipant.show');
+        // Ambil course berdasarkan slug
+        $course = Course::where('slug', $slug)->firstOrFail();
+
+        // Alur eksplisit: slug -> course_id -> enrollments -> user_ids -> users data
+        $courseId = $course->id;
+
+        // Ambil user_ids dari enrollments berdasarkan course_id
+        $userIds = DB::table('enrollments')
+            ->where('course_id', $courseId)
+            ->pluck('user_id');
+
+        // Ambil informasi lengkap users berdasarkan user_ids
+        $enrolledUsers = User::whereIn('id', $userIds)
+            ->select('id', 'name', 'email', 'no_telp', 'created_at')
+            ->get();
+
+        // dd($courseId);
+
+        return view('admin.myParticipant.show', compact('course', 'enrolledUsers'));
     }
 
     /**
@@ -52,6 +87,7 @@ class myParticipantController extends Controller
      */
     public function edit(MyParticipant $myParticipant)
     {
+
         return view('admin.myParticipant.edit');
     }
 

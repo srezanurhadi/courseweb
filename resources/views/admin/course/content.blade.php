@@ -73,94 +73,95 @@
                 <div class="bg-gray-100 border-gray-200 border-2 rounded-xl shadow-lg p-8 m-4">
                     <h2 class="text-2xl font-bold text-gray-900 mb-6">{{ $pagination['current_page'] }}.
                         {{ $course->title ?? 'Content 1' }}</h2>
-                    @if (isset($editorJsData) && is_array($editorJsData['blocks']))
-                        @foreach ($editorJsData['blocks'] as $block)
-                            @switch ($block['type'])
-                                @case('paragraph')
-                                    {{-- Beri jarak bawah pada setiap paragraf --}}
-                                    <p class="mb-4 text-gray-700 leading-relaxed">{!! $block['data']['text'] !!}</p>
-                                @break
-
-                                @case('header')
-                                    @php
-                                        $level = $block['data']['level'];
-                                        $tag = 'h' . $level;
-                                        // Atur ukuran dan jarak sesuai level heading
-                                        $classes = [
-                                            'h1' => 'text-4xl font-bold mt-8 mb-4',
-                                            'h2' => 'text-3xl font-bold mt-8 mb-4 border-b pb-2',
-                                            'h3' => 'text-2xl font-bold mt-6 mb-3',
-                                            'h4' => 'text-xl font-bold mt-6 mb-3',
-                                            'h5' => 'text-lg font-bold mt-4 mb-2',
-                                            'h6' => 'text-base font-bold mt-4 mb-2',
-                                        ];
-                                    @endphp
-                                    {{-- Terapkan class yang sesuai --}}
-                                    <{!! $tag !!} class="{{ $classes[$tag] ?? '' }}">{!! $block['data']['text'] !!}
-                                        </{!! $tag !!}>
+                    <div class="max-w-3xl mx-auto">
+                        @if (isset($editorJsData) && is_array($editorJsData['blocks']))
+                            @foreach ($editorJsData['blocks'] as $block)
+                                @switch ($block['type'])
+                                    @case('paragraph')
+                                        {{-- Beri jarak bawah pada setiap paragraf --}}
+                                        <p class="mb-4 text-gray-700 leading-relaxed">{!! $block['data']['text'] !!}</p>
                                     @break
 
-                                    @case('image')
-                                        <figure class="my-8"> {{-- Beri jarak atas/bawah yang lebih besar untuk gambar --}}
-                                            <img src="{{ $block['data']['file']['url'] }}"
-                                                alt="{{ $block['data']['caption'] ?? 'Image' }}"
-                                                class="w-full h-auto rounded-lg shadow-md"> {{-- Gambar akan mengisi lebar kontainer --}}
-                                            @if ($block['data']['caption'])
-                                                <figcaption class="text-center text-sm text-gray-500 mt-2 italic">
-                                                    {{ $block['data']['caption'] }}</figcaption>
+                                    @case('header')
+                                        @php
+                                            $level = $block['data']['level'];
+                                            $tag = 'h' . $level;
+                                            // Atur ukuran dan jarak sesuai level heading
+                                            $classes = [
+                                                'h1' => 'text-4xl font-bold mt-8 mb-4',
+                                                'h2' => 'text-3xl font-bold mt-8 mb-4 border-b pb-2',
+                                                'h3' => 'text-2xl font-bold mt-6 mb-3',
+                                                'h4' => 'text-xl font-bold mt-6 mb-3',
+                                                'h5' => 'text-lg font-bold mt-4 mb-2',
+                                                'h6' => 'text-base font-bold mt-4 mb-2',
+                                            ];
+                                        @endphp
+                                        {{-- Terapkan class yang sesuai --}}
+                                        <{!! $tag !!} class="{{ $classes[$tag] ?? '' }}">{!! $block['data']['text'] !!}
+                                            </{!! $tag !!}>
+                                        @break
+
+                                        @case('image')
+                                            <figure class="my-8"> {{-- Beri jarak atas/bawah yang lebih besar untuk gambar --}}
+                                                <img src="{{ $block['data']['file']['url'] }}"
+                                                    alt="{{ $block['data']['caption'] ?? 'Image' }}"
+                                                    class="w-3/4 mx-auto h-auto rounded-lg shadow-md"> {{-- Gambar akan mengisi lebar kontainer --}}
+                                                @if ($block['data']['caption'])
+                                                    <figcaption class="text-center text-sm text-gray-500 mt-2 italic">
+                                                        {{ $block['data']['caption'] }}</figcaption>
+                                                @endif
+                                            </figure>
+                                        @break
+
+                                        @case('list')
+                                            {{-- Beri style untuk list dan jarak antar item --}}
+                                            @if ($block['data']['style'] === 'unordered')
+                                                <ul class="list-disc pl-5 mb-4 space-y-2">
+                                                    @foreach ($block['data']['items'] as $item)
+                                                        <li>{!! $item !!}</li>
+                                                    @endforeach
+                                                </ul>
+                                            @else
+                                                <ol class="list-decimal pl-5 mb-4 space-y-2">
+                                                    @foreach ($block['data']['items'] as $item)
+                                                        <li>{!! $item !!}</li>
+                                                    @endforeach
+                                                </ol>
                                             @endif
-                                        </figure>
-                                    @break
+                                        @break
 
-                                    @case('list')
-                                        {{-- Beri style untuk list dan jarak antar item --}}
-                                        @if ($block['data']['style'] === 'unordered')
-                                            <ul class="list-disc pl-5 mb-4 space-y-2">
-                                                @foreach ($block['data']['items'] as $item)
-                                                    <li>{!! $item !!}</li>
-                                                @endforeach
-                                            </ul>
-                                        @else
-                                            <ol class="list-decimal pl-5 mb-4 space-y-2">
-                                                @foreach ($block['data']['items'] as $item)
-                                                    <li>{!! $item !!}</li>
-                                                @endforeach
-                                            </ol>
-                                        @endif
-                                    @break
+                                        @case('quote')
+                                            {{-- Buat blockquote menonjol --}}
+                                            <blockquote class="my-6 p-4 border-l-4 border-gray-400 bg-gray-50 italic">
+                                                <p class="text-xl font-medium leading-relaxed text-gray-800">
+                                                    {!! $block['data']['text'] !!}</p>
+                                                @if ($block['data']['caption'])
+                                                    <footer class="mt-2 text-base text-gray-600">—
+                                                        {{ $block['data']['caption'] }}</footer>
+                                                @endif
+                                            </blockquote>
+                                        @break
 
-                                    @case('quote')
-                                        {{-- Buat blockquote menonjol --}}
-                                        <blockquote class="my-6 p-4 border-l-4 border-gray-400 bg-gray-50 italic">
-                                            <p class="text-xl font-medium leading-relaxed text-gray-800">
-                                                {!! $block['data']['text'] !!}</p>
-                                            @if ($block['data']['caption'])
-                                                <footer class="mt-2 text-base text-gray-600">—
-                                                    {{ $block['data']['caption'] }}</footer>
-                                            @endif
-                                        </blockquote>
-                                    @break
+                                        @case('delimiter')
+                                            <hr class="my-8">
+                                        @break
 
-                                    @case('delimiter')
-                                        <hr class="my-8">
-                                    @break
-
-                                    {{-- Anda bisa menambahkan styling untuk 'code', 'table', dll. --}}
-                                @endswitch
-                        @endforeach
-                    @else
-                        <p class="text-gray-500 italic">Tidak ada konten yang tersedia.</p>
-                    @endif
+                                        {{-- Anda bisa menambahkan styling untuk 'code', 'table', dll. --}}
+                                    @endswitch
+                            @endforeach
+                        @else
+                            <p class="text-gray-500 italic">Tidak ada konten yang tersedia.</p>
+                        @endif
+                    </div>
                 </div>
 
                 {{-- Updated Pagination Section --}}
                 <div class="flex items-center justify-center gap-63 mt-8">
                     {{-- Previous Button --}}
                     @if ($pagination['has_previous'])
-                        <a href="{{ route('user.course.content.show', [
+                        <a href="{{ route('admin.course.content.show', [
                             'course' => $course->slug,
                             'content' => $pagination['previous_content_id'],
-                            'from' => $from ?? 'course',
                         ]) }}"
                             class="bg-indigo-700 hover:bg-indigo-800 text-white font-semibold px-6 py-2 rounded-lg transition-colors">
                             Previous
@@ -183,10 +184,9 @@
 
                         {{-- Show first page if not in range --}}
                         @if ($startPage > 1)
-                            <a href="{{ route('user.course.content.show', [
+                            <a href="{{ route('admin.course.content.show', [
                                 'course' => $course->slug,
                                 'content' => $pagination['all_contents'][0]->id,
-                                'from' => $from ?? 'course',
                             ]) }}"
                                 class="w-6 h-6 text-indigo-700 rounded-lg font-medium hover:bg-gray-300 transition-colors flex items-center justify-center">1</a>
                             @if ($startPage > 2)
@@ -201,10 +201,9 @@
                                 <button
                                     class="w-6 h-6 bg-indigo-700 text-white rounded-lg font-medium">{{ $i }}</button>
                             @else
-                                <a href="{{ route('user.course.content.show', [
+                                <a href="{{ route('admin.course.content.show', [
                                     'course' => $course->slug,
                                     'content' => $pagination['all_contents'][$i - 1]->id,
-                                    'from' => $from ?? 'course',
                                 ]) }}"
                                     class="w-6 h-6 text-indigo-700 rounded-lg font-medium hover:bg-gray-300 transition-colors flex items-center justify-center">{{ $i }}</a>
                             @endif
@@ -216,10 +215,9 @@
                                 <span
                                     class="w-6 h-6 text-indigo-700 rounded-lg font-medium flex items-center justify-center">...</span>
                             @endif
-                            <a href="{{ route('user.course.content.show', [
+                            <a href="{{ route('admin.course.content.show', [
                                 'course' => $course->slug,
                                 'content' => $pagination['all_contents'][$totalPages - 1]->id,
-                                'from' => $from ?? 'course',
                             ]) }}"
                                 class="w-6 h-6 text-indigo-700 rounded-lg font-medium hover:bg-gray-300 transition-colors flex items-center justify-center">{{ $totalPages }}</a>
                         @endif
@@ -227,10 +225,9 @@
 
                     {{-- Next Button --}}
                     @if ($pagination['has_next'])
-                        <a href="{{ route('user.course.content.show', [
+                        <a href="{{ route('admin.course.content.show', [
                             'course' => $course->slug,
                             'content' => $pagination['next_content_id'],
-                            'from' => $from ?? 'course',
                         ]) }}"
                             class="bg-indigo-700 hover:bg-indigo-800 text-white font-semibold px-6 py-2 rounded-lg transition-colors">
                             Next

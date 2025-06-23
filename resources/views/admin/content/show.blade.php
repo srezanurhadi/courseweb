@@ -45,7 +45,7 @@
                         <div class="font-bold text-xl mb-6">
                             1. Content 1 {{-- Judul dari database --}}
                         </div>
-                        <div class="w-full max-w-5xl mx-auto"> 
+                        <div class="w-full max-w-3xl mx-auto"> 
                             @if (isset($editorJsData) && is_array($editorJsData['blocks']))
                                 @foreach ($editorJsData['blocks'] as $block)
                                     @switch ($block['type'])
@@ -77,7 +77,7 @@
                                                 <figure class="my-8"> {{-- Beri jarak atas/bawah yang lebih besar untuk gambar --}}
                                                     <img src="{{ $block['data']['file']['url'] }}"
                                                         alt="{{ $block['data']['caption'] ?? 'Image' }}"
-                                                        class="w-full h-auto rounded-lg shadow-md"> {{-- Gambar akan mengisi lebar kontainer --}}
+                                                        class="w-3/4 h-auto rounded-lg shadow-md mx-auto"> {{-- Gambar akan mengisi lebar kontainer --}}
                                                     @if ($block['data']['caption'])
                                                         <figcaption class="text-center text-sm text-gray-500 mt-2 italic">
                                                             {{ $block['data']['caption'] }}</figcaption>

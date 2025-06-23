@@ -26,12 +26,16 @@
                 </div>
                 <div class="flex">
                     <div class="w-full flex gap-2 items-center p-3 pl-6 font-semibold">
-                        <div class="  text-indigo-700"> <i class="fa-solid fa-play rotate-180"></i><span
-                                class="pl-2">Back</span>
-                        </div>
-                        <div class=" py-0.5 px-3 border-amber-500 text-amber-500 bg-amber-100 rounded-sm border-2">
-                            <i class="fas fa-pencil-alt"></i> <span class="pl-2">Edit</span>
-                        </div>
+                        <a href="{{ '/admin/course' }}">
+                            <div class="  text-indigo-700"> <i class="fa-solid fa-play rotate-180"></i><span
+                                    class="pl-2">Back</span>
+                            </div>
+                        </a>
+                        <a href="">
+                            <div class=" py-0.5 px-3 border-amber-500 text-amber-500 bg-amber-100 rounded-sm border-2">
+                                <i class="fas fa-pencil-alt"></i> <span class="pl-2">Edit</span>
+                            </div>
+                        </a>
                         <div class=" py-0.5 px-3 border-rose-500 text-rose-500 bg-rose-100 rounded-sm border-2">
                             <i class="fas fa-trash"></i> <span class="pl-2">Delete</span>
                         </div>
@@ -39,10 +43,10 @@
                 </div>
                 <div class="w-full bg-indigo-100/80 rounded-lg">
                     <div class="flex flex-row">
-                        <div class="w-1/3 flex flex-col px-8 pt-8 ">
+                        <div class="w-1/3 flex flex-col px-8 py-8 ">
                             <div class="w-68 flex flex-col items-center">
-                                <div
-                                    class="aspect-4/3 w-full h-full bg-[url('https://picsum.photos/900/600')] bg-cover bg-center rounded-md">
+                                <div class="aspect-4/3 w-full h-full bg-cover bg-center rounded-md"
+                                    style="background-image: url('{{ $course->image ? asset('storage/' . $course->image) : 'https://picsum.photos/900/600?random=' . $course->id }}');">
                                 </div>
                             </div>
                         </div>

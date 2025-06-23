@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             CourseSeeder::class,   // Seeder kursus dijalankan setelah kategori ada
             ContentSeeder::class,   // Seeder kursus dijalankan setelah kategori ada
             CourseContentSeeder::class,
+            EnrollmentSeeder::class,
         ]);
     }
 }

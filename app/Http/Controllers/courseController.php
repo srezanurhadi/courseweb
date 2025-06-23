@@ -22,6 +22,9 @@ class courseController extends Controller
 
         $query = Course::query();
         $categories = Category::orderBy('category')->get();
+        $coursescount = Course::all()->count();
+        $coursesactive = Course::where('status', 1)->count();
+        $coursesdraft = Course::where('status', 0)->count();
 
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
@@ -49,7 +52,7 @@ class courseController extends Controller
         $courses = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
 
         // Kirim data ke view
-        return view('admin.course.index', compact('courses', 'categories'));
+        return view('admin.course.index', compact('courses', 'categories','coursescount','coursesactive','coursesdraft'));
     }
 
 

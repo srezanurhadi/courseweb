@@ -38,7 +38,7 @@
             <a href="{{ url('/admin/course') }}" class="ml-6 p-2 rounded-lg border-l-8 border-white/30">
                 <i class="fas fa-book text-white pl-1"></i>
                 <span class="text-white pl-1 font-semibold text-20">My Course</span></a>
-            <a href="" class="ml-6 p-2 rounded-lg border-l-8 border-white/30">
+            <a href="{{ url('/admin/myparticipant') }}" class="ml-6 p-2 rounded-lg border-l-8 border-white/30">
                 <i class="fas fa-user-gear text-white pl-1"></i>
                 <span class="text-white pl-1 font-semibold text-20">My Participant</span></a>
             <a href="" class="ml-6 p-2 rounded-lg border-l-8 border-white/30">
@@ -48,12 +48,12 @@
 
         @if (Request::is('user*'))
             <div class="text-xs text-white pl-8 border-t-1 border-white/50"></div>
-             <a href="{{ url('/user/course') }}"
-                class=" {{ (Request::is('user/course*') && !Request::is('user/mycourse*') && request('from') != 'my-course') ? 'border-white bg-white/20 shadow-lg' : '' }} ml-6 mr-2 p-2 rounded-lg border-l-8 border-white/30">
+            <a href="{{ url('/user/course') }}"
+                class=" {{ Request::is('user/course*') && !Request::is('user/mycourse*') && request('from') != 'my-course' ? 'border-white bg-white/20 shadow-lg' : '' }} ml-6 mr-2 p-2 rounded-lg border-l-8 border-white/30">
                 <i class="fas fa-book-open-reader  text-white pl-1"></i>
                 <span class="text-white pl-1 font-semibold text-20">Courses</span></a>
             <a href="{{ url('/user/mycourse') }}"
-                class="{{ (Request::is('user/mycourse*') || (Request::is('user/course*') && request('from') == 'my-course')) ? 'border-white bg-white/20 shadow-lg' : '' }} ml-6 mr-2 p-2 rounded-lg border-l-8 border-white/30">
+                class="{{ Request::is('user/mycourse*') || (Request::is('user/course*') && request('from') == 'my-course') ? 'border-white bg-white/20 shadow-lg' : '' }} ml-6 mr-2 p-2 rounded-lg border-l-8 border-white/30">
                 <i class="fas fa-book text-white pl-1"></i>
                 <span class="text-white pl-1 font-semibold text-20">My Course</span></a>
             <a href="{{ url('/user/history') }}"
