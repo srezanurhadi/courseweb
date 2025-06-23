@@ -98,6 +98,7 @@ class contentController extends Controller
         $content = Content::where('slug', $slug)->first();
         $contentData = $content->content;
         $editorJsData = json_decode($contentData, true);
+        // dd($editorJsData['blocks'][0]['data']['withBackground']);
         return view('admin.content.show', compact('content', 'editorJsData'));
     }
 
