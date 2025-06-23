@@ -114,3 +114,18 @@ Route::post('/register', [RegisterController::class, 'register']);
 Route::get('/terms', function () {
     return view('user.terms');
 })->name('terms');
+
+// Route untuk halaman About Us
+Route::get('/about-us', function () {
+    return view('user.about');
+})->name('about');
+
+// Route untuk halaman Help Center
+Route::get('/help-center', function () {
+    return view('user.help');
+})->name('help');
+
+// Route untuk halaman Privacy Policy
+Route::get('/privacy-policy', function () {
+    return view('user.privacy');
+})->name('privacy');
