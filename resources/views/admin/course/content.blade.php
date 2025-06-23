@@ -18,24 +18,24 @@
                 <div class="px-6 py-0.5">
                     <div class="flex items-center justify-between h-16">
                         <div class="flex items-center px-4">
-                            <h1 class="text-3xl font-bold text-gray-800">
+                            <h1 class="text-xl font-bold text-gray-800">
 
                                 <a href="{{ url()->previous() }}" class="hover:text-indigo-900">Course</a>
 
-                                <i class="fa-solid fa-chevron-right mx-1 text-2xl"></i>
+                                <i class="fa-solid fa-chevron-right mx-1 text-xl"></i>
 
                                 <a href="{{ route('user.course.show', [
                                     'course' => $course->slug,
                                     'from' => $from ?? 'course',
                                 ]) }}"
                                     class="hover:text-indigo-900">
-                                    {{ \Illuminate\Support\Str::limit($course->title, 15) }}
+                                    {{ \Illuminate\Support\Str::limit($course->title, 25) }}
                                 </a>
 
-                                <i class="fa-solid fa-chevron-right mx-1 text-2xl"></i>
+                                <i class="fa-solid fa-chevron-right mx-1 text-xl"></i>
 
                                 <span
-                                    class="text-gray-600">{{ \Illuminate\Support\Str::limit($currentContent->title ?? 'Content 1', 15) }}</span>
+                                    class="text-gray-600">{{ \Illuminate\Support\Str::limit($course->title ?? 'Content 1', 25) }}</span>
                             </h1>
                         </div>
                         <div class="flex items-center space-x-4 px-4">
@@ -64,13 +64,13 @@
             </nav>
 
             {{-- - Content Area - --}}
-            <div class="max-w-6xl mx-auto py-4">
+            <div class="max-w-6xl mx-auto p-4">
                 <a href="{{ url()->previous() }}"
                     class="flex items-center text-indigo-700 hover:text-indigo-800 text-2xl font-bold pb-2 rounded-lg transition-colors gap-2">
-                    <i class="fa-solid fa-caret-left text-4xl"></i>
+                    <i class="fa-solid fa-caret-left text-2xl"></i>
                     Back
                 </a>
-                <div class="bg-gray-100 border-gray-200 border-2 rounded-xl shadow-lg p-8">
+                <div class="bg-gray-100 border-gray-200 border-2 rounded-xl shadow-lg p-8 m-4">
                     <h2 class="text-2xl font-bold text-gray-900 mb-6">{{ $pagination['current_page'] }}.
                         {{ $course->title ?? 'Content 1' }}</h2>
                     @if (isset($editorJsData) && is_array($editorJsData['blocks']))
