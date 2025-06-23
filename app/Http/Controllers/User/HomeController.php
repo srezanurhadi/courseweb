@@ -44,12 +44,14 @@ class HomeController extends Controller
 
         $ongoingCourseCount = $totalCourses - $finishedCourseCount;
         $overallProgress = ($totalCourses > 0) ? round($totalProgress / $totalCourses) : 0;
+        $finishedCoursePercentage = ($totalCourses > 0) ? round(($finishedCourseCount / $totalCourses) * 100) : 0;
 
         return view('user.home', [
             'finishedCourseCount' => $finishedCourseCount,
             'ongoingCourseCount' => $ongoingCourseCount,
             'overallProgress' => $overallProgress,
             'totalEnrolledCourses' => $totalCourses,
+            'finishedCoursePercentage' => $finishedCoursePercentage,
         ]);
     }
 }

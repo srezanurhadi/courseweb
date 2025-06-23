@@ -457,7 +457,50 @@
 
         // Initialize charts after DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
-            createRadialChart('#finishedChart', {{ $finishedCourseCount }}, 'Finished Course', '#5A1495');
+            var finishedChartOptions = {
+                chart: {
+                    height: 250,
+                    type: "radialBar"
+                },
+                series: [{{ $finishedCoursePercentage }}], // <-- Gunakan PERSENTASE untuk visual
+                plotOptions: {
+                    radialBar: {
+                        hollow: {
+                            margin: 15,
+                            size: "60%"
+                        },
+                        track: {
+                            background: '#f1f5f9',
+                            strokeWidth: '100%'
+                        },
+                        dataLabels: {
+                            showOn: "always",
+                            name: {
+                                show: false
+                            },
+                            value: {
+                                color: "white",
+                                fontSize: "55px",
+                                fontWeight: "600",
+                                show: true,
+                                formatter: function(val) {
+                                    // Tampilkan JUMLAH NOMINAL sebagai teks, bukan persentase
+                                    return {{ $finishedCourseCount }};
+                                }
+                            }
+                        }
+                    }
+                },
+                fill: {
+                    colors: ['#5A1495']
+                },
+                stroke: {
+                    lineCap: "round"
+                },
+                labels: ['Finished Course']
+            };
+            var finishedChart = new ApexCharts(document.querySelector("#finishedChart"), finishedChartOptions);
+            finishedChart.render();
             createRadialChart('#ongoingChart', {{ $ongoingCourseCount }}, 'Ongoing Course', '#5A1495');
             createRadialChart('#overallChart', {{ $overallProgress }}, 'Progress Overall', '#5A1495');
         });
