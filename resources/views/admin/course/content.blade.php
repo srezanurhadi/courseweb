@@ -19,14 +19,8 @@
                     <div class="flex items-center justify-between h-16">
                         <div class="flex items-center px-4">
                             <h1 class="text-3xl font-bold text-gray-800">
-                                @if (isset($from) && $from == 'my-course')
-                                    <a href="{{ route('user.mycourse.index') }}" class="hover:text-indigo-900">My
-                                        Course</a>
-                                @elseif (isset($from) && $from == 'history')
-                                    <a href="{{ route('user.history') }}" class="hover:text-indigo-900">History</a>
-                                @else
-                                    <a href="{{ route('user.course.index') }}" class="hover:text-indigo-900">Course</a>
-                                @endif
+
+                                <a href="{{ url()->previous() }}" class="hover:text-indigo-900">Course</a>
 
                                 <i class="fa-solid fa-chevron-right mx-1 text-2xl"></i>
 
@@ -78,33 +72,85 @@
                 </a>
                 <div class="bg-gray-100 border-gray-200 border-2 rounded-xl shadow-lg p-8">
                     <h2 class="text-2xl font-bold text-gray-900 mb-6">{{ $pagination['current_page'] }}.
-                        {{ $currentContent->title ?? 'Content 1' }}</h2>
-                    <p class="text-gray-600 text-lg leading-relaxed text-justify">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                        exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                        irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                        pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-                        deserunt mollit anim id est laborum. Excepteur sint occaecat cupidatat non proident,
-                        sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </p>
-                    <div class="flex justify-center my-6">
-                        <div class="w-150 overflow-hidden">
-                            <img src="https://picsum.photos/900/600" alt="Course Image"
-                                class="w-full h-auto rounded-lg object-cover">
-                            <p class="flex justify-center mt-1 text-gray-600 text-sm italic">
-                                Fig.{{ $pagination['current_page'] }} Lorem picsum</p>
-                        </div>
-                    </div>
-                    <p class="text-gray-600 text-lg leading-relaxed text-justify">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                        exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                        irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                        pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-                        deserunt mollit anim id est laborum. Excepteur sint occaecat cupidatat non proident,
-                        sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </p>
+                        {{ $course->title ?? 'Content 1' }}</h2>
+                    @if (isset($editorJsData) && is_array($editorJsData['blocks']))
+                        @foreach ($editorJsData['blocks'] as $block)
+                            @switch ($block['type'])
+                                @case('paragraph')
+                                    {{-- Beri jarak bawah pada setiap paragraf --}}
+                                    <p class="mb-4 text-gray-700 leading-relaxed">{!! $block['data']['text'] !!}</p>
+                                @break
+
+                                @case('header')
+                                    @php
+                                        $level = $block['data']['level'];
+                                        $tag = 'h' . $level;
+                                        // Atur ukuran dan jarak sesuai level heading
+                                        $classes = [
+                                            'h1' => 'text-4xl font-bold mt-8 mb-4',
+                                            'h2' => 'text-3xl font-bold mt-8 mb-4 border-b pb-2',
+                                            'h3' => 'text-2xl font-bold mt-6 mb-3',
+                                            'h4' => 'text-xl font-bold mt-6 mb-3',
+                                            'h5' => 'text-lg font-bold mt-4 mb-2',
+                                            'h6' => 'text-base font-bold mt-4 mb-2',
+                                        ];
+                                    @endphp
+                                    {{-- Terapkan class yang sesuai --}}
+                                    <{!! $tag !!} class="{{ $classes[$tag] ?? '' }}">{!! $block['data']['text'] !!}
+                                        </{!! $tag !!}>
+                                    @break
+
+                                    @case('image')
+                                        <figure class="my-8"> {{-- Beri jarak atas/bawah yang lebih besar untuk gambar --}}
+                                            <img src="{{ $block['data']['file']['url'] }}"
+                                                alt="{{ $block['data']['caption'] ?? 'Image' }}"
+                                                class="w-full h-auto rounded-lg shadow-md"> {{-- Gambar akan mengisi lebar kontainer --}}
+                                            @if ($block['data']['caption'])
+                                                <figcaption class="text-center text-sm text-gray-500 mt-2 italic">
+                                                    {{ $block['data']['caption'] }}</figcaption>
+                                            @endif
+                                        </figure>
+                                    @break
+
+                                    @case('list')
+                                        {{-- Beri style untuk list dan jarak antar item --}}
+                                        @if ($block['data']['style'] === 'unordered')
+                                            <ul class="list-disc pl-5 mb-4 space-y-2">
+                                                @foreach ($block['data']['items'] as $item)
+                                                    <li>{!! $item !!}</li>
+                                                @endforeach
+                                            </ul>
+                                        @else
+                                            <ol class="list-decimal pl-5 mb-4 space-y-2">
+                                                @foreach ($block['data']['items'] as $item)
+                                                    <li>{!! $item !!}</li>
+                                                @endforeach
+                                            </ol>
+                                        @endif
+                                    @break
+
+                                    @case('quote')
+                                        {{-- Buat blockquote menonjol --}}
+                                        <blockquote class="my-6 p-4 border-l-4 border-gray-400 bg-gray-50 italic">
+                                            <p class="text-xl font-medium leading-relaxed text-gray-800">
+                                                {!! $block['data']['text'] !!}</p>
+                                            @if ($block['data']['caption'])
+                                                <footer class="mt-2 text-base text-gray-600">—
+                                                    {{ $block['data']['caption'] }}</footer>
+                                            @endif
+                                        </blockquote>
+                                    @break
+
+                                    @case('delimiter')
+                                        <hr class="my-8">
+                                    @break
+
+                                    {{-- Anda bisa menambahkan styling untuk 'code', 'table', dll. --}}
+                                @endswitch
+                        @endforeach
+                    @else
+                        <p class="text-gray-500 italic">Tidak ada konten yang tersedia.</p>
+                    @endif
                 </div>
 
                 {{-- Updated Pagination Section --}}
@@ -199,7 +245,6 @@
             </div>
             <div class="relative">
             </div>
-            <x-footer></x-footer>
         </div>
     </div>
 </body>

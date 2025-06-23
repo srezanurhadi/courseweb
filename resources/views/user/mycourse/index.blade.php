@@ -134,10 +134,12 @@
                                         </p>
                                         <div class="flex items-center justify-between">
                                             <div class="flex-1 bg-gray-200 rounded-full h-2.5">
-                                                <div class="bg-indigo-600 h-2.5 rounded-full" style="width: {{ $lastSeenCourse->progress_percentage }}%">
+                                                <div class="bg-indigo-600 h-2.5 rounded-full"
+                                                    style="width: {{ $lastSeenCourse->progress_percentage }}%">
                                                 </div>
                                             </div>
-                                            <span class="ml-4 text-sm font-medium text-gray-700">{{ $lastSeenCourse->progress_percentage }}%</span>
+                                            <span
+                                                class="ml-4 text-sm font-medium text-gray-700">{{ $lastSeenCourse->progress_percentage }}%</span>
                                         </div>
                                     </div>
                                 </div>
@@ -210,7 +212,8 @@
                     @else
                         {{-- Grid Courses --}}
                         @if ($courses->count() > 0)
-                            <div class="mx-10 mt-10 mb-4 p-4 grid grid-cols-4 gap-10 justify-around">
+                            <div
+                                class="mx-10 mt-10 mb-4 p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 justify-around">
                                 @foreach ($courses as $course)
                                     <div
                                         class="bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden h-105">
@@ -268,10 +271,12 @@
 
                                                 <div class="flex items-center justify-between">
                                                     <div class="flex-1 bg-gray-200 rounded-full h-2 mr-3">
-                                                        <div class="bg-indigo-700 h-2 rounded-full" style="width: {{ $course->progress_percentage }}%">
+                                                        <div class="bg-indigo-700 h-2 rounded-full"
+                                                            style="width: {{ $course->progress_percentage }}%">
                                                         </div>
                                                     </div>
-                                                    <span class="text-sm font-bold text-gray-900">{{ $course->progress_percentage }}%</span>
+                                                    <span
+                                                        class="text-sm font-bold text-gray-900">{{ $course->progress_percentage }}%</span>
                                                 </div>
                                             </div>
                                         </div>

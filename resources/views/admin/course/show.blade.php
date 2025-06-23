@@ -44,14 +44,6 @@
                                 <div
                                     class="aspect-4/3 w-full h-full bg-[url('https://picsum.photos/900/600')] bg-cover bg-center rounded-md">
                                 </div>
-                                <div class="pt-2 font-semibold text-gray-800">Course By:</div>
-                                <div class="flex items-center p-2 gap-2">
-                                    <div
-                                        class="rounded-full h-6 w-6 p-1 text-gray-50 bg-amber-500 flex items-center justify-center">
-                                        {{ substr($course->user->name, 0, 1) }}
-                                    </div>
-                                    <div class="text-gray-800 text-sm">{{ $course->user->name }}</div>
-                                </div>
                             </div>
                         </div>
                         <div class="w-2/3 flex flex-col py-8 pr-8 ">
@@ -68,11 +60,13 @@
                                 </div>
                                 <div class="flex items-center pt-1 gap-2">
                                     <i class="fas fa-users-line text-indigo-700"></i>
-                                    <div class="text-sm text-gray-600">0.5% Participant</div>
+                                    <div class="text-sm text-gray-600">{{ $course->enrollments_count }} Participant
+                                    </div>
                                 </div>
                             </div>
                             <div class="pt-2 text-4xl font-bold">{{ $course->title }}</div>
-                            <div class="pt-2 text-md/5 line-clamp-6">{{ $course->description }}</div>
+                            <div class="pt-2 text-gray-800 flex">Course By: {{ $course->user->name }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -83,29 +77,23 @@
                 <div class="flex justify-around w-full p-8 gap-8">
                     <div
                         class="w-1/3 h-58 overflow-y-auto px-2 pb-2 rounded-lg shadow-[0px_0px_4px_1px_rgba(0,0,0,0.4)] bg-indigo-50">
-                        <div class="text-2xl font-semibold sticky top-0 bg-indigo-50 pt-2 z-10">Content</div>
+                        <div class="text-xl font-semibold sticky top-0 bg-indigo-50 pt-2 z-10">Content</div>
                         @foreach ($orderedContents as $index => $content)
-                            <div class="font-semibold pl-2 py-1 line-clamp-2">{{ $index + 1 }}. {{ $content->title }}
-                            </div>
+                            <a
+                                href="{{ route('admin.course.content.show', ['course' => $course->slug, 'content' => $content->id]) }}">
+                                <div class="font pl-2 py-1 line-clamp-2">{{ $index + 1 }}. {{ $content->title }}
+                                </div>
+                            </a>
                         @endforeach
                     </div>
                     <div class="w-2/3 flex flex-col justify-between">
                         <div class="p-4 rounded-lg shadow-[0px_0px_4px_1px_rgba(0,0,0,0.4)] bg-indigo-50">
-                            @if ($firstContent)
-                                <div class="text-2xl font-semibold">{{ $firstContent->title }}</div>
-                                <div class="text-md/5 line-clamp-5 text-ellipsis">
-                                    {{ Str::limit(strip_tags($firstContent->content), 300) }}
-                                </div>
-                            @else
-                                <div class="text-md text-gray-600">No content available for this course.</div>
-                            @endif
+                            <div class="text-xl font-bold">Description</div>
+                            <div class="pt-2 text-md/5 line-clamp-6">{{ $course->description }}</div>
                         </div>
-                        <Div class="flex justify-between">
-                            <div class="py-1 px-2 w-22 text-center rounded-lg bg-indigo-700 text-white">previous
-                            </div>
-                            <div class=""> 1 2 3 4</div>
-                            <div class="py-1 px-2 w-22 text-center rounded-lg bg-indigo-700 text-white">next</div>
-                        </Div>
+                        <div class="mt-4 mb-10">
+                            {{-- {{ $courses->appends(request()->all())->links() }} --}}
+                        </div>
                     </div>
                 </div>
             </div>

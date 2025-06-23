@@ -98,7 +98,8 @@
                     </div>
                 </div>
 
-                <div class="mt-10 mx-10 p-4 grid grid-cols-4 gap-10 justify-around">
+                <div
+                    class="mt-10 mx-10 p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 justify-around">
                     @forelse ($courses as $course)
                         <div
                             class="bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden h-105">
@@ -151,16 +152,19 @@
                                         </div>
                                         <div class="text-sm text-gray-600">{{ $course->user->name }}</div>
                                     </div>
-
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex-1 bg-gray-200 rounded-full h-2 mr-3">
-                                            {{-- Gunakan variabel progress_percentage yang baru untuk mengatur lebar bar --}}
-                                            <div class="bg-indigo-700 h-2 rounded-full" style="width: {{ $course->progress_percentage ?? 0 }}%">
+                                    @if (Auth::check())
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex-1 bg-gray-200 rounded-full h-2 mr-3">
+                                                {{-- Gunakan variabel progress_percentage yang baru untuk mengatur lebar bar --}}
+                                                <div class="bg-indigo-700 h-2 rounded-full"
+                                                    style="width: {{ $course->progress_percentage ?? 0 }}%">
+                                                </div>
                                             </div>
+                                            {{-- Tampilkan juga angka progresnya --}}
+                                            <span
+                                                class="text-sm font-bold text-gray-900">{{ $course->progress_percentage ?? 0 }}%</span>
                                         </div>
-                                        {{-- Tampilkan juga angka progresnya --}}
-                                        <span class="text-sm font-bold text-gray-900">{{ $course->progress_percentage ?? 0 }}%</span>
-                                    </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>

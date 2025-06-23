@@ -457,9 +457,9 @@
 
         // Initialize charts after DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
-            createRadialChart('#finishedChart', 12, 'Finished Course', '#5A1495');
-            createRadialChart('#ongoingChart', 5, 'Ongoing Course', '#5A1495');
-            createRadialChart('#overallChart', 75, 'Progress Overall', '#5A1495');
+            createRadialChart('#finishedChart', {{ $finishedCourseCount }}, 'Finished Course', '#5A1495');
+            createRadialChart('#ongoingChart', {{ $ongoingCourseCount }}, 'Ongoing Course', '#5A1495');
+            createRadialChart('#overallChart', {{ $overallProgress }}, 'Progress Overall', '#5A1495');
         });
     </script>
 </body>
