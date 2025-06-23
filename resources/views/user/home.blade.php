@@ -105,7 +105,7 @@
 </head>
 
 <body>
-    <div class="flex flex-1">
+    <div class="flex flex-1 ">
         <x-sidebar></x-sidebar>
         <div class="flex-1">
             {{-- - Navbar - --}}
@@ -484,7 +484,6 @@
                                 fontWeight: "600",
                                 show: true,
                                 formatter: function(val) {
-                                    // Tampilkan JUMLAH NOMINAL sebagai teks, bukan persentase
                                     return {{ $finishedCourseCount }};
                                 }
                             }

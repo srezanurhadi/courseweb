@@ -60,7 +60,7 @@
                                     <div class=" flex gap-1 items-center rounded-3xl border-gray-300 border-2 pl-2">
                                         <i class="fas fa-search text-gray-500"></i>
                                         <input type="text" name="search"
-                                            class="rounded-lg w-48 focus:outline-none px-2 placeholder:font-semibold placeholder:italic text-gray-400"
+                                            class="rounded-lg w-48 focus:outline-none px-2 placeholder:font-semibold placeholder:italic text-gray-900"
                                             placeholder="Search Content..." value="{{ request('search') }}">
                                     </div>
 
@@ -160,7 +160,7 @@
                                     <div class=" flex gap-1 items-center rounded-3xl border-gray-300 border-2 pl-2">
                                         <i class="fas fa-search text-gray-500"></i>
                                         <input type="text" name="search"
-                                            class="rounded-lg w-48 focus:outline-none px-2 placeholder:font-semibold placeholder:italic text-gray-400"
+                                            class="rounded-lg w-48 focus:outline-none px-2 placeholder:font-semibold placeholder:italic text-gray-900"
                                             placeholder="Search Content..." value="{{ request('search') }}">
                                     </div>
 
