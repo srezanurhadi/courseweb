@@ -12,7 +12,7 @@
 <body>
     <div class="flex flex-1">
         <x-sidebar></x-sidebar>
-        <div class="flex-1">
+        <div class="flex-1 min-h-screen">
             {{-- - Navbar - --}}
             <nav class="bg-white shadow-md z-50 sticky top-0">
                 <div class="px-6 py-0.5">
@@ -76,7 +76,7 @@
                     <i class="fa-solid fa-caret-left text-4xl"></i>
                     Back
                 </a>
-                <div class="bg-gray-100 border-gray-200 border-2 rounded-xl shadow-lg p-8">
+                {{-- <div class="bg-gray-100 border-gray-200 border-2 rounded-xl shadow-lg p-8">
                     <h2 class="text-2xl font-bold text-gray-900 mb-6">{{ $pagination['current_page'] }}.
                         {{ $currentContent->title ?? 'Content 1' }}</h2>
                     <p class="text-gray-600 text-lg leading-relaxed text-justify">
@@ -105,9 +105,96 @@
                         deserunt mollit anim id est laborum. Excepteur sint occaecat cupidatat non proident,
                         sunt in culpa qui officia deserunt mollit anim id est laborum.
                     </p>
-                </div>
+                </div> --}}
+                <div class="bg-gray-100 border-gray-200 border-2 rounded-xl shadow-lg p-8">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-6">{{ $pagination['current_page'] }}.
+                        {{ $currentContent->title ?? 'Content Title' }}</h2>
 
-                {{-- Updated Pagination Section --}}
+                    {{-- Kontainer untuk render konten dari Editor.js --}}
+                    <div class="prose max-w-none text-lg leading-relaxed text-justify">
+                        @if (isset($editorJsData) && is_array($editorJsData['blocks']))
+                            @foreach ($editorJsData['blocks'] as $block)
+                                @switch ($block['type'])
+                                    @case('paragraph')
+                                        <p class="mb-4">{!! $block['data']['text'] !!}</p>
+                                    @break
+
+                                    @case('header')
+                                        @php
+                                            $level = $block['data']['level'];
+                                            $tag = 'h' . $level;
+                                            $classes = [
+                                                'h1' => 'text-4xl font-bold mt-8 mb-4',
+                                                'h2' => 'text-3xl font-bold mt-8 mb-4 border-b pb-2',
+                                                'h3' => 'text-2xl font-bold mt-6 mb-3',
+                                                'h4' => 'text-xl font-bold mt-6 mb-3',
+                                                'h5' => 'text-lg font-bold mt-4 mb-2',
+                                                'h6' => 'text-base font-bold mt-4 mb-2',
+                                            ];
+                                        @endphp
+                                        <{!! $tag !!} class="{{ $classes[$tag] ?? '' }}">{!! $block['data']['text'] !!}
+                                            </{!! $tag !!}>
+                                        @break
+
+                                        @case('image')
+                                            <figure class="my-8">
+                                                <img src="{{ $block['data']['file']['url'] }}"
+                                                    alt="{{ $block['data']['caption'] ?? 'Image' }}"
+                                                    class="w-full max-w-2xl mx-auto h-auto rounded-lg shadow-md">
+                                                @if (!empty($block['data']['caption']))
+                                                    <figcaption class="text-center text-sm text-gray-500 mt-2 italic">
+                                                        {{ $block['data']['caption'] }}
+                                                    </figcaption>
+                                                @endif
+                                            </figure>
+                                        @break
+
+                                        @case('list')
+                                            @if ($block['data']['style'] === 'unordered')
+                                                <ul class="list-disc pl-8 mb-4 space-y-2">
+                                                    @foreach ($block['data']['items'] as $item)
+                                                        <li>{!! $item !!}</li>
+                                                    @endforeach
+                                                </ul>
+                                            @else
+                                                <ol class="list-decimal pl-8 mb-4 space-y-2">
+                                                    @foreach ($block['data']['items'] as $item)
+                                                        <li>{!! $item !!}</li>
+                                                    @endforeach
+                                                </ol>
+                                            @endif
+                                        @break
+
+                                        @case('quote')
+                                            <blockquote class="my-6 p-4 border-l-4 border-gray-400 bg-gray-200 italic">
+                                                <p class="text-xl font-medium leading-relaxed text-gray-800">
+                                                    {!! $block['data']['text'] !!}</p>
+                                                @if (!empty($block['data']['caption']))
+                                                    <footer class="mt-2 text-base text-gray-600">—
+                                                        {{ $block['data']['caption'] }}</footer>
+                                                @endif
+                                            </blockquote>
+                                        @break
+
+                                        @case('delimiter')
+                                            <hr class="my-8">
+                                        @break
+
+                                        @case('code')
+                                            <pre class="bg-gray-800 text-white text-sm rounded-lg p-4 my-6 overflow-x-auto"><code class="font-mono">{!! htmlspecialchars($block['data']['code']) !!}</code></pre>
+                                        @break
+                                    @endswitch
+                            @endforeach
+                        @else
+                            <p class="text-gray-500 italic min-h-[300px]">Content
+                                unavailable <br>
+                                Please check back later or contact support
+                            </p>
+                            </p>
+                        @endif
+                    </div>
+                </div>
+                {{-- Pagination Section --}}
                 <div class="flex items-center justify-center gap-63 mt-8">
                     {{-- Previous Button --}}
                     @if ($pagination['has_previous'])

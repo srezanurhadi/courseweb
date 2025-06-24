@@ -96,7 +96,6 @@ class CourseController extends Controller
             $isEnrolled = (bool) $enrollment;
 
             if ($isEnrolled) {
-                // === LOGIKA PROGRES BARU ===
                 $totalContents = $course->contents()->count();
                 if ($totalContents > 0) {
                     // Ambil semua ID konten yang sudah diselesaikan oleh user di kursus ini
@@ -108,7 +107,6 @@ class CourseController extends Controller
                     $completedContentsCount = count($completedContentIds);
                     $progressPercentage = round(($completedContentsCount / $totalContents) * 100);
                 }
-                // ===========================
 
                 // Update timestamp 'updated_at' di enrollment untuk fitur "Last Seen"
                 if ($enrollment) {
@@ -195,6 +193,10 @@ class CourseController extends Controller
             );
         }
 
+        // Mengubah string JSON dari database menjadi array PHP
+        $editorJsData = json_decode($currentContent->content, true);
+        // dd($editorJsData);
+
         // Find current content index
         $currentIndex = $allContents->search(function ($item) use ($contentId) {
             return $item->id == $contentId;
@@ -221,6 +223,6 @@ class CourseController extends Controller
 
         $from = $request->query('from');
 
-        return view('user.course.content', compact('course', 'currentContent', 'from', 'isEnrolled', 'pagination'));
+        return view('user.course.content', compact('course', 'currentContent', 'editorJsData', 'from', 'isEnrolled', 'pagination'));
     }
 }
