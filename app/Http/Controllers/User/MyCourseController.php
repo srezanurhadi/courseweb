@@ -8,7 +8,7 @@ use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Content;
-use App\Models\enrollments as Enrollment;
+use App\Models\Enrollment;
 use App\Models\UserCourseProgress;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;

@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\UserCourseProgress;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Models\enrollments as Enrollment;
+use App\Models\Enrollment;
 
 class CourseController extends Controller
 {
