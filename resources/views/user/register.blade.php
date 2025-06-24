@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register R. Dosen</title>
+    <title>Register R. DOSEN</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .bg-custom-gradient {
@@ -215,7 +215,8 @@
                                 @error('password')
                                     <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                                 @enderror
-                                <p id="password_error" class="mt-1 text-xs text-red-500 hidden">Password minimal 8 karakter</p>
+                                <p id="password_error" class="mt-1 text-xs text-red-500 hidden">Password minimal 8
+                                    karakter</p>
                             </div>
 
                             <div class="mb-6">

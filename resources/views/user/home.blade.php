@@ -5,12 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Dashboard Modern - R. Dosen</title>
+    <title>Home - R. DOSEN</title>
     <x-headcomponent></x-headcomponent>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <style>
-        /* === PENYEMPURNAAN === */
-
         /* 1. Transisi Halus untuk Semua Elemen Interaktif */
         .enhanced-transition {
             transition-property: all;
@@ -403,8 +400,6 @@
     </div>
 
     {{-- KODE JAVASCRIPT FINAL --}}
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>
         var swiper = new Swiper(".mySwiper", {
             loop: true,

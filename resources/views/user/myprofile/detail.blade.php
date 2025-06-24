@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Course Detail</title>
+    <title>Course Detail - R. DOSEN</title>
     <x-headcomponent></x-headcomponent>
 </head>
 
@@ -33,12 +33,12 @@
                                 <i class="fa-regular fa-bell fa-lg text-black hover:text-gray-600"></i>
                             </button>
                             <div class="flex items-center space-x-2 px-3">
-                                <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-neutral-300 overflow-hidden">
+                                <span
+                                    class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-neutral-300 overflow-hidden">
                                     @if (Auth::user()->image)
                                         {{-- Jika user punya foto, tampilkan foto --}}
-                                        <img src="{{ asset('storage/' . Auth::user()->image) }}" 
-                                            alt="{{ Auth::user()->name }}" 
-                                            class="w-full h-full object-cover">
+                                        <img src="{{ asset('storage/' . Auth::user()->image) }}"
+                                            alt="{{ Auth::user()->name }}" class="w-full h-full object-cover">
                                     @else
                                         {{-- Jika tidak ada foto, tampilkan inisial --}}
                                         <span class="text-xl font-semibold leading-none text-gray-700">

@@ -5,8 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Courses</title>
+    <title>Courses - R. DOSEN</title>
     <x-headcomponent></x-headcomponent>
+    <style>
+        .enhanced-transition {
+            transition-property: all;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 300ms;
+        }
+
+        .enhanced-card:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+        }
+    </style>
 </head>
 
 <body>
@@ -65,7 +77,8 @@
                                         placeholder="Search Content..." value="{{ request('search') }}">
                                 </div>
 
-                                <button class="bg-sky-600
+                                <button
+                                    class="bg-sky-600 hover:bg-sky-700
                                         px-2 rounded-3xl">
                                     <p class="font-medium text-base text-white cursor-pointer">Search</p>
                                 </button>
@@ -77,10 +90,10 @@
                             <div class="w-[1px] h-[30px] bg-gray-300"></div>
                             <p class="flex items-center font-medium text-base text-gray-900 whitespace-nowrap">Choose
                                 Category :</p>
-                            <div class=" flex gap-1 items-center rounded-3xl border-gray-300 border-2 px-2">
+                            <div class=" flex gap-1 items-center rounded-3xl border-gray-300 border-2 px-2 ">
                                 <i class="fas fa-search text-gray-500"></i>
                                 <select id="categoryFilter"
-                                    class="w-40 focus:outline-none px-2 text-gray-900 bg-transparent">
+                                    class="w-40 focus:outline-none px-2 text-gray-900 bg-transparent cursor-pointer">
                                     <option value="{{ route('user.course.index') }}"
                                         @if (!request('category')) selected @endif>
                                         All Category
@@ -99,10 +112,11 @@
                 </div>
 
                 <div
-                    class="mt-10 mx-10 p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 justify-around">
+                    class="mt-10 mx-10 p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 justify-around ">
+                    {{-- Tampilkan daftar course --}}
                     @forelse ($courses as $course)
                         <div
-                            class="bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden h-105">
+                            class="bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden h-105 enhanced-transition enhanced-card">
 
                             {{-- Gambar Course --}}
                             <a href="{{ route('user.course.show', $course->slug) }}" class="w-full">
