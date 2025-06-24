@@ -20,7 +20,7 @@ return new class extends Migration
             // Foreign key ke tabel content.
             $table->foreignId('content_id')->constrained('content')->onDelete('cascade');
 
-            $table->integer('order'); // Untuk menentukan urutan konten dalam sebuah course
+            $table->integer('order'); 
 
             $table->timestamps();   
         });

@@ -19,8 +19,27 @@ class contentController extends Controller
      */
     public function index(Request $request)
     {
-        $contents = Content::with('category')->orderBy('updated_at', 'desc')->paginate(10)->onEachSide(1);
-        return view('admin.content.index', compact('contents'));
+        $unusedContentCount = Content::doesntHave('courses')->count();
+        $usedContentCount = Content::all()->count() - $unusedContentCount;
+        $categories = Category::all();
+        $content = 'All Content';
+        $query = Content::query();
+        if ($request->has('search') && $request->input('search') != '') {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', '%' . $search . '%')
+                    ->orWhere('content', 'like', '%' . $search . '%');
+            });
+        }
+
+        // 2. Filter berdasarkan kategori/role
+        if ($request->has('category') && $request->input('category') != '') {
+            $category = Category::where('category', $request->input('category'))->first();
+            $query->where('category_id', $category->id);
+            $content = $category->category;
+        }
+        $contents = $query->orderBy('updated_at', 'desc')->paginate(10)->onEachSide(1);
+        return view('admin.content.index', compact('contents', 'categories', 'unusedContentCount', 'usedContentCount','content'));
     }
 
     /**
@@ -44,16 +63,14 @@ class contentController extends Controller
             'category' => 'required|exists:categories,id',
         ]);
 
-        // Siapkan data utama untuk disimpan ke tabel 'content'
         $dataToCreate = [
             'title'       => $validatedData['title'],
             'content'     => $validatedData['content'],
             'category_id' => $validatedData['category'],
             'created_by'  => Auth::id(),
-            // Kolom 'image' sengaja tidak diisi sesuai permintaan Anda
+
         ];
 
-        // Buat slug yang unik
         $slug = Str::slug($dataToCreate['title']);
         $uniqueSlug = $slug;
         $counter = 1;
@@ -63,32 +80,25 @@ class contentController extends Controller
         }
         $dataToCreate['slug'] = $uniqueSlug;
 
-        // 2. Simpan konten ke database
         $content = Content::create($dataToCreate);
 
-        // 3. Hubungkan gambar-gambar dari Editor.js dengan konten yang baru dibuat
         $contentJson = json_decode($validatedData['content'], true);
         $imageUrls = [];
 
-        // Loop sekali untuk mengumpulkan semua URL gambar dari dalam konten
         foreach (($contentJson['blocks'] ?? []) as $block) {
             if ($block['type'] === 'image' && isset($block['data']['file']['url'])) {
                 $imageUrls[] = $block['data']['file']['url'];
             }
         }
 
-        // Jika ada gambar di dalam konten, cari dan hubungkan semuanya
         if (!empty($imageUrls)) {
-            // Ambil semua record gambar yang relevan dengan SATU query database
             $imagesToAssociate = UploadedImage::whereIn('url', $imageUrls)->get();
 
-            // Hubungkan semua gambar yang ditemukan dengan konten ini
             if ($imagesToAssociate->isNotEmpty()) {
                 $content->images()->saveMany($imagesToAssociate);
             }
         }
 
-        // 4. Redirect dengan pesan sukses
         return redirect('/admin/content')
             ->with('success', 'Konten Berhasil Ditambahkan');
     }
@@ -98,7 +108,6 @@ class contentController extends Controller
         $content = Content::where('slug', $slug)->first();
         $contentData = $content->content;
         $editorJsData = json_decode($contentData, true);
-        // dd($editorJsData['blocks'][0]['data']['withBackground']);
         return view('admin.content.show', compact('content', 'editorJsData'));
     }
 
@@ -132,13 +141,11 @@ class contentController extends Controller
             'category' => 'required|exists:categories,id',
         ]);
 
-        
+
         DB::beginTransaction();
 
         try {
             $content = Content::where('slug', $slug)->firstOrFail();
-
-            // 2. Logika untuk mengupdate slug jika judul berubah (kode Anda sudah bagus)
             if ($content->title !== $validatedData['title']) {
                 $newSlug = Str::slug($validatedData['title']);
                 $uniqueSlug = $newSlug;
@@ -150,7 +157,7 @@ class contentController extends Controller
                 $content->slug = $uniqueSlug;
             }
 
-            // 3. Update data utama konten
+            // Update data  konten
             $content->title = $validatedData['title'];
             $content->content = $validatedData['content'];
             $content->category_id = $validatedData['category'];
@@ -171,17 +178,8 @@ class contentController extends Controller
             // 6. Tentukan gambar mana yang harus dihapus
             $urlsToDelete = array_diff($currentAssociatedUrls, $newImageUrlsInContent);
 
-            // dd(
-            //     'GAMBAR YANG TERHUBUNG DI DB SAAT INI:',
-            //     $currentAssociatedUrls,
-            //     'GAMBAR DI FORM SETELAH DIEDIT:',
-            //     $newImageUrlsInContent,
-            //     'GAMBAR YANG AKAN DIHAPUS (HASIL PERBANDINGAN):',
-            //     $urlsToDelete
-            // );
 
-            // GANTI SELURUH BLOK IF INI DENGAN YANG BARU
-            // GANTI LAGI SELURUH BLOK IF INI DENGAN YANG BENAR
+
             if (!empty($urlsToDelete)) {
 
                 // --- PERBAIKAN UTAMA ADA DI BARIS INI ---
@@ -223,7 +221,22 @@ class contentController extends Controller
                     ]);
             }
 
-            // Jika semua proses berhasil, commit perubahan ke database
+            $orphanImages = UploadedImage::whereNull('imageable_id')
+                ->where('uploaded_by', Auth::id())
+                ->get();
+
+            foreach ($orphanImages as $image) {
+                try {
+                    if (Storage::disk('public')->exists($image->path)) {
+                        Storage::disk('public')->delete($image->path);
+                    }
+                    $image->delete();
+                } catch (\Exception $e) {
+                    Log::error("Gagal membersihkan gambar yatim piatu: {$image->url}. Error: " . $e->getMessage());
+                }
+            }
+
+
             DB::commit();
 
             return redirect('/admin/content')->with('success', 'Konten berhasil diperbarui!');
@@ -239,8 +252,35 @@ class contentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Content $content)
+    public function destroy(string $slug)
     {
-        //
+        $content = Content::where('slug', $slug)->first();
+
+
+        DB::beginTransaction();
+        try {
+            $images = $content->images;
+
+            foreach ($images as $image) {
+                // Pastikan file ada sebelum mencoba menghapusnya.
+                if (Storage::disk('public')->exists($image->path)) {
+                    Storage::disk('public')->delete($image->path);
+                }
+            }
+
+            $content->images()->delete();
+
+            $content->delete();
+            DB::commit();
+            return redirect('/admin/content')->with('success', 'Konten berhasil dihapus!');
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            // Catat error untuk keperluan debug.
+            Log::error('Gagal menghapus konten: ' . $e->getMessage());
+
+            return back()->with('error', 'Terjadi kesalahan saat menghapus konten.');
+        }
     }
 }

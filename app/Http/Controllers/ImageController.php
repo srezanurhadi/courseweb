@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\UploadedImage;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log; // Tambahkan Log
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException; // Tambahkan ini
+use id;
+use Illuminate\Support\Facades\Auth;
 
 class ImageController extends Controller
 {
@@ -16,7 +19,6 @@ class ImageController extends Controller
             $request->validate([
                 'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:3048',
             ]);
-
             $file = $request->file('image');
             $path = $file->store('content_images', 'public');
             $url = Storage::url($path);
@@ -25,9 +27,9 @@ class ImageController extends Controller
                 'filename' => $file->getClientOriginalName(),
                 'path' => $path,
                 'url' => $url,
+                'uploaded_by' => Auth::id(),
             ]);
 
-            // Jika semua berhasil, kembalikan respons sukses
             return response()->json([
                 'success' => 1,
                 'file' => [
@@ -40,14 +42,9 @@ class ImageController extends Controller
                 'success' => 0,
                 'message' => 'Validasi gagal',
                 'errors' => $e->errors()
-            ], 422); // 422 Unprocessable Entity
-
+            ], 422);
         } catch (\Exception $e) {
-            // Untuk error lainnya (misal: gagal menyimpan file)
-            // Log errornya agar bisa ditelusuri
             Log::error('Image upload failed: ' . $e->getMessage());
-
-            // Kembalikan respons gagal yang dikenali Editor.js
             return response()->json([
                 'success' => 0,
                 'message' => 'Server error: ' . $e->getMessage(),

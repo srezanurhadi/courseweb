@@ -25,27 +25,38 @@
             </div>
             <div class="w-full flex pt-8 px-4 justify-between">
                 <div class="flex gap-4">
-                    <form class="flex gap-2">
-                        <div class=" flex gap-1 items-center rounded-lg border-gray-400 border-2 pl-2">
-                            <i class="fas fa-search text-gray-500"></i>
-                            <input type="text"
-                                class="rounded-lg min-w-56 focus:outline-none px-2 placeholder:font-semibold placeholder:italic"
-                                placeholder="Search Content...">
+                    <form action="{{ url('/admin/content') }}" method="GET" class="flex gap-4" id="search-form">
+                        <div class="flex gap-2">
+                            {{-- Input Pencarian --}}
+                            <div class="flex gap-1 items-center rounded-lg border-gray-400 border-2 pl-2">
+                                <i class="fas fa-search text-gray-500"></i>
+                                <input type="text" name="search" 
+                                    value="{{ request('search') }}" 
+                                    class="rounded-lg min-w-56 focus:outline-none px-2 placeholder:font-semibold placeholder:italic bg-transparent"
+                                    placeholder="Search Content...">
+                            </div>
+
+                            <div class="flex gap-1 items-center rounded-lg border-gray-400 border-2 px-2">
+                                <i class="fas fa-filter text-gray-500"></i> {{-- Mengganti ikon agar lebih sesuai --}}
+                                <select name="category" id="category"
+                                    class="min-w-56 focus:outline-none px-2 text-gray-900 bg-transparent"
+                                    onchange="this.form.submit()"> {{-- [OPSIONAL] Otomatis submit saat kategori diubah --}}
+                                    <option value="">All Roles</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->category }}"
+                                            {{ request('category') == $category->category ? 'selected' : '' }}>
+                                            {{ $category->category }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            {{-- Tombol Search --}}
+                            <button type="submit" class="bg-sky-600 px-4 rounded-lg">
+                                <p class="font-medium text-base text-white">Search</p>
+                            </button>
                         </div>
-
-                        <button class="bg-sky-600 px-2 rounded-lg">
-                            <p class=" font-medium text-base text-white">search</p>
-                        </button>
                     </form>
-                    <div class=" flex gap-1 items-center rounded-lg border-gray-400 border-2 px-2">
-                        <i class="fas fa-search text-gray-500"></i>
-                        <select name="category" id="category" class="min-w-56 focus:outline-none px-2 text-gray-900 ">
-                            <option value="writer" class="min-w-56 ">
-                                All category
-                            </option>
-                        </select>
-
-                    </div>
                 </div>
                 <div class="">
                     <a href="content/create" class="px-2 py-1 bg-sky-500 rounded-lg text-white font-semibold"><i
@@ -57,8 +68,8 @@
                 <div
                     class="border-l-4 border-indigo-700 bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl w-1/4 flex justify-between items-center pl-2 ">
                     <div class="p-2 flex flex-col font-semibold ">
-                        <div class="text-base text-gray-800">All Content</div>
-                        <div class="text-3xl text-indigo-700 pl-4">24</div>
+                        <div class="text-base text-gray-800">{{ $content }}</div>
+                        <div class="text-3xl text-indigo-700 pl-4">{{ $contents->count() }}</div>
                     </div>
                     <div
                         class="rounded-full text-indigo-200 justify-center flex items-center bg-indigo-300 h-10 w-10 m-4">
@@ -69,7 +80,7 @@
                     class="border-l-4 border-green-700 bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl w-1/4 flex justify-between items-center pl-2 ">
                     <div class="p-2 flex flex-col  font-semibold ">
                         <div class="text-base text-gray-800">Categories</div>
-                        <div class="text-3xl text-green-700 pl-4">20</div>
+                        <div class="text-3xl text-green-700 pl-4">{{ $categories->count() }}</div>
                     </div>
                     <div
                         class="rounded-full text-indigo-200 justify-center flex items-center bg-green-300 h-10 w-10 m-4">
@@ -80,7 +91,7 @@
                     class="border-l-4 border-amber-500 bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl w-1/4 flex justify-between items-center pl-2">
                     <div class="p-2 flex flex-col font-semibold ">
                         <div class="text-base text-gray-800">Used</div>
-                        <div class="text-3xl text-amber-500 pl-4">24</div>
+                        <div class="text-3xl text-amber-500 pl-4">{{ $usedContentCount }}</div>
                     </div>
                     <div
                         class="rounded-full text-indigo-200 justify-center flex items-center bg-amber-200 h-10 w-10 m-4">
@@ -91,7 +102,7 @@
                     class="border-l-4 border-rose-500 bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl w-1/4 flex justify-between items-center pl-2">
                     <div class="p-2 flex flex-col font-semibold ">
                         <div class="text-base text-gray-800">Unused</div>
-                        <div class="text-3xl text-rose-500 pl-4">24</div>
+                        <div class="text-3xl text-rose-500 pl-4">{{ $unusedContentCount }}</div>
                     </div>
                     <div
                         class="rounded-full text-indigo-200 justify-center flex items-center bg-rose-200 h-10 w-10 m-4">
@@ -124,13 +135,16 @@
                                             </svg>
                                         </div>
                                         <div class="ml-4 truncate">
-                                            {{ $content->title }} 
+                                            {{ $content->title }}
                                         </div>
                                     </div>
                                 </div>
-                                <div class="px-6 py-3 w-2/12 text-gray-700 truncate">{{ optional($content->creator)->name ?? 'Tidak diketahui' }}</div>
-                                <div class="px-6 py-3 w-2/12 text-gray-700 truncate">{{ $content->category->category }}</div>
-                                <div class="px-6 py-3 w-2/12 text-gray-700">{{ $content->created_at->format('d-m-Y') }}</div>
+                                <div class="px-6 py-3 w-2/12 text-gray-700 truncate">
+                                    {{ optional($content->creator)->name ?? 'Tidak diketahui' }}</div>
+                                <div class="px-6 py-3 w-2/12 text-gray-700 truncate">{{ $content->category->category }}
+                                </div>
+                                <div class="px-6 py-3 w-2/12 text-gray-700">{{ $content->created_at->format('d-m-Y') }}
+                                </div>
                                 <div class="px-6 py-3 w-2/12">
                                     <div class="flex items-center space-x-2">
                                         <a href="content/{{ $content->slug }}"
@@ -143,16 +157,21 @@
                                             aria-label="Ubah">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
-                                        <button
-                                            class="w-8 h-8 rounded-sm bg-red-500 hover:bg-red-600 text-white flex items-center justify-center"
-                                            aria-label="Hapus">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
+                                        <form action="content/{{ $content->slug }}" method="post" class="w-8 h-8">
+                                            @method('delete')
+                                            @csrf
+                                            <button
+                                                class="w-8 h-8 rounded-sm bg-red-500 hover:bg-red-600 text-white flex items-center justify-center"
+                                                aria-label="Hapus">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+
                                     </div>
                                 </div>
                             </div>
                         @endforeach
-                        
+
                     </div>
                 </div>
             </div>

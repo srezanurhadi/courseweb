@@ -16,10 +16,9 @@ return new class extends Migration
             $table->string('filename');
             $table->string('path')->unique();
             $table->string('url');
-
-            // ✨ BARU: Kolom untuk hubungan polimorfik
-            $table->nullableMorphs('imageable'); // ✨ Gunakan ini// Ini akan membuat `imageable_id` (BIGINT) dan `imageable_type` (VARCHAR)
-
+            $table->foreignId('uploaded_by')->constrained('users');
+            
+            $table->nullableMorphs('imageable'); 
             $table->timestamps();
         });
     }

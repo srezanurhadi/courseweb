@@ -18,7 +18,7 @@ class Content extends Model
         'title',
         'slug',
         'content',
-        'image', // Ini untuk "featured image"
+        'image', 
         'created_by',
         'category_id'
     ];
