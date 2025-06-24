@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class enrollments extends Model
+class Enrollment extends Model
 {
+    use HasFactory;
     protected $table = 'enrollments';
 
-     protected $fillable = [
+    protected $fillable = [
         'user_id',
         'course_id',
         'last_content_id',

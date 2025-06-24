@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Category;
+use App\Models\Enrollment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -58,7 +59,7 @@ class Course extends Model
      */
     public function enrollments()
     {
-        return $this->hasMany(enrollments::class, 'course_id');
+        return $this->hasMany(Enrollment::class, 'course_id');
     }
 
     /**
@@ -68,4 +69,5 @@ class Course extends Model
     {
         return $this->hasMany(UserCourseProgress::class);
     }
+    
 }

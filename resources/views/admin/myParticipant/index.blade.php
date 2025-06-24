@@ -91,138 +91,38 @@
                         </thead>
                         <tbody>
                             {{-- Contoh Baris Tabel --}}
-                            <tr class="bg-white border-t hover:bg-gray-50 ">
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center">
-                                        <div class="ml-4 w-full">
-                                            <div
-                                                class="text-lg font-semibold text-gray-700 truncate overflow-hidden whitespace-nowrap max-w-[650px]">
-                                                Tutorial Laravel 12 Mantap jos gandoss mantap pollllll anda mahis
-                                                laravle dalam 3 menit pertama Laravel 12 Mantap jos gandoss mantap
-                                                pollllll ya jelas karena dia oke banget wkwkwkwk</div>
-                                            <div
-                                                class="text-sm text-gray-700 truncate overflow-hidden whitespace-nowrap max-w-[700px]">
-                                                Tutorial ini akan membuat anda mahis laravle dalam 3 menit pertama
-                                                Laravel 12 Mantap jos gandoss mantap pollllll ya jelas karena dia oke
-                                                banget wkwkwkwk</div>
+                            @foreach ($courses as $course)
+                                <tr class="bg-white border-t hover:bg-gray-50 ">
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center">
+                                            <div class="ml-4 w-full">
+                                                <div
+                                                    class="text-lg font-semibold text-gray-700 truncate overflow-hidden whitespace-nowrap max-w-[700px]">
+                                                    {{ $course->title }}</div>
+                                                <div
+                                                    class="text-sm text-gray-700 truncate overflow-hidden whitespace-nowrap max-w-[700px]">
+                                                    {{ $course->description }}</div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
+                                    </td>
 
-                                <td class="pl-6 py-4">
-                                    <span
-                                        class="inline-flex text-xs leading-5 font-semibold rounded-full  text-gray-800">
-                                        25 Participant 2
-                                    </span>
-                                </td>
-                                <td class="pr-6 py-4">
-                                    <a id="show" href="/admin/myparticipant/show"
-                                        class="w-8 h-8 rounded-sm bg-indigo-400 hover:bg-indigo-500 text-white flex items-center justify-center"
-                                        aria-label="show">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                </td>
-
-                            </tr>
-                            <tr class="bg-white border-t hover:bg-gray-50 ">
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center">
-                                        <div class="ml-4 w-full">
-                                            <div
-                                                class="text-lg font-semibold text-gray-700 truncate overflow-hidden whitespace-nowrap max-w-[700px]">
-                                                Tutorial Laravel 12 Mantap jos gandoss mantap pollllll anda mahis
-                                                laravle dalam 3 menit pertama Laravel 12 Mantap jos gandoss mantap
-                                                pollllll ya jelas karena dia oke banget wkwkwkwk</div>
-                                            <div
-                                                class="text-sm text-gray-700 truncate overflow-hidden whitespace-nowrap max-w-[700px]">
-                                                Tutorial ini akan membuat anda mahis laravle dalam 3 menit pertama
-                                                Laravel 12 Mantap jos gandoss mantap pollllll ya jelas karena dia oke
-                                                banget wkwkwkwk</div>
-                                        </div>
-                                    </div>
-                                </td>
-
-                                <td class="pl-6 py-4">
-                                    <span
-                                        class="inline-flex text-xs leading-5 font-semibold rounded-full  text-gray-800">
-                                        25 Participant
-                                    </span>
-                                </td>
-                                <td class="pr-6 py-4">
-                                    <button id="show"
-                                        class="w-8 h-8 rounded-sm bg-indigo-400 hover:bg-indigo-500 text-white flex items-center justify-center"
-                                        aria-label="show">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr class="bg-white border-t hover:bg-gray-50 ">
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center">
-                                        <div class="ml-4 w-full">
-                                            <div
-                                                class="text-lg font-semibold text-gray-700 truncate overflow-hidden whitespace-nowrap max-w-[700px]">
-                                                Tutorial Laravel 12 Mantap jos gandoss mantap pollllll anda mahis
-                                                laravle dalam 3 menit pertama Laravel 12 Mantap jos gandoss mantap
-                                                pollllll ya jelas karena dia oke banget wkwkwkwk</div>
-                                            <div
-                                                class="text-sm text-gray-700 truncate overflow-hidden whitespace-nowrap max-w-[700px]">
-                                                Tutorial ini akan membuat anda mahis laravle dalam 3 menit pertama
-                                                Laravel 12 Mantap jos gandoss mantap pollllll ya jelas karena dia oke
-                                                banget wkwkwkwk</div>
-                                        </div>
-                                    </div>
-                                </td>
-
-                                <td class="pl-6 py-4">
-                                    <span
-                                        class="inline-flex text-xs leading-5 font-semibold rounded-full  text-gray-800">
-                                        25 Participant
-                                    </span>
-                                </td>
-                                <td class="pr-6 py-4">
-                                    <button id="show"
-                                        class="w-8 h-8 rounded-sm bg-indigo-400 hover:bg-indigo-500 text-white flex items-center justify-center"
-                                        aria-label="show">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr class="bg-white border-t hover:bg-gray-50 ">
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center">
-                                        <div class="ml-4 w-full">
-                                            <div
-                                                class="text-lg font-semibold text-gray-700 truncate overflow-hidden whitespace-nowrap max-w-[700px]">
-                                                Tutorial Laravel 12 Mantap jos gandoss mantap pollllll anda mahis
-                                                laravle dalam 3 menit pertama Laravel 12 Mantap jos gandoss mantap
-                                                pollllll ya jelas karena dia oke banget wkwkwkwk</div>
-                                            <div
-                                                class="text-sm text-gray-700 truncate overflow-hidden whitespace-nowrap max-w-[700px]">
-                                                Tutorial ini akan membuat anda mahis laravle dalam 3 menit pertama
-                                                Laravel 12 Mantap jos gandoss mantap pollllll ya jelas karena dia oke
-                                                banget wkwkwkwk</div>
-                                        </div>
-                                    </div>
-                                </td>
-
-                                <td class="pl-6 py-4">
-                                    <span
-                                        class="inline-flex text-xs leading-5 font-semibold rounded-full  text-gray-800">
-                                        25 Participant
-                                    </span>
-                                </td>
-                                <td class="pr-6 py-4">
-                                    <button id="show"
-                                        class="w-8 h-8 rounded-sm bg-indigo-400 hover:bg-indigo-500 text-white flex items-center justify-center"
-                                        aria-label="show">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </td>
-
-                            </tr>
-
-
+                                    <td class="pl-6 py-4">
+                                        <span
+                                            class="inline-flex text-xs leading-5 font-semibold rounded-full  text-gray-800">
+                                            {{ $course->enrollments_count }} Participant
+                                        </span>
+                                    </td>
+                                    <td class="pr-6 py-4">
+                                        <a href="{{ url('admin/myparticipant/' . $course->slug) }}">
+                                            <button id="show"
+                                                class="w-8 h-8 rounded-sm bg-indigo-400 hover:bg-indigo-500 text-white flex items-center justify-center hover:cursor-pointer"
+                                                aria-label="show">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

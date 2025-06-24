@@ -75,7 +75,7 @@
                     class="border-l-4 border-indigo-700 bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl w-1/3 flex justify-between items-center pl-2">
                     <div class="p-2 flex flex-col font-semibold ">
                         <div class="text-base text-gray-800">All Course</div>
-                        <div class="text-3xl text-indigo-700">24</div>
+                        <div class="text-3xl text-indigo-700">{{ $coursescount }}</div>
                     </div>
                     <div
                         class="rounded-full text-indigo-200 justify-center flex items-center bg-indigo-200 h-10 w-10 m-4">
@@ -86,7 +86,7 @@
                     class="border-l-4 border-green-700 bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl w-1/3 flex justify-between items-center pl-2">
                     <div class="p-2 flex flex-col  font-semibold ">
                         <div class="text-base text-gray-800">Active Course</div>
-                        <div class="text-3xl text-green-700 pl-4">20</div>
+                        <div class="text-3xl text-green-700 pl-4">{{ $coursesactive }}</div>
                     </div>
                     <div
                         class="rounded-full text-indigo-200 justify-center flex items-center bg-green-300 h-10 w-10 m-4">
@@ -97,7 +97,7 @@
                     class="border-l-4 border-amber-500 bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl w-1/3 flex justify-between items-center pl-2">
                     <div class="p-2 flex flex-col font-semibold ">
                         <div class="text-base text-gray-800">Drafted Course</div>
-                        <div class="text-3xl text-amber-500 pl-4"></div>
+                        <div class="text-3xl text-amber-500 pl-4">{{ $coursesdraft }}</div>
                     </div>
                     <div
                         class="rounded-full text-indigo-200 justify-center flex items-center bg-amber-200 h-10 w-10 m-4">
@@ -109,7 +109,7 @@
                 @foreach ($courses as $course)
                     <div
                         class=" bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden">
-                        <div class="p-2 h-52 w-full items-start flex justify-between  bg-cover bg-center"
+                        <div class="p-2 h-52 w-full items-start flex justify-between  bg-cover bg-center "
                             style="background-image: url('{{ $course->image ? asset('storage/' . $course->image) : 'https://picsum.photos/900/600?random=' . $course->id }}');">
 
                             <div class="rounded-4xl bg-indigo-200/60 py-1 px-2 text-xs text-gray-900">
@@ -157,7 +157,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900">
+                            <div class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900 hover:cursor-pointer"
+                                onclick="window.location.href='{{ url('admin/course/' . $course->slug) }}'">
                                 {{ $course->title }}</div>
                             <div class="pl-2 pt-2 text-sm text-gray-500 line-clamp-2">
                                 {{ $course->description }}</div>
@@ -170,7 +171,8 @@
                                 </div>
                                 <div class="flex items-center pt-2 gap-2">
                                     <i class="fas fa-users-line text-indigo-700"></i>
-                                    <div class="text-sm text-gray-600">{{ $course->enrollments_count }} Participant</div>
+                                    <div class="text-sm text-gray-600">{{ $course->enrollments_count }} Participant
+                                    </div>
                                 </div>
                             </div>
 

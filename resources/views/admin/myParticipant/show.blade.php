@@ -91,93 +91,56 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- Contoh Baris Tabel --}}
-                            <tr class="bg-white border-t hover:bg-gray-50">
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center">
-                                        <div class="flex-shrink-0 h-10 w-10">
-                                            <div
-                                                class="bg-purple-600 text-white rounded-full h-10 w-10 flex items-center justify-center text-lg font-semibold">
-                                                B
+                            @forelse ($enrolledUsers as $user)
+                                <tr class="bg-white border-t hover:bg-gray-50">
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 h-10 w-10">
+                                                <div
+                                                    class="bg-purple-600 text-white rounded-full h-10 w-10 flex items-center justify-center text-lg font-semibold">
+                                                    {{ substr($user->name, 0, 1) }}
+                                                </div>
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="text-sm font-medium text-gray-900">{{ $user->name }}</div>
                                             </div>
                                         </div>
-                                        <div class="ml-4">
-                                            <div class="text-sm font-medium text-gray-900">Bagus Pragoyo</div>
+                                    </td>
+                                    <td class="px-6 py-4 text-gray-900">{{ $user->email }}</td>
+                                    <td class="px-6 py-4 text-gray-900">{{ $user->no_telp ?? 'N/A' }}</td>
+                                    <td class="px-6 py-4">
+                                        <span
+                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                            75% {{-- Ini bisa disesuaikan dengan data progress yang sebenarnya --}}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex space-x-2">
+                                            <button onclick="showUser({{ $user->id }})"
+                                                class="w-8 h-8 rounded-sm bg-indigo-400 hover:bg-indigo-500 text-white flex items-center justify-center"
+                                                aria-label="show">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <a href="{{ route('users.edit', $user->id) }}"
+                                                class="w-8 h-8 rounded-sm bg-amber-400 hover:bg-amber-500 text-white flex items-center justify-center"
+                                                aria-label="edit">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </a>
+                                            <button onclick="deleteUser({{ $user->id }})"
+                                                class="w-8 h-8 rounded-sm bg-red-400 hover:bg-red-500 text-white flex items-center justify-center"
+                                                aria-label="delete">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
                                         </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 text-gray-900">Bagusprayogo15@gmail.com</td>
-                                <td class="px-6 py-4 text-gray-900">085764324325</td>
-                                <td class="px-6 py-4">
-                                    <span
-                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                        75%
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="flex space-x-2">
-                                        <button id="show"
-                                            class="w-8 h-8 rounded-sm bg-indigo-400 hover:bg-indigo-500 text-white flex items-center justify-center"
-                                            aria-label="show">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <a href="/admin/myparticipant/1/edit"
-                                            class="w-8 h-8 rounded-sm bg-amber-400 hover:bg-amber-500 text-white flex items-center justify-center"
-                                            aria-label="edit">
-                                            <i class="fas fa-pencil-alt"></i>
-                                        </a>
-                                        <button
-                                            class="w-8 h-8 rounded-sm bg-red-400 hover:bg-red-500 text-white flex items-center justify-center"
-                                            aria-label="delete">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="bg-white border-t hover:bg-gray-50">
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center">
-                                        <div class="flex-shrink-0 h-10 w-10">
-                                            <div
-                                                class="bg-purple-600 text-white rounded-full h-10 w-10 flex items-center justify-center text-lg font-semibold">
-                                                B
-                                            </div>
-                                        </div>
-                                        <div class="ml-4">
-                                            <div class="text-sm font-medium text-gray-900">Bagus Pragoyo</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 text-gray-900">Bagusprayogo15@gmail.com</td>
-                                <td class="px-6 py-4 text-gray-900">085764324325</td>
-                                <td class="px-6 py-4">
-                                    <span
-                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                        80%
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="flex space-x-2">
-
-                                        <button id="show"
-                                            class="w-8 h-8 rounded-sm bg-indigo-400 hover:bg-indigo-500 text-white flex items-center justify-center"
-                                            aria-label="show">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button
-                                            class="w-8 h-8 rounded-sm bg-amber-400 hover:bg-amber-500 text-white flex items-center justify-center"
-                                            aria-label="edit">
-                                            <i class="fas fa-pencil-alt"></i>
-                                        </button>
-                                        <button
-                                            class="w-8 h-8 rounded-sm bg-red-400 hover:bg-red-500 text-white flex items-center justify-center"
-                                            aria-label="delete">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            {{-- Akhir Contoh Baris Tabel (Ulangi sesuai kebutuhan) --}}
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="px-6 py-4 text-center text-gray-500">
+                                        Belum ada peserta terdaftar di kursus ini
+                                    </td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>

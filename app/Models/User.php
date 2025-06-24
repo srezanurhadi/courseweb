@@ -3,11 +3,12 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Course;
+use App\Models\Enrollment;
+use App\Models\enrollments;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use App\Models\Course;
-use App\Models\enrollments;
 
 class User extends Authenticatable
 {
@@ -74,6 +75,6 @@ class User extends Authenticatable
 
     public function enrollments()
     {
-        return $this->hasMany(enrollments::class, 'user_id');
+        return $this->hasMany(Enrollment::class, 'user_id');
     }
 }

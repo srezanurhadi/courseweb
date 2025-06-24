@@ -16,6 +16,7 @@ use App\Http\Controllers\User\MyCourseController;
 use App\Http\Controllers\User\EnrollmentController;
 use App\Http\Controllers\User\CourseController as UserCourseController;
 use App\Http\Controllers\User\HomeController as UserHomeController;
+use App\Models\MyParticipant;
 
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
 
@@ -35,6 +36,8 @@ Route::prefix('/admin')->middleware(adminMiddleware::class)->group(function () {
         ->name('admin.course.content.show');
     Route::resource('/content', contentController::class);
     Route::resource('/myparticipant', myParticipantController::class);
+    Route::get('/myparticipant/{course:slug}/{user:id}/edit', [myParticipantController::class, 'edit'])
+        ->name('admin.myparticipant.edit');
 });
 
 Route::prefix('/author')->middleware(authorMiddleware::class)->group(function () {
