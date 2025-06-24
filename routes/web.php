@@ -36,7 +36,7 @@ Route::prefix('/admin')->middleware(adminMiddleware::class)->group(function () {
         ->name('admin.course.content.show');
     Route::resource('/content', contentController::class);
     Route::resource('/myparticipant', myParticipantController::class);
-    Route::get('/myparticipant/{course:slug}/{user:id}/edit', [myParticipantController::class, 'edit'])
+    Route::get('/myparticipant/{myparticipant:slug}/{user:id}/edit', [myParticipantController::class, 'editNilai'])
         ->name('admin.myparticipant.edit');
 });
 
