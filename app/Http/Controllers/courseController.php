@@ -49,7 +49,7 @@ class courseController extends Controller
         $query->withCount('enrollments');
 
         // Eksekusi query dengan pagination
-        $courses = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
+        $courses = $query->orderBy('created_at', 'desc')->paginate(9)->withQueryString();
 
         // Kirim data ke view
         return view('admin.course.index', compact('courses', 'categories', 'coursescount', 'coursesactive', 'coursesdraft'));
@@ -64,7 +64,7 @@ class courseController extends Controller
             ->where('created_by', $loggedInUserId) // <-- INI ADALAH FILTERNYA
             ->orderBy('created_at', 'desc')
             ->get();
-    
+
         $categories = Category::all();
 
         // Kembalikan view lengkap dengan semua data yang dibutuhkan
@@ -125,7 +125,11 @@ class courseController extends Controller
 
     public function search(Request $request)
     {
-        $contentsQuery = Content::with('category')->orderBy('created_at', 'desc');
+        $loggedInUserId = Auth::id();
+
+        $contentsQuery = Content::with('category')
+            ->where('created_by', $loggedInUserId)
+            ->orderBy('created_at', 'desc');
 
         if ($request->filled('search')) {
             $contentsQuery->where('title', 'like', '%' . $request->search . '%');
@@ -259,8 +263,32 @@ class courseController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+    /**
+     * Remove the specified resource from storage.
+     */
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy(Course $course)
     {
-        //
+        try {
+            // 1. Hapus gambar dari storage jika ada
+            if ($course->image && Storage::disk('public')->exists($course->image)) {
+                Storage::disk('public')->delete($course->image);
+            }
+
+            // 2. Hapus relasi enrollments yang terkait
+            $course->enrollments()->delete();
+
+            // 3. Detach relasi dengan contents (hapus dari pivot table)
+            $course->contents()->detach();
+
+            // 4. Hapus course itu sendiri
+            $course->delete();
+
+            return redirect('/admin/course')->with('success', 'Course berhasil dihapus!');
+        } catch (\Exception $e) {
+            return redirect('/admin/course')->with('error', 'Gagal menghapus course. Silakan coba lagi.');
+        }
     }
 }
