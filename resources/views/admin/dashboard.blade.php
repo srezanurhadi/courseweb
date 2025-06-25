@@ -33,7 +33,7 @@
                         class="border-l-4 border-indigo-700 bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl w-1/3 flex justify-between items-center pl-2 ">
                         <div class="p-2 flex flex-col font-semibold ">
                             <div class="text-base text-gray-800">All Course</div>
-                            <div class="text-3xl text-indigo-700 pl-4">1</div>
+                            <div class="text-3xl text-indigo-700 pl-4">{{ $coursescount }}</div>
                         </div>
                         <div
                             class="rounded-full text-indigo-200 justify-center flex items-center bg-indigo-300 h-10 w-10 m-4">
@@ -44,7 +44,7 @@
                         class="border-l-4 border-green-700 bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl w-1/3 flex justify-between items-center pl-2 ">
                         <div class="p-2 flex flex-col font-semibold ">
                             <div class="text-base text-gray-800">Active Course</div>
-                            <div class="text-3xl text-green-700 pl-4">1</div>
+                            <div class="text-3xl text-green-700 pl-4">{{ $coursesactive }}</div>
                         </div>
                         <div class="rounded-full justify-center flex items-center bg-green-300 h-10 w-10 m-4">
                             <i class="fas fa-check text-2xl text-green-700"></i>
@@ -54,7 +54,7 @@
                         class="border-l-4 border-amber-500 bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl w-1/3 flex justify-between items-center pl-2">
                         <div class="p-2 flex flex-col font-semibold ">
                             <div class="text-base text-gray-800">Drafted Course</div>
-                            <div class="text-3xl text-amber-500 pl-4">1</div>
+                            <div class="text-3xl text-amber-500 pl-4">{{ $coursesdraft }}</div>
                         </div>
                         <div class="rounded-full justify-center flex items-center bg-amber-200 h-10 w-10 m-4">
                             <i class="fas fa-pen-to-square text-2xl text-amber-500"></i>
@@ -66,7 +66,7 @@
                         class="border-l-4 border-indigo-700 bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl w-1/4 flex justify-between items-center pl-2 ">
                         <div class="p-2 flex flex-col font-semibold ">
                             <div class="text-base text-gray-800">Content Total</div>
-                            <div class="text-3xl text-indigo-700 pl-4">1</div>
+                            <div class="text-3xl text-indigo-700 pl-4">{{ $ContentCount }}</div>
                         </div>
                         <div
                             class="rounded-full text-indigo-200 justify-center flex items-center bg-indigo-300 h-10 w-10 m-4">
@@ -77,7 +77,7 @@
                         class="border-l-4 border-amber-500 bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl w-1/4 flex justify-between items-center pl-2">
                         <div class="p-2 flex flex-col font-semibold ">
                             <div class="text-base text-gray-800">Category</div>
-                            <div class="text-3xl text-amber-500 pl-4">1</div>
+                            <div class="text-3xl text-amber-500 pl-4">{{ $categories }}</div>
                         </div>
                         <div class="rounded-full justify-center flex items-center bg-amber-200 h-10 w-10 m-4">
                             <i class="fas fa-tag text-2xl text-amber-500"></i>
@@ -87,7 +87,7 @@
                         class="border-l-4 border-green-700 bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl w-1/4 flex justify-between items-center pl-2 ">
                         <div class="p-2 flex flex-col font-semibold ">
                             <div class="text-base text-gray-800">Used</div>
-                            <div class="text-3xl text-green-700 pl-4">1</div>
+                            <div class="text-3xl text-green-700 pl-4">{{ $ContentCount - $unusedContentCount }}</div>
                         </div>
                         <div class="rounded-full justify-center flex items-center bg-green-300 h-10 w-10 m-4">
                             <i class="fas fa-check text-2xl text-green-700"></i>
@@ -97,7 +97,7 @@
                         class="border-l-4 border-rose-500 bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl w-1/4 flex justify-between items-center pl-2">
                         <div class="p-2 flex flex-col font-semibold ">
                             <div class="text-base text-gray-800">Unused</div>
-                            <div class="text-3xl text-rose-500 pl-4">1</div>
+                            <div class="text-3xl text-rose-500 pl-4">{{ $unusedContentCount }}</div>
                         </div>
                         <div class="rounded-full justify-center flex items-center bg-rose-200 h-10 w-10 m-4">
                             <i class="fas fa-xmark text-2xl text-rose-500"></i>

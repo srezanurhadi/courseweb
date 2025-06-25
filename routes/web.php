@@ -38,6 +38,10 @@ Route::prefix('/admin')->middleware(adminMiddleware::class)->group(function () {
     Route::resource('/myparticipant', myParticipantController::class);
     Route::get('/myparticipant/{course:slug}/{user:id}/edit', [myParticipantController::class, 'edit'])
         ->name('admin.myparticipant.edit');
+
+    //area saya
+    Route::resource('/mycourse', courseController::class);
+    Route::resource('/mycontent', contentController::class);
 });
 
 Route::prefix('/author')->middleware(authorMiddleware::class)->group(function () {
