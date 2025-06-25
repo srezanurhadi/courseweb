@@ -19,6 +19,31 @@ class contentController extends Controller
      */
     public function index(Request $request)
     {
+        if ($request->is("admin/mycontent")) {
+            $allcontents = Content::where('created_by', Auth::id())->get();
+            $unusedContentCount = Content::where('created_by', Auth::id())->doesntHave('courses')->count();
+            $usedContentCount = Content::where('created_by', Auth::id())->count() - $unusedContentCount;
+            $categories = Category::all();
+            $content = 'All Content';
+            $query = Content::where('created_by', Auth::id());
+            if ($request->has('search') && $request->input('search') != '') {
+                $search = $request->input('search');
+                $query->where(function ($q) use ($search) {
+                    $q->where('title', 'like', '%' . $search . '%')
+                        ->orWhere('content', 'like', '%' . $search . '%');
+                });
+            }
+
+            // 2. Filter berdasarkan kategori/role
+            if ($request->has('category') && $request->input('category') != '') {
+                $category = Category::where('category', $request->input('category'))->first();
+                $query->where('category_id', $category->id);
+                $content = $category->category;
+            }
+            $contents = $query->orderBy('updated_at', 'desc')->paginate(10)->onEachSide(1);
+            return view('admin.content.index', compact('contents', 'categories', 'unusedContentCount', 'usedContentCount', 'content', 'allcontents'));
+        }
+        $allcontents = Content::all();
         $unusedContentCount = Content::doesntHave('courses')->count();
         $usedContentCount = Content::all()->count() - $unusedContentCount;
         $categories = Category::all();
@@ -39,7 +64,7 @@ class contentController extends Controller
             $content = $category->category;
         }
         $contents = $query->orderBy('updated_at', 'desc')->paginate(10)->onEachSide(1);
-        return view('admin.content.index', compact('contents', 'categories', 'unusedContentCount', 'usedContentCount','content'));
+        return view('admin.content.index', compact('contents', 'categories', 'unusedContentCount', 'usedContentCount', 'content', 'allcontents'));
     }
 
     /**

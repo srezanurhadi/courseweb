@@ -1,21 +1,21 @@
     <!DOCTYPE html>
     <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <x-headcomponent></x-headcomponent>
-    @vite('resources/css/app.css') 
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Document</title>
+        <x-headcomponent></x-headcomponent>
+        @vite('resources/css/app.css')
+    </head>
 
     <body>
         <div class="flex flex-1">
             <x-sidebar></x-sidebar>
             <div class=" w-full bg-gray-50 ">
-                <div class="p-4 shadow-lg font-bold flex bg-gray-100 flex-row justify-between top-0 sticky">
-                    <div class="text-3xl font-bold pl-4">Management Course</div>
+                <div class="p-4 shadow-lg font-bold flex bg-gray-100 flex-row justify-between top-0 sticky z-99">
+                    <div class="text-3xl font-bold pl-4">Management Content</div>
                     <div class="profile flex items-center gap-2 pr-4">
                         <i class="fas fa-bell text-xl"></i>
                         <div class="rounded-full justify-center flex bg-gray-300 h-8 w-8">
@@ -27,18 +27,28 @@
                 <div class="w-full flex pt-8 px-4 justify-between pb-2">
                     <div class="w-full flex flex-wrap gap-2 font-semibold">
                         <div class="w-full flex gap-2 items-center p-2">
-                            <div class=" text-indigo-700"> <a href="{{ url()->previous() }}">
+                            <div
+                                class=" text-indigo-700 hover:text-indigo-600  hover:text-shadow-sm transition-all duration-300">
+                                <a href="{{ url()->previous() }}">
                                     <i class="fa-solid fa-play rotate-180">
                                     </i>
                                     <span class="pl-2">Back</span>
                                 </a>
                             </div>
-                            <div class=" py-0.5 px-3 border-amber-500 text-amber-500 bg-amber-100 rounded-sm border-2">
+                            <a href="/admin/content/{{ $content->slug }}/edit"
+                                class=" py-0.5 px-3 border-amber-500 text-amber-500 hover:bg-amber-50  bg-amber-100 rounded-sm border-2 transition-all duration-200 shadow-inherit">
                                 <i class="fas fa-pencil-alt"></i> <span class="pl-2">Edit</span>
-                            </div>
-                            <div class=" py-0.5 px-3 border-rose-500 text-rose-500 bg-rose-100 rounded-sm border-2">
-                                <i class="fas fa-trash"></i> <span class="pl-2">Delete</span>
-                            </div>
+                            </a>
+                            <form action="/admin/content/{{ $content->slug }}" method="POST" class="inline-block">
+                                @method('delete')
+                                @csrf
+                                <button type="button"
+                                    class="delete-btn py-0.5 px-3 border-rose-500 text-rose-500 bg-rose-100 rounded-sm border-2 hover:bg-rose-50 transition-all duration-200 cursor-pointer"
+                                    data-title="{{ $content->title }}">
+                                    <i class="fas fa-trash"></i> <span class="pl-2">Delete</span>
+                                </button>
+                            </form>
+
                         </div>
 
                         <div class="w-full p-4 bg-gray-100 rounded-lg shadow-[0px_1px_2px_1px_rgba(0,0,0,0.4)]">
@@ -78,7 +88,8 @@
                                                         'h6' => 'text-base font-bold mt-4 mb-2',
                                                     ];
                                                 @endphp
-                                                <{!! $tag !!} class="{{ $classes[$tag] ?? '' }}">{!! $block['data']['text'] !!}
+                                                <{!! $tag !!} class="{{ $classes[$tag] ?? '' }}">
+                                                    {!! $block['data']['text'] !!}
                                                     </{!! $tag !!}>
                                                 @break
 
@@ -176,7 +187,8 @@
                                                                 @foreach ($body as $row)
                                                                     <tr class="hover:bg-gray-50">
                                                                         @foreach ($row as $cell)
-                                                                            <td class="p-3 border-b border-gray-300 text-gray-700">
+                                                                            <td
+                                                                                class="p-3 border-b border-gray-300 text-gray-700">
                                                                                 {!! $cell !!}</td>
                                                                         @endforeach
                                                                     </tr>
@@ -194,9 +206,101 @@
                         </div>
                     </div>
                 </div>
+                <div id="delete-confirmation-modal"
+                    class="fixed inset-0 z-[100] flex items-center bg-white/10 justify-center transition-all duration-150 ease-in-out opacity-0 scale-95 pointer-events-none">
+                    <div class="bg-white/50 backdrop-blur-xs border-2 border-gray-200 rounded-lg shadow-sm w-full max-w-md mx-4 transition-all duration-300">
+                        <div class="p-6">
+                            <div class="flex items-start">
+                                <div
+                                    class="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                                    <svg class="h-6 w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                    </svg>
+                                </div>
+                                <div class="ml-4 text-left">
+                                    <h3 class="text-lg leading-6 font-bold text-gray-900" id="modal-title">
+                                        Konfirmasi Hapus
+                                    </h3>
+                                    <div class="mt-2">
+                                        <p class="text-sm text-gray-600">
+                                            Apakah Anda yakin ingin menghapus konten
+                                            <strong id="content-title-to-delete" class="text-gray-900"></strong>?
+                                            <br>Tindakan ini tidak dapat dibatalkan.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class=" px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse rounded-b-lg">
+                            <button type="button" id="confirmDeleteBtn"
+                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
+                                Ya, Hapus
+                            </button>
+                            <button type="button" id="cancelDeleteBtn"
+                                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:w-auto sm:text-sm">
+                                Batal
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </body>
-    <script></script>
+    {{-- Letakkan ini di dalam tag <script> di bawah --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('delete-confirmation-modal');
+            const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+            const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+            const deleteButtons = document.querySelectorAll('.delete-btn');
+            const contentTitleElement = document.getElementById('content-title-to-delete');
+
+            let formToSubmit = null;
+
+            const showModal = (form, title) => {
+                formToSubmit = form;
+                contentTitleElement.textContent = `'${title}'`;
+                modal.classList.remove('pointer-events-none');
+                setTimeout(() => {
+                    modal.classList.add('opacity-100', 'scale-100');
+                    modal.classList.remove('opacity-0', 'scale-95');
+                }, 10);
+            };
+
+            const hideModal = () => {
+                modal.classList.remove('opacity-100', 'scale-100');
+                modal.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => {
+                    modal.classList.add('pointer-events-none');
+                    formToSubmit = null;
+                    contentTitleElement.textContent = '';
+                }, 300);
+            };
+
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const form = this.closest('form');
+                    const title = this.dataset.title;
+                    showModal(form, title);
+                });
+            });
+
+            confirmDeleteBtn.addEventListener('click', () => {
+                if (formToSubmit) {
+                    formToSubmit.submit();
+                }
+            });
+
+            cancelDeleteBtn.addEventListener('click', hideModal);
+
+            modal.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    hideModal();
+                }
+            });
+        });
+    </script>
 
     </html>
