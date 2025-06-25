@@ -52,15 +52,19 @@ class courseController extends Controller
         $courses = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
 
         // Kirim data ke view
-        return view('admin.course.index', compact('courses', 'categories','coursescount','coursesactive','coursesdraft'));
+        return view('admin.course.index', compact('courses', 'categories', 'coursescount', 'coursesactive', 'coursesdraft'));
     }
 
 
     public function create(Request $request)
     {
+        $loggedInUserId = Auth::id();
 
-        $contentsQuery = Content::with('category')->orderBy('created_at', 'desc');
-        $contents = $contentsQuery->get();
+        $contents = Content::with('category')
+            ->where('created_by', $loggedInUserId) // <-- INI ADALAH FILTERNYA
+            ->orderBy('created_at', 'desc')
+            ->get();
+    
         $categories = Category::all();
 
         // Kembalikan view lengkap dengan semua data yang dibutuhkan

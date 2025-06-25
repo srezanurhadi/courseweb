@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Log;
 use App\Models\User;
 use App\Models\Course;
 use App\Models\Content;
@@ -9,10 +10,10 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\MyParticipant;
 use App\Models\UserCourseProgress;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\DB;
 
 
 class myParticipantController extends Controller
@@ -61,27 +62,29 @@ class myParticipantController extends Controller
     // app/Http/Controllers/MyParticipantController.php
     public function show($slug)
     {
-        // Ambil course berdasarkan slug
         $course = Course::where('slug', $slug)->firstOrFail();
-
-        // Alur eksplisit: slug -> course_id -> enrollments -> user_ids -> users data
         $courseId = $course->id;
 
-        // Ambil user_ids dari enrollments berdasarkan course_id
         $userIds = DB::table('enrollments')
             ->where('course_id', $courseId)
             ->pluck('user_id');
 
-        // Ambil informasi lengkap users berdasarkan user_ids
-        $enrolledUsers = User::whereIn('id', $userIds)
-            ->select('id', 'name', 'email', 'no_telp', 'created_at')
-            ->get();
+        $enrolledUsers = User::whereIn('id', $userIds)->get();
 
-        // dd($courseId);
+        // Manual cara: ambil courses untuk setiap user
+        foreach ($enrolledUsers as $user) {
+            $userCourses = DB::table('enrollments')
+                ->join('courses', 'enrollments.course_id', '=', 'courses.id')
+                ->where('enrollments.user_id', $user->id)
+                ->select('courses.id', 'courses.title', 'courses.slug')
+                ->get();
+
+            // Tambahkan sebagai attribute
+            $user->enrolled_courses = $userCourses;
+        }
 
         return view('admin.myParticipant.show', compact('course', 'enrolledUsers'));
     }
-
     /**
      * Show the form for editing the specified resource.
      */
