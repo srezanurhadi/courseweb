@@ -188,65 +188,50 @@
         <div id="modal"
             class="modal ml-54 hidden opacity-0 fixed inset-0 bg-black/50 backdrop-blur-xs transition-all duration-500 ease-in-out flex items-center justify-center z-50 p-25">
             <div class="p-4 w-full max-w-6xl bg-gray-100 rounded-lg ">
-                {{-- Search dll --}}
-                <div class="w-full bg-gray-100 flex pt-2 pb-4 px-1 justify-between">
-                    <div class="flex gap-4 justify-between">
-                        <form class="flex gap-2">
-                            <div class=" flex gap-1 items-center rounded-lg border-gray-400 border-2 pl-2">
-                                <i class="fas fa-search text-gray-500"></i>
-                                <input type="text"
-                                    class="rounded-lg min-w-56 focus:outline-none px-2 placeholder:font-semibold placeholder:italic"
-                                    placeholder="Search Content...">
+                <div id="ajax-solution">
+                    <div class="w-full bg-gray-100 flex pt-2 pb-4 px-1 justify-between">
+                        <div class="flex gap-4 justify-between">
+                            <div class="flex gap-2">
+                                <div class=" flex gap-1 items-center rounded-lg border-gray-400 border-2 pl-2">
+                                    <i class="fas fa-search text-gray-500"></i>
+                                    <input type="text" id="ajax-search"
+                                        class="rounded-lg min-w-56 focus:outline-none px-2 placeholder:font-semibold placeholder:italic"
+                                        placeholder="Search Course...">
+                                </div>
+                                <div class=" flex gap-1 items-center rounded-lg border-gray-400 border-2 px-2">
+                                    <i class="fas fa-filter text-gray-500"></i>
+                                    <select id="ajax-category-filter"
+                                        class="min-w-56 focus:outline-none px-2 text-gray-900">
+                                        <option value="">All Category</option>
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->id }}">{{ $category->category }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <button id="ajax-search-btn" class="bg-sky-600 px-2 rounded-lg">
+                                    <p class=" font-medium text-base text-white">search</p>
+                                </button>
                             </div>
-
-                            <button class="bg-sky-600 px-2 rounded-lg">
-                                <p class=" font-medium text-base text-white">search</p>
-                            </button>
-                        </form>
-                        <div class=" flex gap-1 items-center rounded-lg border-gray-400 border-2 px-2">
-                            <i class="fas fa-search text-gray-500"></i>
-                            <select name="category" id="category"
-                                class="min-w-56 focus:outline-none px-2 text-gray-900">
-                                <option value="writer" class="min-w-56 gray-900">
-                                    All Category
-                                </option>
-                            </select>
-                        </div>
-                        <div class=" flex gap-1 items-center rounded-lg border-gray-400 border-2 px-2">
-                            <i class="fas fa-search text-gray-500"></i>
-                            <select name="category" id="category"
-                                class="min-w-42 focus:outline-none px-2 text-gray-900">
-                                <option value="writer" class="min-w-56 gray-900">
-                                    Status
-                                </option>
-                            </select>
                         </div>
                     </div>
                 </div>
-                <div class="bg-gray-50 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl overflow-hidden pb-5">
 
+                <!-- Content List Container -->
+                <div class="bg-gray-50 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl overflow-hidden pb-5">
                     {{-- header --}}
                     <div
                         class="relative flex bg-indigo-600 text-gray-50 text-xs font-semibold uppercase tracking-wider">
-                        <div class="px-6 py-3 w-4/12 text-left">Judul Konten</div>
+                        <div class="px-6 py-3 w-6/12 text-left">Judul Konten</div>
                         <div class="px-6 py-3 w-2/12 text-left">Category</div>
                         <div class="px-6 py-3 w-2/12 text-left">Created At</div>
-                        <div class="px-6 py-3 w-2/12 text-left">Status</div>
-                        <div class="px-6 py-3 w-2/12 text-left flex flex-col mr-6">
-                            <div>Action</div>
-                        </div>
-
+                        <div class="px-6 py-3 w-2/12 text-left flex flex-col mr-6">Action</div>
                     </div>
-                    @php
-                        $selectedContentIds = $course->contents->pluck('id')->toArray();
-                    @endphp
-                    {{-- data --}}
-                    <div class="space-y-4 px-4 py-4 overflow-y-auto h-100">
 
-                        @foreach ($contents as $content)
+                    {{-- Content List --}}
+                    <div id="content-list" class="space-y-4 px-4 py-4 overflow-y-auto h-100">
+                        @forelse ($contents as $content)
                             <div class="flex items-center bg-amber-100 rounded-lg shadow-md text-sm font-medium">
-
-                                <div class="px-6 py-3 w-4/12 text-gray-900">
+                                <div class="px-6 py-3 w-6/12 text-gray-900">
                                     <div class="flex items-center">
                                         <div
                                             class="flex-shrink-0 h-8 w-8 rounded-md bg-amber-500 flex items-center justify-center text-white">
@@ -257,97 +242,59 @@
                                                     d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L1.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09l2.846.813-.813 2.846a4.5 4.5 0 00-3.09 3.09zM18.25 12L17 14.25l-1.25-2.25L13.5 11l2.25-1.25L17 7.5l1.25 2.25L20.5 11l-2.25 1.25z" />
                                             </svg>
                                         </div>
-                                        <div class="ml-4 truncate">
-                                            {{ $content->title }}
-                                        </div>
+                                        <div class="ml-4 truncate">{{ $content->title }}</div>
                                     </div>
                                 </div>
-                                <div class="px-6 py-3 w-2/12 text-gray-700 truncate">Laravel</div>
+                                <div class="px-6 py-3 w-2/12 text-gray-700 truncate">
+                                    {{ $content->category->category }}</div>
                                 <div class="px-6 py-3 w-2/12 text-gray-700">
-                                    {{ $content->created_at->format('d-m-Y') }}
-                                </div>
-                                <div class="px-6 py-3 w-2/12 text-gray-700 ">
-                                    @if (in_array($content->id, $selectedContentIds))
-                                        <span class="text-green-600 font-semibold">Selected</span>
-                                    @else
-                                        Belum pernah dipilih
-                                    @endif
-                                </div>
-                                <div class="px-6 py-3 w-2/12 ">
+                                    {{ $content->created_at->format('d-m-Y') }}</div>
+                                <div class="px-6 py-3 w-2/12">
                                     <div class="flex items-center space-x-2">
                                         <div class="flex justify-center w-full">
                                             <input type="checkbox" id="content_{{ $content->id }}"
                                                 name="content_checkbox" value="{{ $content->id }}"
                                                 data-title="{{ $content->title }}"
-                                                class="h-6 w-6 border-gray-300 rounded focus:ring-indigo-700 text-indigo-700"
-                                                {{ in_array($content->id, $selectedContentIds) ? 'checked' : '' }}>
+                                                class="h-6 w-6 border-gray-300 rounded focus:ring-indigo-700 text-indigo-700">
                                         </div>
-                                        <button id="lihat"
-                                            class="w-6 h-6 p-2 rounded-sm bg-sky-500 hover:bg-sky-600 text-white flex items-center justify-center"
-                                            aria-label="Lihat" data-content-id="{{ $content->id }}">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
+                                        <a href="{{ url('admin/content/' . $content->slug) }}" target="_blank">
+                                            <button
+                                                class="lihat-btn w-6 h-6 p-2 rounded-sm bg-sky-500 hover:bg-sky-600 text-white flex items-center justify-center"
+                                                aria-label="Lihat" data-content-id="{{ $content->id }}">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
-                        @endforeach
+                        @empty
+                            <div class="text-center text-gray-600 py-4">Tidak ada konten yang ditemukan.</div>
+                        @endforelse
+                    </div>
+
+                    <!-- Loading indicator for AJAX -->
+                    <div id="loading-indicator" class="hidden text-center py-4">
+                        <div
+                            class="inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md text-gray-500 bg-white">
+                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-500"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10"
+                                    stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
+                            </svg>
+                            Loading...
+                        </div>
                     </div>
                 </div>
+
                 <div class="mt-4">
                     <div class="flex flex-row justify-end gap-4">
                         <button id="closeModal"
-                            class="py-1 w-34 text-indigo-700 bg-gray-50 border-2 border-indigo-700 rounded-lg text-center">
-                            Cancel</button>
+                            class="py-1 w-34 text-indigo-700 bg-gray-50 border-2 border-indigo-700 rounded-lg text-center">Cancel</button>
                         <button id="saveSelectedContent" type="button"
-                            class="py-1 w-34 text-gray-50 bg-indigo-700 border-2 border-indigo-700 rounded-lg text-center">
-                            Save</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="modal2"
-            class="modal2 ml-54 hidden opacity-0 fixed inset-0 bg-black/50 backdrop-blur-xs transition-all duration-500 ease-in-out flex items-center justify-center z-50 p-25">
-            <div class="p-4 w-full max-w-6xl relative">
-                <button id="closeModal2" title="Close modal"
-                    class="absolute top-0 right-0 transform -translate-y-1/2 text-gray-200 hover:text-white p-1 rounded-full bg-indigo-700">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-                <div class="bg-gray shadow-lg rounded-xl overflow-hidden">
-                    <div
-                        class="w-full h-120 overflow-y-auto font-bold p-8 bg-gray-100 rounded-lg shadow-[0px_1px_2px_1px_rgba(0,0,0,0.4)] flex flex-wrap gep-2">
-                        <p class="text-2xl font-bold">
-                            {{ $content->title }}
-                        </p>
-                        <p class="text-base font-medium indent-10">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique magni tenetur sunt quo
-                            iure nesciunt unde voluptatum earum dolor sit natus sequi maxime delectus pariatur quas
-                            perferendis minima ipsa repellendus, consequuntur quidem aliquid itaque eligendi accusamus
-                            hic? Fuga, molestias? Consequatur nesciunt sint officia enim vel doloribus, ex cum non
-                            libero tenetur iusto delectus necessitatibus eaque. Culpa, quo doloribus? Dolorum dolore
-                            quos ipsa quas ullam asperiores beatae labore repellendus, laboriosam sed qui nobis vitae in
-                            assumenda aliquam. Vitae recusandae vel excepturi velit aut, et quod itaque maxime in fuga
-                            rerum alias corrupti quidem ratione error nesciunt, aliquam harum molestias. Ipsam, et omnis
-                            voluptatibus odio, libero maiores autem numquam veritatis earum quaerat dolore ullam
-                            eligendi atque ratione rerum tempore enim quibusdam reiciendis eum unde maxime qui quos
-                            deserunt. Incidunt doloremque labore iusto est cupiditate facilis esse unde autem beatae?
-                            Ipsum laborum incidunt, iure inventore facilis minima voluptatem at quam impedit saepe? Vel
-                            iure perferendis ad? Saepe, suscipit placeat dicta exercitationem ex unde ullam cumque
-                            totam, corrupti deserunt quae, dolorum explicabo alias! Molestiae inventore aliquid aperiam
-                            nobis, fugiat voluptates praesentium. Nesciunt quae quaerat laudantium officia sequi magni
-
-                            voluptate officiis, quibusdam doloribus tenetur soluta perferendis numquam ratione
-                            repudiandae consectetur ipsum quas ipsam iusto? Aspernatur.
-                            Incidunt doloremque labore iusto est cupiditate facilis esse unde autem beatae?
-                            Ipsum laborum incidunt, iure inventore facilis minima voluptatem at quam impedit saepe? Vel
-                            iure perferendis ad? Saepe, suscipit placeat dicta exercitationem ex unde ullam cumque
-                            totam, corrupti deserunt quae, dolorum explicabo alias! Molestiae inventore aliquid aperiam
-                            nobis, fugiat voluptates praesentium. Nesciunt quae quaerat laudantium officia sequi magni
-                            voluptate officiis, quibusdam doloribus tenetur soluta perferendis numquam ratione
-                            repudiandae consectetur ipsum quas ipsam iusto? Aspernatur
-                        </p>
+                            class="py-1 w-34 text-gray-50 bg-indigo-700 border-2 border-indigo-700 rounded-lg text-center">Save</button>
                     </div>
                 </div>
             </div>
@@ -357,91 +304,176 @@
 
 </body>
 <script>
-    const modalOpen = document.querySelectorAll('#add_content');
-    const modal = document.querySelectorAll('#modal');
-    const modalClose = document.querySelectorAll('#closeModal');
+    // Gunakan nama yang benar dari hasil "php artisan route:list"
+    const SEARCH_URL = '{{ route('course.search') }}';
+</script>
 
-    for (let i = 0; i < modalOpen.length; i++) {
-        modalOpen[i].addEventListener('click', () => {
-            modal[i].classList.remove('hidden');
-            setTimeout(() => {
-                modal[i].classList.remove('opacity-0')
-            }, 10);
+<script>
+    // AJAX Search Implementation
+    const ajaxSearchInput = document.getElementById('ajax-search');
+    const ajaxCategoryFilter = document.getElementById('ajax-category-filter');
+    const ajaxSearchBtn = document.getElementById('ajax-search-btn');
+    const contentList = document.getElementById('content-list');
+    const loadingIndicator = document.getElementById('loading-indicator');
+    let selectedContents = [];
+
+    function performAjaxSearch() {
+        const searchTerm = ajaxSearchInput.value;
+        const categoryId = ajaxCategoryFilter.value;
+
+        // Show loading
+        loadingIndicator.classList.remove('hidden');
+        contentList.style.opacity = '0.5';
+
+        const params = new URLSearchParams();
+        if (searchTerm) params.append('search', searchTerm);
+        if (categoryId) params.append('category', categoryId);
+        // params.append('ajax', '1'); // Ini tidak wajib jika Anda menggunakan header
+
+        // URL endpoint yang kita buat di Laravel
+        const url = `${SEARCH_URL}?${params.toString()}`;
 
 
-        });
-        modalClose[i].addEventListener('click', () => {
-            modal[i].classList.add('opacity-0');
-            setTimeout(() => {
-                modal[i].classList.add('hidden')
-            }, 500);
-        })
+        console.log('SEARCH_URL:', SEARCH_URL);
+        console.log('Final URL:', url)
+
+        fetch(url, {
+                method: 'GET',
+                headers: {
+                    // Header ini penting agar Laravel tahu ini adalah request AJAX
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Panggil fungsi baru kita untuk update list
+                updateContentList(data.contents);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Sekarang kita tahu errornya adalah SyntaxError, kita bisa lebih yakin masalahnya di sini.
+                contentList.innerHTML =
+                    `<div class="text-center text-red-600 py-4">Terjadi kesalahan saat memuat data (Format salah).</div>`;
+            })
+            .finally(() => {
+                // Selalu sembunyikan loading setelah selesai
+                hideLoading();
+            });
     }
 
+    function hideLoading() {
+        loadingIndicator.classList.add('hidden');
+        contentList.style.opacity = '1';
+    }
 
-    const modalOpenTriggers = document.querySelectorAll('#lihat');
-    const modalElement = document.querySelector('#modal2');
-    const modalCloseButton = document.querySelector('#closeModal2');
+    function updateContentList(contents) {
+        // Kosongkan daftar konten saat ini
+        contentList.innerHTML = '';
 
-    if (modalElement && modalCloseButton) {
-        modalOpenTriggers.forEach(triggerButton => {
-            triggerButton.addEventListener('click', () => {
-                modalElement.classList.remove('hidden');
-                setTimeout(() => {
-                    modalElement.classList.remove('opacity-0');
-                }, 10);
+        // Jika tidak ada konten yang ditemukan, tampilkan pesan
+        if (!contents || contents.length === 0) {
+            contentList.innerHTML =
+                `<div class="text-center text-gray-600 py-4">Tidak ada konten yang ditemukan.</div>`;
+            return;
+        }
+
+        const currentlyChecked = [];
+        document.querySelectorAll('input[name="content_checkbox"]:checked').forEach(checkbox => {
+            currentlyChecked.push({
+                id: parseInt(checkbox.value),
+                title: checkbox.getAttribute('data-title')
             });
         });
 
+        let html = '';
+        contents.forEach(content => {
+            // **PENTING: Cek apakah konten ini sudah dipilih sebelumnya**
+            // Kita menggunakan array 'selectedContents' dari script Anda sebelumnya
+            const isChecked = selectedContents.some(item => item.id == content.id);
 
-        modalCloseButton.addEventListener('click', () => {
-            modalElement.classList.add('opacity-0');
-            setTimeout(() => {
-                modalElement.classList.add('hidden');
-            }, 500);
+            html += `
+            <div class="flex items-center bg-amber-100 rounded-lg shadow-md text-sm font-medium">
+                <div class="px-6 py-3 w-4/12 text-gray-900">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 h-8 w-8 rounded-md bg-amber-500 flex items-center justify-center text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L1.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09l2.846.813-.813 2.846a4.5 4.5 0 00-3.09 3.09zM18.25 12L17 14.25l-1.25-2.25L13.5 11l2.25-1.25L17 7.5l1.25 2.25L20.5 11l-2.25 1.25z" />
+                            </svg>
+                        </div>
+                        <div class="ml-4 truncate">${content.title}</div>
+                    </div>
+                </div>
+                <div class="px-6 py-3 w-2/12 text-gray-700 truncate">${content.category_name}</div>
+                <div class="px-6 py-3 w-2/12 text-gray-700">${content.created_at}</div>
+                <div class="px-6 py-3 w-2/12 text-gray-700">Belum pernah dipilih</div>
+                <div class="px-6 py-3 w-2/12">
+                    <div class="flex items-center space-x-2">
+                        <div class="flex justify-center w-full">
+                            <input type="checkbox" name="content_checkbox" value="${content.id}" data-title="${content.title}"
+                                class="h-6 w-6 border-gray-300 rounded focus:ring-indigo-700 text-indigo-700"
+                                ${isChecked ? 'checked' : ''}> 
+                        </div>
+                        <a href="/admin/content/${content.slug}" target="_blank">
+                            <button class="lihat-btn w-6 h-6 p-2 rounded-sm bg-sky-500 hover:bg-sky-600 text-white flex items-center justify-center" aria-label="Lihat">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `;
         });
 
-    } else {
-
-        if (!modalElement) {
-            console.error("Error: The modal element with ID 'modal2' was not found.");
-        }
-        if (!modalCloseButton) {
-            console.error("Error: The modal close button with ID 'closeModal2' was not found.");
-        }
+        // Masukkan semua HTML yang sudah digenerate ke dalam list
+        contentList.innerHTML = html;
     }
 
+    // Event listeners for AJAX search
+    ajaxSearchBtn.addEventListener('click', performAjaxSearch);
+    ajaxSearchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            performAjaxSearch();
+        }
+    });
+    ajaxCategoryFilter.addEventListener('change', performAjaxSearch);
 
 
+    // Image Preview Functionality
     const imageInput = document.getElementById('image');
     const imagePreviewDiv = document.getElementById('image-preview');
     const previewImage = document.getElementById('preview-img');
 
-    imageInput.addEventListener('change', function() {
-        const file = this.files[0];
-
-        if (file) {
-            if (file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    previewImage.src = e.target.result;
-                    imagePreviewDiv.classList.remove('hidden');
+    if (imageInput) {
+        imageInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        previewImage.src = e.target.result;
+                        imagePreviewDiv.classList.remove('hidden');
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    previewImage.src = '#';
+                    imagePreviewDiv.classList.add('hidden');
+                    alert('Harap pilih file gambar (PNG, JPG, GIF).');
                 }
-                reader.readAsDataURL(file);
             } else {
                 previewImage.src = '#';
                 imagePreviewDiv.classList.add('hidden');
-                alert('Harap pilih file gambar (PNG, JPG, GIF).');
             }
-        } else {
-            previewImage.src = '#';
-            imagePreviewDiv.classList.add('hidden');
-        }
-    });
-</script>
+        });
+    }
 
-
-<script>
+    // Content Selection Functionality
     document.addEventListener('DOMContentLoaded', function() {
         const saveSelectedContentBtn = document.getElementById('saveSelectedContent');
         const selectedContentContainer = document.getElementById('selected-content-container');
@@ -459,6 +491,25 @@
             selectedContents = [];
         }
 
+        // Fungsi untuk sinkronisasi checkbox dengan selectedContents
+        function syncCheckboxesWithSelectedContent() {
+            // Ambil semua checkbox di modal
+            const checkboxes = document.querySelectorAll('input[name="content_checkbox"]');
+
+            // Reset semua checkbox terlebih dahulu
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+
+            // Centang checkbox sesuai dengan selectedContents
+            selectedContents.forEach(selectedContent => {
+                const checkbox = document.querySelector(
+                    `input[name="content_checkbox"][value="${selectedContent.id}"]`);
+                if (checkbox) {
+                    checkbox.checked = true;
+                }
+            });
+        }
 
         // Handle save button click in the modal
         if (saveSelectedContentBtn) {
@@ -500,37 +551,37 @@
                 contentCard.dataset.contentId = content.id;
 
                 contentCard.innerHTML = `
-                    <div class="mr-3">
-                        <div class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center font-bold">
-                            ${index + 1}
-                        </div>
+                <div class="mr-3">
+                    <div class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center font-bold">
+                        ${index + 1}
                     </div>
-                    <div class="flex-1">
-                        <h3 class="font-semibold text-gray-800">${content.title}</h3>
-                        <p class="text-sm text-gray-600">
-                            Selected content item
-                        </p>
-                    </div>
-                    <div class="ml-3 flex flex-col items-center justify-center space-y-1">
-                        <button type="button" class="move-up-btn text-gray-500 hover:text-gray-700" data-index="${index}">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"></path>
-                            </svg>
-                        </button>
-                        <button type="button" class="move-down-btn text-gray-500 hover:text-gray-700" data-index="${index}">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
-                    </div>
-                    <button type="button" class="remove-content-btn ml-3 text-red-500 hover:text-red-700" data-index="${index}">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M6 2a1 1 0 00-1 1v1H3.5a.5.5 0 000 1h.54l.7 10.11A2 2 0 006.73 17h6.54a2 2 0 001.99-1.89L16.96 5H17.5a.5.5 0 000-1H15V3a1 1 0 00-1-1H6zm1 4a.5.5 0 011 0v7a.5.5 0 01-1 0V6zm4 0a.5.5 0 011 0v7a.5.5 0 01-1 0V6z" />
+                </div>
+                <div class="flex-1">
+                    <h3 class="font-semibold text-gray-800">${content.title}</h3>
+                    <p class="text-sm text-gray-600">
+                        Selected content item
+                    </p>
+                </div>
+                <div class="ml-3 flex flex-col items-center justify-center space-y-1">
+                    <button type="button" class="move-up-btn text-gray-500 hover:text-gray-700" data-index="${index}">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"></path>
                         </svg>
                     </button>
-                `;
+                    <button type="button" class="move-down-btn text-gray-500 hover:text-gray-700" data-index="${index}">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                </div>
+                <button type="button" class="remove-content-btn ml-3 text-red-500 hover:text-red-700" data-index="${index}">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M6 2a1 1 0 00-1 1v1H3.5a.5.5 0 000 1h.54l.7 10.11A2 2 0 006.73 17h6.54a2 2 0 001.99-1.89L16.96 5H17.5a.5.5 0 000-1H15V3a1 1 0 00-1-1H6zm1 4a.5.5 0 011 0v7a.5.5 0 01-1 0V6zm4 0a.5.5 0 011 0v7a.5.5 0 01-1 0V6z" />
+                    </svg>
+                </button>
+            `;
                 selectedContentContainer.appendChild(contentCard);
             });
             addContentCardEventListeners();
@@ -586,6 +637,29 @@
             selectedContentIdsInput.value = JSON.stringify(selectedContents);
         }
 
+        // Event listener untuk membuka modal dengan sinkronisasi checkbox
+        const modalOpen = document.querySelectorAll('#add_content');
+        const modal = document.querySelectorAll('#modal');
+        const modalClose = document.querySelectorAll('#closeModal');
+
+        for (let i = 0; i < modalOpen.length; i++) {
+            modalOpen[i].addEventListener('click', () => {
+                modal[i].classList.remove('hidden');
+                setTimeout(() => {
+                    modal[i].classList.remove('opacity-0');
+                    // Sinkronkan checkbox setelah modal muncul
+                    syncCheckboxesWithSelectedContent();
+                }, 10);
+            });
+
+            modalClose[i].addEventListener('click', () => {
+                modal[i].classList.add('opacity-0');
+                setTimeout(() => {
+                    modal[i].classList.add('hidden')
+                }, 500);
+            })
+        }
+
         document.querySelectorAll('#lihat').forEach(button => {
             button.addEventListener('click', function() {
                 const contentId = this.getAttribute('data-content-id');
@@ -602,7 +676,12 @@
 
         // Initial display update
         updateSelectedContentDisplay();
+        // Panggil sinkronisasi checkbox saat halaman pertama kali dimuat
+        syncCheckboxesWithSelectedContent();
     });
+
+    ;
 </script>
+</body>
 
 </html>

@@ -66,7 +66,7 @@
                 </div>
                 <div class="">
                     <a href="course/create" class="px-2 py-1 bg-sky-500 rounded-lg text-white font-semibold"><i
-                            class="fas fa-plus text-gray-50"></i> Add Content</a>
+                            class="fas fa-plus text-gray-50"></i> Add Course</a>
                 </div>
 
             </div>
@@ -150,9 +150,13 @@
                                             <a href="{{ url('admin/course/' . $course->slug) }}"
                                                 class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-300"
                                                 role="menuitem" id="menu-item-1">Show more</a>
-                                            <a href="#"
-                                                class="text-red-600 block px-4 py-2 text-sm hover:bg-gray-300"
-                                                role="menuitem" id="menu-item-2">Delete</a>
+                                            <form action="{{ route('course.destroy', $course->id) }}" method="POST"
+                                                onsubmit="return confirm('Apakah Anda yakin ingin menghapus course ini?')"
+                                                class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-300">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger">Hapus</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
