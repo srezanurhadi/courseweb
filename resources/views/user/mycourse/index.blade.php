@@ -231,7 +231,8 @@
                                         class="bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden h-105 enhanced-transition enhanced-card">
 
                                         {{-- Gambar Course --}}
-                                        <a href="{{ route('user.course.show', $course->slug) }}" class="w-full">
+                                        <a href="{{ route('user.course.show', ['course' => $course->slug, 'from' => 'my-course']) }}"
+                                            class="w-full">
                                             <div class="p-2 h-40 w-full items-start flex justify-between bg-cover bg-center"
                                                 style="background-image: url('{{ asset('storage/' . $course->image) }}')">
 
