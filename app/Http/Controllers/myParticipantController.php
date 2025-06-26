@@ -31,7 +31,7 @@ class myParticipantController extends Controller
         $query = Course::query();
 
         $query->where('user_id', $loggedInUserId);
-        
+
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
@@ -141,6 +141,7 @@ class myParticipantController extends Controller
         };
         // Ambil semua kursus yang diikuti, dan hitung total kontennya (withCount)
         $enrolledCourses = $user->enrolledCourses()
+            ->where('status', 1)
             ->with(['category', 'user'])
             ->withCount('contents') // <-- PENTING: Untuk efisiensi
             ->get();

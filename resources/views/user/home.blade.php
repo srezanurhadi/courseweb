@@ -531,7 +531,54 @@
 
             var finishedChart = new ApexCharts(document.querySelector("#finishedChart"), finishedChartOptions);
             finishedChart.render();
-            createRadialChart('#ongoingChart', {{ $ongoingCourseCount }}, 'Ongoing Course', '#ffffff');
+
+            var ongoingChartOptions = {
+                chart: {
+                    height: 250,
+                    type: "radialBar"
+                },
+                // 1. Visual Chart: Menggunakan persentase agar lingkaran penuh
+                series: [{{ $ongoingCourseCountPercentage }}],
+                plotOptions: {
+                    radialBar: {
+                        hollow: {
+                            margin: 15,
+                            size: "60%"
+                        },
+                        track: {
+                            background: '#818cf8',
+                            strokeWidth: '100%'
+                        },
+                        dataLabels: {
+                            showOn: "always",
+                            name: {
+                                show: false
+                            },
+                            value: {
+                                color: "white",
+                                fontSize: "40px",
+                                fontWeight: "600",
+                                show: true,
+                                // 2. Teks di Dalam Chart: Menampilkan jumlah nominal
+                                formatter: function(val) {
+                                    return {{ $ongoingCourseCount }};
+                                }
+                            }
+                        }
+                    }
+                },
+                fill: {
+                    colors: ['#ffffff']
+                },
+                stroke: {
+                    lineCap: "round"
+                },
+                labels: ['Ongoing Course']
+            };
+
+            var ongoingChart = new ApexCharts(document.querySelector("#ongoingChart"), ongoingChartOptions);
+            ongoingChart.render();
+            // createRadialChart('#ongoingChart', {{ $ongoingCourseCount }}, 'Ongoing Course', '#ffffff');
             createRadialChart('#overallChart', {{ $overallProgress }}, 'Progress Overall', '#ffffff');
 
             // JavaScript untuk animasi saat scroll

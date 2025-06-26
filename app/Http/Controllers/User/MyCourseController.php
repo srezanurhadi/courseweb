@@ -68,7 +68,7 @@ class MyCourseController extends Controller
             }
         }
 
-        $enrolledCoursesQuery = $user->enrolledCourses()->withCount(['enrollments', 'contents'])->with(['category', 'user']);
+        $enrolledCoursesQuery = $user->enrolledCourses()->where('courses.status', 1)->withCount(['enrollments', 'contents'])->with(['category', 'user']);
 
         if ($lastSeenCourse && !$isFilteringOrSearching) {
             $enrolledCoursesQuery->where('courses.id', '!=', $lastSeenCourse->id);
