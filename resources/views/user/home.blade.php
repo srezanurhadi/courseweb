@@ -168,11 +168,10 @@
                             <h1 class="text-3xl font-bold text-gray-800">Home</h1>
                         </div>
                         <div class="flex items-center space-x-4 px-4">
-                            <button class="enhanced-transition hover:scale-110">
+                            <button>
                                 <i class="fa-regular fa-bell fa-lg text-black hover:text-indigo-600"></i>
                             </button>
-                            <div
-                                class="flex items-center space-x-2 px-3 py-2 rounded-full enhanced-transition hover:bg-slate-100 cursor-pointer">
+                            <div class="flex items-center space-x-2 px-3">
                                 <span
                                     class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-neutral-300 overflow-hidden">
                                     @if (Auth::user()->image)
