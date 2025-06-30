@@ -25,7 +25,8 @@
             </div>
             <div class="w-full flex pt-8 px-4 justify-between">
                 <div class="flex gap-4">
-                    <form action="{{ Request::is('admin/mycontent') ? '/admin/mycontent' : '/admin/content' }}" method="GET" class="flex gap-4" id="search-form">
+                    <form action="{{ Request::is('admin/mycontent') ? '/admin/mycontent' : '/admin/content' }}"
+                        method="GET" class="flex gap-4" id="search-form">
                         <div class="flex gap-2">
                             {{-- Input Pencarian --}}
                             <div class="flex gap-1 items-center rounded-lg border-gray-400 border-2 pl-2">
@@ -58,7 +59,9 @@
                     </form>
                 </div>
                 <div class="">
-                    <a href="" class="px-2 py-1 bg-sky-500 rounded-lg text-white font-semibold"><i
+                    <a href="category" class="px-2 py-1 mr-2 bg-sky-500 rounded-lg text-white font-semibold"><i
+                            class="fas fa-plus text-gray-50"></i> Add Category</a>
+                    <a href="" class="px-2 py-1 ml-2 bg-sky-500 rounded-lg text-white font-semibold"><i
                             class="fas fa-plus text-gray-50"></i> Add Content</a>
                 </div>
 
@@ -68,7 +71,7 @@
                     class="border-l-4 border-indigo-700 bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl w-1/4 flex justify-between items-center pl-2 ">
                     <div class="p-2 flex flex-col font-semibold">
                         <div class="text-base text-gray-800">All Content</div>
-                        <div class="text-3xl text-indigo-700 pl-4">{{ $allcontents->count()}}</div>
+                        <div class="text-3xl text-indigo-700 pl-4">{{ $allcontents->count() }}</div>
                     </div>
                     <div
                         class="rounded-full text-indigo-200 justify-center flex items-center bg-indigo-300 h-10 w-10 m-4">
@@ -254,8 +257,8 @@
             setTimeout(() => {
                 modal.classList.add('pointer-events-none');
                 formToSubmit = null;
-                contentTitleElement.textContent = ''; 
-            }, 300); 
+                contentTitleElement.textContent = '';
+            }, 300);
         };
 
         // Tambahkan event listener untuk setiap tombol hapus
