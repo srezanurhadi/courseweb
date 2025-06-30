@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\MyParticipant;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\homecontroller;
 use App\Http\Middleware\adminMiddleware;
@@ -8,15 +9,15 @@ use App\Http\Controllers\usersController;
 use App\Http\Middleware\authorMiddleware;
 use App\Http\Controllers\courseController;
 use App\Http\Controllers\contentController;
+use App\Http\Controllers\categoryController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Middleware\participantMiddleware;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\myParticipantController;
 use App\Http\Controllers\User\MyCourseController;
 use App\Http\Controllers\User\EnrollmentController;
-use App\Http\Controllers\User\CourseController as UserCourseController;
 use App\Http\Controllers\User\HomeController as UserHomeController;
-use App\Models\MyParticipant;
+use App\Http\Controllers\User\CourseController as UserCourseController;
 
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
 
@@ -38,6 +39,9 @@ Route::prefix('/admin')->middleware(adminMiddleware::class)->group(function () {
     Route::resource('/myparticipant', myParticipantController::class);
     Route::get('/myparticipant/{myparticipant:slug}/{user:id}/edit', [myParticipantController::class, 'editNilai'])
         ->name('admin.myparticipant.edit');
+
+    //category
+    Route::resource('/category', categoryController::class);
 
     //area saya
     Route::resource('/mycourse', courseController::class);
