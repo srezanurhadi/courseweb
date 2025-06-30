@@ -18,7 +18,7 @@ class HomeController extends Controller
         $user = Auth::user();
 
         // Ambil semua kursus yang diikuti oleh user, beserta jumlah total konten di setiap kursus
-        $enrolledCourses = $user->enrolledCourses()->withCount('contents')->get();
+        $enrolledCourses = $user->enrolledCourses()->where('status', 1)->withCount('contents')->get();
 
         $finishedCourseCount = 0;
         $totalProgress = 0;
@@ -43,6 +43,7 @@ class HomeController extends Controller
         }
 
         $ongoingCourseCount = $totalCourses - $finishedCourseCount;
+        $ongoingCourseCountPercentage = ($totalCourses > 0) ? round(($ongoingCourseCount / $totalCourses) * 100) : 0;
         $overallProgress = ($totalCourses > 0) ? round($totalProgress / $totalCourses) : 0;
         $finishedCoursePercentage = ($totalCourses > 0) ? round(($finishedCourseCount / $totalCourses) * 100) : 0;
 
@@ -52,6 +53,7 @@ class HomeController extends Controller
             'overallProgress' => $overallProgress,
             'totalEnrolledCourses' => $totalCourses,
             'finishedCoursePercentage' => $finishedCoursePercentage,
+            'ongoingCourseCountPercentage' => $ongoingCourseCountPercentage,
         ]);
     }
 }
