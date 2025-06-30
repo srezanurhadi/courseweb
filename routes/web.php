@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\MyParticipant;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\homecontroller;
 use App\Http\Middleware\adminMiddleware;
@@ -14,9 +15,9 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\myParticipantController;
 use App\Http\Controllers\User\MyCourseController;
 use App\Http\Controllers\User\EnrollmentController;
-use App\Http\Controllers\User\CourseController as UserCourseController;
+use App\Http\Controllers\User\CertificateController;
 use App\Http\Controllers\User\HomeController as UserHomeController;
-use App\Models\MyParticipant;
+use App\Http\Controllers\User\CourseController as UserCourseController;
 
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
 
@@ -101,6 +102,8 @@ Route::prefix('/user')->middleware(participantMiddleware::class)->name('user.')-
     Route::post('/profile/update', [myParticipantController::class, 'updateProfile'])->name('profile.update'); // Nama sudah benar
 
     Route::get('/profile/course/{id}', [myParticipantController::class, 'showCourseDetail'])->name('course.detail');
+
+    Route::get('/certificate/{courseId}', [CertificateController::class, 'generateCertificate'])->name('certificate.download');
 });
 
 // AUDENA PUNYA
