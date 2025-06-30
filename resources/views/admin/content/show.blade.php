@@ -14,7 +14,7 @@
         <div class="flex flex-1">
             <x-sidebar></x-sidebar>
             <div class=" w-full bg-gray-50 ">
-                <div class="p-4 shadow-lg font-bold flex bg-gray-100 flex-row justify-between top-0 sticky z-99">
+                <div class="p-4 shadow-lg font-bold flex bg-gray-100 flex-row justify-between top-0 sticky z-10">
                     <div class="text-3xl font-bold pl-4">Management Content</div>
                     <div class="profile flex items-center gap-2 pr-4">
                         <i class="fas fa-bell text-xl"></i>
@@ -35,11 +35,13 @@
                                     <span class="pl-2">Back</span>
                                 </a>
                             </div>
-                            <a href="/admin/content/{{ $content->slug }}/edit"
+                            <a href="/admin{{ Request::is('admin/mycontent*') ? '/mycontent' : '/content' }}/{{ $content->slug }}/edit"
                                 class=" py-0.5 px-3 border-amber-500 text-amber-500 hover:bg-amber-50  bg-amber-100 rounded-sm border-2 transition-all duration-200 shadow-inherit">
                                 <i class="fas fa-pencil-alt"></i> <span class="pl-2">Edit</span>
                             </a>
-                            <form action="/admin/content/{{ $content->slug }}" method="POST" class="inline-block">
+                            <form
+                                action="/admin{{ Request::is('admin/mycontent*') ? '/mycontent' : '/content' }}/{{ $content->slug }}"
+                                method="POST" class="inline-block">
                                 @method('delete')
                                 @csrf
                                 <button type="button"
@@ -124,18 +126,42 @@
                                                 @break
 
                                                 @case('list')
-                                                    @if ($block['data']['style'] === 'unordered')
-                                                        <ul class="list-disc pl-5 mb-4 space-y-2">
+                                                    {{-- Menangani Unordered dan Ordered List --}}
+                                                    @if ($block['data']['style'] === 'unordered' || $block['data']['style'] === 'ordered')
+                                                        @if ($block['data']['style'] === 'unordered')
+                                                            <ul class="list-disc pl-5 mb-4 space-y-2">
+                                                            @else
+                                                                <ol class="list-decimal pl-5 mb-4 space-y-2">
+                                                        @endif
+                                                        @foreach ($block['data']['items'] as $item)
+                                                            {{-- PASTIKAN item tidak kosong dan memiliki key 'content' --}}
+                                                            @if (is_array($item) && !empty($item['content']))
+                                                                <li>{!! $item['content'] !!}</li>
+                                                            @endif
+                                                        @endforeach
+                                                        @if ($block['data']['style'] === 'unordered')
+                                                            </ul>
+                                                        @else
+                                                            </ol>
+                                                        @endif
+
+                                                        {{-- BARU: Menangani Checklist --}}
+                                                    @elseif ($block['data']['style'] === 'checklist')
+                                                        <div class="mb-4 space-y-2">
                                                             @foreach ($block['data']['items'] as $item)
-                                                                <li>{!! $item !!}</li>
+                                                                {{-- PASTIKAN item tidak kosong dan memiliki key 'content' --}}
+                                                                @if (is_array($item) && isset($item['content']))
+                                                                    <div class="flex items-center">
+                                                                        <input type="checkbox"
+                                                                            class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+                                                                            {{ $item['meta']['checked'] ?? false ? 'checked' : '' }}
+                                                                            disabled>
+                                                                        <label
+                                                                            class="ml-2 text-gray-700">{!! $item['content'] !!}</label>
+                                                                    </div>
+                                                                @endif
                                                             @endforeach
-                                                        </ul>
-                                                    @else
-                                                        <ol class="list-decimal pl-5 mb-4 space-y-2">
-                                                            @foreach ($block['data']['items'] as $item)
-                                                                <li>{!! $item !!}</li>
-                                                            @endforeach
-                                                        </ol>
+                                                        </div>
                                                     @endif
                                                 @break
 
@@ -208,7 +234,8 @@
                 </div>
                 <div id="delete-confirmation-modal"
                     class="fixed inset-0 z-[100] flex items-center bg-white/10 justify-center transition-all duration-150 ease-in-out opacity-0 scale-95 pointer-events-none">
-                    <div class="bg-white/50 backdrop-blur-xs border-2 border-gray-200 rounded-lg shadow-sm w-full max-w-md mx-4 transition-all duration-300">
+                    <div
+                        class="bg-white/50 backdrop-blur-xs border-2 border-gray-200 rounded-lg shadow-sm w-full max-w-md mx-4 transition-all duration-300">
                         <div class="p-6">
                             <div class="flex items-start">
                                 <div
@@ -245,10 +272,12 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
+
     </body>
-    {{-- Letakkan ini di dalam tag <script> di bawah --}}
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const modal = document.getElementById('delete-confirmation-modal');
