@@ -80,7 +80,7 @@
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                                 <p class="mt-1 text-sm text-gray-500">
-                                    Kunjungi <a href="https://fontawesome.com/icons" target="_blank"
+                                    Kunjungi <a href="https://fontawesome.com/search?ic=free" target="_blank"
                                         class="text-blue-600 hover:text-blue-800 underline">FontAwesome</a> untuk
                                     melihat daftar icon yang tersedia
                                 </p>

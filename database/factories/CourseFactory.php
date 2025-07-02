@@ -17,7 +17,9 @@ class CourseFactory extends Factory
     public function definition(): array
     {
         $title = $this->faker->sentence(4);
-        $author = User::where('role', 'author')->inRandomOrder()->first();
+        $author = User::whereIn('role', ['author', 'admin'])
+            ->inRandomOrder()
+            ->first();
 
         // 1. Buat array besar dengan distribusi yang diinginkan
         $roles = array_merge(
@@ -29,7 +31,7 @@ class CourseFactory extends Factory
         return [
             // Kita tidak perlu mengambil ID di sini, Laravel bisa melakukannya
             // jika relasi sudah didefinisikan dengan benar.
-            
+
             'category_id' => Category::inRandomOrder()->first()->id,
 
             // Data Utama

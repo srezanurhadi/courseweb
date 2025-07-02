@@ -49,7 +49,7 @@
                                     class="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                     oninput="updatePreview()">
                                 <p class="mt-1 text-sm text-gray-500">
-                                    Kunjungi <a href="https://fontawesome.com/icons" target="_blank"
+                                    Kunjungi <a href="https://fontawesome.com/search?ic=free" target="_blank"
                                         class="text-blue-600 hover:text-blue-800 underline">FontAwesome</a> untuk
                                     melihat daftar icon yang tersedia
                                 </p>
@@ -82,7 +82,7 @@
                                                 <div class="flex items-center">
                                                     <div id="cardIconPreview"
                                                         class="text-center flex-shrink-0 h-8 w-8 rounded-md flex items-center justify-center text-white"
-                                                         style="background-color: #3B82F6;">
+                                                        style="background-color: #3B82F6;">
                                                         <i
                                                             class="fas fa-question w-5 h-5 justify-center text-center"></i>
                                                     </div>

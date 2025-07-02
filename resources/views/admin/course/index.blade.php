@@ -126,7 +126,8 @@
                         </div>
                         <div class="h-46 w-full p-2 flex flex-col justify-around mt-2">
                             <div class="flex justify-between">
-                                <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-gray-900 self-start">
+                                <div class="rounded-4xl font-bold bg-indigo-200 py-1 px-2 text-xs text-gray-900 self-start"
+                                    style="background-color: {{ $course->category->color }}20; color: {{ $course->category->color }}; ">
                                     {{ $course->category->category }}
                                 </div>
                                 <div class="relative inline-block text-left">
