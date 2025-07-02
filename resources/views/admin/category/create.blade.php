@@ -24,49 +24,28 @@
                 </div>
             </div>
 
-            <!-- Breadcrumb -->
-            <div class="mx-6 mt-4">
-                <nav class="flex" aria-label="Breadcrumb">
-                    <ol class="inline-flex items-center space-x-1 md:space-x-3">
-                        <li class="inline-flex items-center">
-                            <a href="#" onclick="goBack()"
-                                class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600">
-                                <i class="fas fa-home mr-2"></i>
-                                Management Category
-                            </a>
-                        </li>
-                        <li>
-                            <div class="flex items-center">
-                                <i class="fas fa-chevron-right text-gray-400 mx-2"></i>
-                                <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2">Create New Category</span>
-                            </div>
-                        </li>
-                    </ol>
-                </nav>
-            </div>
-
             <!-- Form -->
             <div class="mx-6 mb-6">
                 <div class="bg-white rounded-lg shadow-sm p-6">
-                    <form id="createCategoryForm" onsubmit="handleSubmit(event)">
+                    <form id="createCategoryForm" method="POST" action="/admin/category">
+                        @csrf
                         <div class="space-y-6">
                             <!-- Category Name -->
                             <div>
-                                <label for="categoryName" class="block text-sm font-medium text-gray-700 mb-2">
+                                <label for="category" class="block text-sm font-medium text-gray-700 mb-2">
                                     Category Name <span class="text-red-500">*</span>
                                 </label>
-                                <input type="text" id="categoryName" name="categoryName" required
+                                <input type="text" id="category" name="category" required
                                     placeholder="Enter category name"
                                     class="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                             </div>
 
                             <!-- Icon -->
                             <div>
-                                <label for="categoryIcon" class="block text-sm font-medium text-gray-700 mb-2">
+                                <label for="icon" class="block text-sm font-medium text-gray-700 mb-2">
                                     Icon Class <span class="text-red-500">*</span>
                                 </label>
-                                <input type="text" id="categoryIcon" name="categoryIcon" required
-                                    placeholder="fas fa-person"
+                                <input type="text" id="icon" name="icon" required placeholder="fas fa-people"
                                     class="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                     oninput="updatePreview()">
                                 <p class="mt-1 text-sm text-gray-500">
@@ -78,11 +57,11 @@
 
                             <!-- Color -->
                             <div>
-                                <label for="categoryColor" class="block text-sm font-medium text-gray-700 mb-2">
+                                <label for="color" class="block text-sm font-medium text-gray-700 mb-2">
                                     Color <span class="text-red-500">*</span>
                                 </label>
                                 <div class="flex items-center space-x-3">
-                                    <input type="color" id="categoryColor" name="categoryColor" value="#3B82F6"
+                                    <input type="color" id="color" name="color" value="#3B82F6"
                                         class="h-10 w-16 border border-gray-300 rounded cursor-pointer"
                                         oninput="updatePreview()">
                                     <span id="colorValue" class="text-sm text-gray-600">#3B82F6</span>
@@ -92,20 +71,20 @@
                             <!-- Preview -->
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Preview</label>
-                                <div class="p-4 border border-gray-200 rounded-lg bg-gray-50 spcae-y-4">
-
+                                <div class="p-4 border border-gray-200 rounded-lg bg-gray-50 space-y-4">
                                     <!-- Card Style Preview -->
                                     <div>
                                         <p class="text-xs text-gray-500 mb-2">Card Preview:</p>
                                         <div id="cardPreview"
-                                            class="flex items-center rounded-lg shadow-md text-sm font-medium max-w-md"
+                                            class="mb-4 flex items-center rounded-lg shadow-md text-sm font-medium max-w-md"
                                             style="background-color: rgba(59, 130, 246, 0.1);">
                                             <div class="px-6 py-3 w-full text-gray-900">
-                                                <div class="flex items-center border-2">
+                                                <div class="flex items-center">
                                                     <div id="cardIconPreview"
-                                                        class="border-2 border-black flex-shrink-0 h-8 w-8 rounded-md flex items-center justify-center text-white"
-                                                        style="background-color: #3B82F6;">
-                                                        <i class="fas fa-question w-5 h-5 border-2 border-black"></i>
+                                                        class="text-center flex-shrink-0 h-8 w-8 rounded-md flex items-center justify-center text-white"
+                                                         style="background-color: #3B82F6;">
+                                                        <i
+                                                            class="fas fa-question w-5 h-5 justify-center text-center"></i>
                                                     </div>
                                                     <div class="ml-4 truncate">
                                                         <span id="cardTitlePreview">How to use Figma Chapter 1</span>
@@ -162,27 +141,6 @@
         </div>
     </div>
 
-    <!-- Success Modal -->
-    <div id="successModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
-        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-            <div class="mt-3 text-center">
-                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
-                    <i class="fas fa-check text-green-600 text-xl"></i>
-                </div>
-                <h3 class="text-lg font-medium text-gray-900 mt-4">Success!</h3>
-                <div class="mt-2 px-7 py-3">
-                    <p class="text-sm text-gray-500">Category has been created successfully.</p>
-                </div>
-                <div class="items-center px-4 py-3">
-                    <button onclick="redirectToManagement()"
-                        class="px-4 py-2 bg-green-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300">
-                        OK
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
         // Helper function to convert hex to rgba
         function hexToRgba(hex, alpha) {
@@ -194,9 +152,10 @@
 
         // Update preview when inputs change
         function updatePreview() {
-            const name = document.getElementById('categoryName').value || 'Category Name';
-            const icon = document.getElementById('categoryIcon').value || 'fas fa-question';
-            const color = document.getElementById('categoryColor').value;
+            // FIXED: Menggunakan ID yang sesuai dengan HTML
+            const name = document.getElementById('category').value || 'Category Name';
+            const icon = document.getElementById('icon').value || 'fas fa-question';
+            const color = document.getElementById('color').value;
 
             // Update color value display
             document.getElementById('colorValue').textContent = color.toUpperCase();
@@ -208,6 +167,9 @@
             const cardIconPreview = document.getElementById('cardIconPreview');
             cardIconPreview.style.backgroundColor = color;
             cardIconPreview.innerHTML = `<i class="${icon} w-5 h-5"></i>`;
+
+            // Update card title
+            document.getElementById('cardTitlePreview').textContent = name || 'How to use Figma Chapter 1';
 
             // Update category preview
             const categoryPreview = document.getElementById('categoryPreview');
@@ -225,39 +187,8 @@
             document.getElementById('colorTextPreview').textContent = color.toUpperCase();
         }
 
-        // Handle form submission
-        function handleSubmit(event) {
-            event.preventDefault();
-
-            const formData = new FormData(event.target);
-            const categoryData = {
-                name: formData.get('categoryName'),
-                icon: formData.get('categoryIcon'),
-                color: formData.get('categoryColor')
-            };
-
-            // Here you would typically send the data to your backend
-            console.log('Creating category:', categoryData);
-
-            // Show success modal
-            document.getElementById('successModal').classList.remove('hidden');
-        }
-
-        // Go back to management page
+        // Go back function
         function goBack() {
-            // In a real application, this would navigate to the management page
-            // For now, we'll just show an alert
-            if (confirm('Are you sure you want to go back? Any unsaved changes will be lost.')) {
-                window.history.back();
-                // Or redirect to management page: window.location.href = 'management-category.html';
-            }
-        }
-
-        // Redirect to management page after successful creation
-        function redirectToManagement() {
-            // In a real application, this would redirect to the management page
-            // window.location.href = 'management-category.html';
-            alert('Redirecting to Management Category page...');
             window.history.back();
         }
 
@@ -266,9 +197,10 @@
             updatePreview();
 
             // Add event listeners for real-time preview updates
-            document.getElementById('categoryName').addEventListener('input', updatePreview);
-            document.getElementById('categoryColor').addEventListener('input', updatePreview);
-        })
+            document.getElementById('category').addEventListener('input', updatePreview);
+            document.getElementById('color').addEventListener('input', updatePreview);
+            document.getElementById('icon').addEventListener('input', updatePreview);
+        });
     </script>
 
 </body>

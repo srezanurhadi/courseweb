@@ -10,9 +10,9 @@
 </head>
 
 <body>
-    <div class="flex flex-1">
+    <div class="flex flex-1 ">
         <x-sidebar></x-sidebar>
-        <div class=" w-full bg-gray-50 ">
+        <div class=" w-full bg-gray-50 overflow-hidden">
             <div class="p-4 shadow-lg font-bold flex bg-gray-100 flex-row justify-between top-0 sticky z-99">
                 <div class="text-3xl font-bold pl-4">Management Content</div>
                 <div class="profile flex items-center gap-2 pr-4">
