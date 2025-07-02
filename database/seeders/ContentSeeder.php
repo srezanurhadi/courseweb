@@ -18,15 +18,20 @@ class ContentSeeder extends Seeder
     {
         $numberOfContents = 20;
 
-        $authorId = User::where('role', 'author')->first()?->id;
-        $categoryId = Category::first()?->id;
 
-        if (!$authorId || !$categoryId) {
+
+        if (User::whereIn('role', ['author', 'admin'])->count() === 0 || Category::count() === 0) {
             $this->command->info('Tidak dapat menemukan user author atau kategori. Pastikan seeder User dan Category sudah dijalankan.');
             return;
         }
 
         for ($i = 1; $i <= $numberOfContents; $i++) {
+
+            $authorId = User::whereIn('role', ['author', 'admin'])
+                ->inRandomOrder()
+                ->first()->id;
+            $categoryId = Category::inRandomOrder()->first()->id;
+
             // Gunakan Faker untuk membuat judul yang lebih realistis
             $title = fake()->sentence(rand(4, 8));
 
