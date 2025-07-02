@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\MyParticipant;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\homecontroller;
 use App\Http\Middleware\adminMiddleware;
@@ -8,15 +9,15 @@ use App\Http\Controllers\usersController;
 use App\Http\Middleware\authorMiddleware;
 use App\Http\Controllers\courseController;
 use App\Http\Controllers\contentController;
+use App\Http\Controllers\categoryController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Middleware\participantMiddleware;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\myParticipantController;
 use App\Http\Controllers\User\MyCourseController;
 use App\Http\Controllers\User\EnrollmentController;
-use App\Http\Controllers\User\CourseController as UserCourseController;
 use App\Http\Controllers\User\HomeController as UserHomeController;
-use App\Models\MyParticipant;
+use App\Http\Controllers\User\CourseController as UserCourseController;
 
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
 
@@ -24,12 +25,10 @@ Route::prefix('/admin')->middleware(adminMiddleware::class)->group(function () {
 
     // Route khusus untuk AJAX search
     Route::get('/course/search', [courseController::class, 'search'])->name('course.search');
-
     Route::get('/', [homecontroller::class, 'index']);
     // route khusus image di editor
     Route::post('/upload-image', [ImageController::class, 'store'])->name('image.store');
     Route::post('/admin/delete-image', [ImageController::class, 'destroy'])->name('admin.image.destroy');
-
     Route::resource('/users', usersController::class);
     Route::resource('/course', courseController::class);
     Route::get('/course/{course:slug}/content/{content}', [CourseController::class, 'showContent'])
@@ -39,8 +38,13 @@ Route::prefix('/admin')->middleware(adminMiddleware::class)->group(function () {
     Route::get('/myparticipant/{myparticipant:slug}/{user:id}/edit', [myParticipantController::class, 'editNilai'])
         ->name('admin.myparticipant.edit');
 
+    //category
+    Route::resource('/category', categoryController::class);
+
     //area saya
     Route::resource('/mycourse', courseController::class);
+    Route::get('/mycourse/{course:slug}/content/{content}', [CourseController::class, 'showContent'])
+        ->name('admin.mycourse.content.show');  
     Route::resource('/mycontent', contentController::class);
 });
 

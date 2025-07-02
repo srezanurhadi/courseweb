@@ -168,11 +168,10 @@
                             <h1 class="text-3xl font-bold text-gray-800">Home</h1>
                         </div>
                         <div class="flex items-center space-x-4 px-4">
-                            <button class="enhanced-transition hover:scale-110">
+                            <button>
                                 <i class="fa-regular fa-bell fa-lg text-black hover:text-indigo-600"></i>
                             </button>
-                            <div
-                                class="flex items-center space-x-2 px-3 py-2 rounded-full enhanced-transition hover:bg-slate-100 cursor-pointer">
+                            <div class="flex items-center space-x-2 px-3">
                                 <span
                                     class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-neutral-300 overflow-hidden">
                                     @if (Auth::user()->image)
@@ -531,7 +530,54 @@
 
             var finishedChart = new ApexCharts(document.querySelector("#finishedChart"), finishedChartOptions);
             finishedChart.render();
-            createRadialChart('#ongoingChart', {{ $ongoingCourseCount }}, 'Ongoing Course', '#ffffff');
+
+            var ongoingChartOptions = {
+                chart: {
+                    height: 250,
+                    type: "radialBar"
+                },
+                // 1. Visual Chart: Menggunakan persentase agar lingkaran penuh
+                series: [{{ $ongoingCourseCountPercentage }}],
+                plotOptions: {
+                    radialBar: {
+                        hollow: {
+                            margin: 15,
+                            size: "60%"
+                        },
+                        track: {
+                            background: '#818cf8',
+                            strokeWidth: '100%'
+                        },
+                        dataLabels: {
+                            showOn: "always",
+                            name: {
+                                show: false
+                            },
+                            value: {
+                                color: "white",
+                                fontSize: "40px",
+                                fontWeight: "600",
+                                show: true,
+                                // 2. Teks di Dalam Chart: Menampilkan jumlah nominal
+                                formatter: function(val) {
+                                    return {{ $ongoingCourseCount }};
+                                }
+                            }
+                        }
+                    }
+                },
+                fill: {
+                    colors: ['#ffffff']
+                },
+                stroke: {
+                    lineCap: "round"
+                },
+                labels: ['Ongoing Course']
+            };
+
+            var ongoingChart = new ApexCharts(document.querySelector("#ongoingChart"), ongoingChartOptions);
+            ongoingChart.render();
+            // createRadialChart('#ongoingChart', {{ $ongoingCourseCount }}, 'Ongoing Course', '#ffffff');
             createRadialChart('#overallChart', {{ $overallProgress }}, 'Progress Overall', '#ffffff');
 
             // JavaScript untuk animasi saat scroll

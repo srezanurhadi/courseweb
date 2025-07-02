@@ -26,7 +26,7 @@
             </div>
             <div class="w-full flex pt-6 pb-2 px-6 justify-between">
                 <div class="flex gap-4">
-                    <form action="{{ url('/admin/course') }}" method="GET" class="flex gap-2">
+                    <form action="{{ url('/admin/mycourse') }}" method="GET" class="flex gap-2">
                         <div class=" flex gap-1 items-center rounded-lg border-gray-400 border-2 pl-2">
                             <i class="fas fa-search text-gray-500"></i>
                             <input type="text" name="search" value="{{ request('search') }}"
@@ -65,8 +65,9 @@
 
                 </div>
                 <div class="">
-                    <a href="course/create" class="px-2 py-1 bg-sky-500 rounded-lg text-white font-semibold"><i
-                            class="fas fa-plus text-gray-50"></i> Add Content</a>
+                    <a href="/admin{{ Request::is('admin/mycourse') ? '/mycourse/create' : '/course/create' }}"
+                        class="px-2 py-1 bg-sky-500 rounded-lg text-white font-semibold"><i
+                            class="fas fa-plus text-gray-50"></i> Add Course</a>
                 </div>
 
             </div>
@@ -143,22 +144,29 @@
                                     <div id="dropdown-menu"
                                         class="js-dropdown-menu hidden origin-top-right absolute shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] right-0 mt-2 w-56 rounded-md bg-gray-100 focus:outline-none"
                                         role="menu" aria-orientation="vertical" aria-labelledby="dropdown-button">
-                                        <div class="py-1" role="none">
+                                        <div class="" role="none">
                                             <a href="{{ url('admin/course/' . $course->slug . '/edit') }}"
                                                 class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-300"
                                                 role="menuitem" id="menu-item-0">Edit Course</a>
                                             <a href="{{ url('admin/course/' . $course->slug) }}"
                                                 class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-300"
                                                 role="menuitem" id="menu-item-1">Show more</a>
-                                            <a href="#"
-                                                class="text-red-600 block px-4 py-2 text-sm hover:bg-gray-300"
-                                                role="menuitem" id="menu-item-2">Delete</a>
+                                            <form action="/admin/mycourse/{{ $course->slug }}" method="POST"
+                                                class="delete-btn text-rose-700 block px-4 py-2 text-sm hover:bg-rose-300 hover:text-red-900 hover:cursor-pointer"
+                                                data-title="{{ $course->title }}">
+                                                @csrf
+                                                @method('DELETE')
+                                                {{-- PERUBAHAN DI SINI --}}
+                                                <div class="font-medium">
+                                                    Hapus
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900 hover:cursor-pointer"
-                                onclick="window.location.href='{{ url('admin/course/' . $course->slug) }}'">
+                                onclick="window.location.href='/admin{{ Request::is('*/mycourse*') ? '/mycourse' : '/course' }}/{{ $course->slug }}'">
                                 {{ $course->title }}</div>
                             <div class="pl-2 pt-2 text-sm text-gray-500 line-clamp-2">
                                 {{ $course->description }}</div>
@@ -168,7 +176,7 @@
                                         class="rounded-full h-6 w-6 bg-indigo-700 text-indigo-200 justify-center flex items-center">
                                         {{ substr($course->user->name, 0, 1) }}</div>
                                     <div class="pl-2 text-sm text-gray-600">{{ $course->user->name }}</div>
-                                </div>
+                                </div> 
                                 <div class="flex items-center pt-2 gap-2">
                                     <i class="fas fa-users-line text-indigo-700"></i>
                                     <div class="text-sm text-gray-600">{{ $course->enrollments_count }} Participant
@@ -179,202 +187,51 @@
                         </div>
                     </div>
                 @endforeach
-                {{-- <div
-                        class=" bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden">
-                        <div
-                            class="p-2 h-52 w-full items-start flex justify-between  bg-[url('https://picsum.photos/902/600')] bg-cover bg-center">
-                            <div class="rounded-4xl bg-amber-200/60 py-1 px-2 text-xs text-gray-900">12 Month Ago</div>
-                            <div class="rounded-4xl bg-green-600 py-1 px-2 text-xs text-gray-200">Published</div>
-                        </div>
-                        <div class="h-46 w-full p-2 flex flex-col mt-2">
-                            <div class="flex justify-between">
-                                <div class="rounded-4xl bg-amber-200 py-1 px-2 text-xs text-gray-900"> Web Development
-                                </div>
-                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                    fill="currentColor" aria-hidden="true">
-                                    <path
-                                        d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                                </svg>
-                            </div>
-                            <div class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900">Tutorial Laravel 12
-                                100% work no debat dan pasti berhasil realllllll pasti bisa yakn betul html dan lain
-                                lain</div>
-                            <div class="pl-2 pt-2 text-sm text-gray-500 line-clamp-2">Pelajari laravel 12 dengan
-                                sungguh-sungguh
-                                maka anda akan aman dan sehat sentosa</div>
-                            <div class="flex justify-between">
-                                <div class="flex items-center pt-2 pl-2">
-                                    <div
-                                        class="rounded-full h-6 w-6 bg-amber-500 text-amber-100 justify-center flex items-center">
-                                        P</div>
-                                    <div class="pl-2 text-sm text-gray-700">Prawowo</div>
-                                </div>
-                                <div class="flex items-center pt-2 gap-2">
-                                    <i class="fas fa-users-line text-amber-500"></i>
-                                    <div class="text-sm text-gray-600">0.5% Participant</div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div
-                        class=" bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden">
-                        <div
-                            class="p-2 h-52 w-full items-start flex justify-between  bg-[url('https://picsum.photos/901/600')] bg-cover bg-center">
-                            <div class="rounded-4xl bg-green-200/60 py-1 px-2 text-xs text-gray-900">12 Month Ago</div>
-                            <div class="rounded-4xl bg-red-600 py-1 px-2 text-xs text-gray-100">Draft</div>
-                        </div>
-                        <div class="h-46 w-full p-2 flex flex-col mt-2">
-                            <div class="flex justify-between">
-                                <div class="rounded-4xl bg-green-200 py-1 px-2 text-xs text-gray-900"> Web Development
-                                </div>
-                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                    fill="currentColor" aria-hidden="true">
-                                    <path
-                                        d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                                </svg>
-                            </div>
-                            <div class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900">Tutorial Laravel 12
-                                100% work no debat dan pasti berhasil realllllll pasti bisa yakn betul html dan lain
-                                lain</div>
-                            <div class="pl-2 pt-2 text-sm text-gray-500 line-clamp-2">Pelajari laravel 12 dengan
-                                sungguh-sungguh
-                                maka anda akan aman dan sehat sentosa</div>
-                            <div class="flex justify-between">
-                                <div class="flex items-center pt-2 pl-2">
-                                    <div
-                                        class="rounded-full h-6 w-6 bg-green-700 text-green-100 justify-center flex items-center">
-                                        P</div>
-                                    <div class="pl-2 text-sm text-gray-600">Prawowo</div>
-                                </div>
-                                <div class="flex items-center pt-2 gap-2">
-                                    <i class="fas fa-users-line text-green-700"></i>
-                                    <div class="text-sm text-gray-700">0.5% Participant</div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div
-                        class=" bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden">
-                        <div
-                            class="p-2 h-52 w-full items-start flex justify-between  bg-[url('https://picsum.photos/901/600')] bg-cover bg-center">
-                            <div class="rounded-4xl bg-green-200/60 py-1 px-2 text-xs text-gray-900">12 Month Ago</div>
-                            <div class="rounded-4xl bg-red-600 py-1 px-2 text-xs text-gray-100">Draft</div>
-                        </div>
-                        <div class="h-46 w-full p-2 flex flex-col mt-2">
-                            <div class="flex justify-between">
-                                <div class="rounded-4xl bg-green-200 py-1 px-2 text-xs text-gray-900"> Web Development
-                                </div>
-                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                    fill="currentColor" aria-hidden="true">
-                                    <path
-                                        d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                                </svg>
-                            </div>
-                            <div class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900">Tutorial Laravel 12
-                                100% work no debat dan pasti berhasil realllllll pasti bisa yakn betul html dan lain
-                                lain</div>
-                            <div class="pl-2 pt-2 text-sm text-gray-500 line-clamp-2">Pelajari laravel 12 dengan
-                                sungguh-sungguh
-                                maka anda akan aman dan sehat sentosa</div>
-                            <div class="flex justify-between">
-                                <div class="flex items-center pt-2 pl-2">
-                                    <div
-                                        class="rounded-full h-6 w-6 bg-green-700 text-green-100 justify-center flex items-center">
-                                        P</div>
-                                    <div class="pl-2 text-sm text-gray-600">Prawowo</div>
-                                </div>
-                                <div class="flex items-center pt-2 gap-2">
-                                    <i class="fas fa-users-line text-green-700"></i>
-                                    <div class="text-sm text-gray-700">0.5% Participant</div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div
-                        class=" bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden">
-                        <div
-                            class="p-2 h-52 w-full items-start flex justify-between  bg-[url('https://picsum.photos/900/600')] bg-cover bg-center">
-                            <div class="rounded-4xl bg-indigo-200/60 py-1 px-2 text-xs text-gray-900">12 Month Ago
-                            </div>
-                            <div class="rounded-4xl bg-green-600 py-1 px-2 text-xs text-gray-200">Published</div>
-                        </div>
-                        <div class="h-46 w-full p-2 flex flex-col mt-2">
-                            <div class="flex justify-between">
-                                <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-gray-900"> Web Development
-                                </div>
-                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                    fill="currentColor" aria-hidden="true">
-                                    <path
-                                        d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                                </svg>
-                            </div>
-                            <div class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900">Tutorial Laravel 12
-                                100% work no debat dan pasti berhasil realllllll pasti bisa yakn betul html dan lain
-                                lain</div>
-                            <div class="pl-2 pt-2 text-sm text-gray-500 line-clamp-2">Pelajari laravel 12 dengan
-                                sungguh-sungguh
-                                maka anda akan aman dan sehat sentosa</div>
-                            <div class="flex justify-between">
-                                <div class="flex items-center pt-2 pl-2">
-                                    <div
-                                        class="rounded-full h-6 w-6 bg-indigo-700 text-indigo-200 justify-center flex items-center">
-                                        P</div>
-                                    <div class="pl-2 text-sm text-gray-600">Prawowo</div>
-                                </div>
-                                <div class="flex items-center pt-2 gap-2">
-                                    <i class="fas fa-users-line text-indigo-700"></i>
-                                    <div class="text-sm text-gray-600">0.5% Participant</div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div
-                        class=" bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl flex flex-col justify-between items-center overflow-hidden">
-                        <div
-                            class="p-2 h-52 w-full items-start flex justify-between  bg-[url('https://picsum.photos/906/600')] bg-cover bg-center">
-                            <div class="rounded-4xl bg-indigo-200/60 py-1 px-2 text-xs text-gray-900">12 Month Ago
-                            </div>
-                            <div class="rounded-4xl bg-green-600 py-1 px-2 text-xs text-gray-200">Published</div>
-                        </div>
-                        <div class="h-46 w-full p-2 flex flex-col mt-2">
-                            <div class="flex justify-between">
-                                <div class="rounded-4xl bg-indigo-200 py-1 px-2 text-xs text-gray-900"> Web Development
-                                </div>
-                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                    fill="currentColor" aria-hidden="true">
-                                    <path
-                                        d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                                </svg>
-                            </div>
-                            <div class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900">Tutorial Laravel 12
-                                100% work no debat dan pasti berhasil realllllll pasti bisa yakn betul html dan lain
-                                lain</div>
-                            <div class="pl-2 pt-2 text-sm text-gray-500 line-clamp-2">Pelajari laravel 12 dengan
-                                sungguh-sungguh
-                                maka anda akan aman dan sehat sentosa</div>
-                            <div class="flex justify-between">
-                                <div class="flex items-center pt-2 pl-2">
-                                    <div
-                                        class="rounded-full h-6 w-6 bg-indigo-700 text-indigo-200 justify-center flex items-center">
-                                        P</div>
-                                    <div class="pl-2 text-sm text-gray-600">Prawowo</div>
-                                </div>
-                                <div class="flex items-center pt-2 gap-2">
-                                    <i class="fas fa-users-line text-indigo-700"></i>
-                                    <div class="text-sm text-gray-600">0.5% Participant</div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div> --}}
 
             </div>
-            <div class="mt-4">
+            <div class="mt-4 pb-4">
                 {{ $courses->appends(request()->all())->links() }}
+            </div>
+            <div id="delete-confirmation-modal"
+                class="fixed ml-54 inset-0 z-[100] flex items-center justify-center bg-white/10 backdrop-blur-sm bg-opacity-50 transition-all duration-300 ease-in-out opacity-0 scale-95 pointer-events-none">
+                <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+                    <div class="p-6">
+                        <div class="flex items-start">
+                            <div
+                                class="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                                <svg class="h-6 w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                            </div>
+                            <div class="ml-4 text-left">
+                                <h3 class="text-lg leading-6 font-bold text-gray-900" id="modal-title">
+                                    Konfirmasi Hapus
+                                </h3>
+                                <div class="mt-2">
+                                    {{-- PERUBAHAN DI SINI --}}
+                                    <p class="text-sm text-gray-600">
+                                        Apakah Anda yakin ingin menghapus konten
+                                        <strong id="content-title-to-delete" class="text-gray-900"></strong>?
+                                        <br>Tindakan ini tidak dapat dibatalkan.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse rounded-b-lg">
+                        {{-- Tombol tidak berubah --}}
+                        <button type="button" id="confirmDeleteBtn"
+                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
+                            Ya, Hapus
+                        </button>
+                        <button type="button" id="cancelDeleteBtn"
+                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:w-auto sm:text-sm">
+                            Batal
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -414,6 +271,70 @@
             });
         });
 
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('delete-confirmation-modal');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+        const deleteButtons = document.querySelectorAll('.delete-btn');
+        const contentTitleElement = document.getElementById('content-title-to-delete');
+
+        let formToSubmit = null;
+
+        // Fungsi untuk menampilkan modal dengan transisi
+        const showModal = (form, title) => {
+            formToSubmit = form;
+            contentTitleElement.textContent = `'${title}'`;
+
+            modal.classList.remove('pointer-events-none');
+
+            setTimeout(() => {
+                // Tambahkan kelas untuk memicu animasi 'fade in' dan 'scale up'
+                modal.classList.add('opacity-100', 'scale-100');
+                modal.classList.remove('opacity-0', 'scale-95');
+            }, 10); // Jeda 10 milidetik sudah cukup
+        };
+
+        // Fungsi untuk menyembunyikan modal dengan transisi
+        const hideModal = () => {
+            // 1. Tambahkan kelas untuk memicu animasi 'fade out' dan 'scale down'
+            modal.classList.remove('opacity-100', 'scale-100');
+            modal.classList.add('opacity-0', 'scale-95');
+
+            // 2. Setelah animasi selesai (300ms), buat modal tidak bisa diklik lagi
+            setTimeout(() => {
+                modal.classList.add('pointer-events-none');
+                formToSubmit = null;
+                contentTitleElement.textContent = '';
+            }, 300);
+        };
+
+        // Tambahkan event listener untuk setiap tombol hapus
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const form = this.closest('form');
+                const title = this.dataset.title;
+                showModal(form, title);
+            });
+        });
+
+        // Event listener untuk tombol konfirmasi
+        confirmDeleteBtn.addEventListener('click', () => {
+            if (formToSubmit) {
+                formToSubmit.submit();
+            }
+        });
+
+        // Event listener untuk tombol batal
+        cancelDeleteBtn.addEventListener('click', hideModal);
+
+        // Event listener untuk menutup modal jika klik di area luar (backdrop)
+        modal.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                hideModal();
+            }
+        });
     });
 </script>
 

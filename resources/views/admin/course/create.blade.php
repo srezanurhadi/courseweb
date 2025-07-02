@@ -8,6 +8,75 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Document</title>
     <x-headcomponent></x-headcomponent>
+
+    <style>
+        /* From Uiverse.io by alexruix */
+        .loader {
+            width: 48px;
+            height: 48px;
+            margin: auto;
+            position: relative;
+        }
+
+        .loader:before {
+            content: '';
+            width: 48px;
+            height: 5px;
+            background: #f0808050;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            border-radius: 50%;
+            animation: shadow324 0.5s linear infinite;
+        }
+
+        .loader:after {
+            content: '';
+            width: 100%;
+            height: 100%;
+            background: #f08080;
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-radius: 4px;
+            animation: jump7456 0.5s linear infinite;
+        }
+
+        @keyframes jump7456 {
+            15% {
+                border-bottom-right-radius: 3px;
+            }
+
+            25% {
+                transform: translateY(9px) rotate(22.5deg);
+            }
+
+            50% {
+                transform: translateY(18px) scale(1, .9) rotate(45deg);
+                border-bottom-right-radius: 40px;
+            }
+
+            75% {
+                transform: translateY(9px) rotate(67.5deg);
+            }
+
+            100% {
+                transform: translateY(0) rotate(90deg);
+            }
+        }
+
+        @keyframes shadow324 {
+
+            0%,
+            100% {
+                transform: scale(1, 1);
+            }
+
+            50% {
+                transform: scale(1.2, 1);
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -136,8 +205,6 @@
         <div id="modal"
             class="modal ml-54 hidden opacity-0 fixed inset-0 bg-black/50 backdrop-blur-xs transition-all duration-500 ease-in-out flex items-center justify-center z-50 p-25">
             <div class="p-4 w-full max-w-6xl bg-gray-100 rounded-lg ">
-
-                <!-- SOLUTION 2: AJAX SEARCH (HIDDEN BY DEFAULT) -->
                 <div id="ajax-solution">
                     <div class="w-full bg-gray-100 flex pt-2 pb-4 px-1 justify-between">
                         <div class="flex gap-4 justify-between">
@@ -167,14 +234,14 @@
                 </div>
 
                 <!-- Content List Container -->
-                <div class="bg-gray-50 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl overflow-hidden pb-5">
+                <div
+                    class="bg-gray-50 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl overflow-hidden pb-5 relative">
                     {{-- header --}}
                     <div
                         class="relative flex bg-indigo-600 text-gray-50 text-xs font-semibold uppercase tracking-wider">
-                        <div class="px-6 py-3 w-4/12 text-left">Judul Konten</div>
+                        <div class="px-6 py-3 w-6/12 text-left">Judul Konten</div>
                         <div class="px-6 py-3 w-2/12 text-left">Category</div>
                         <div class="px-6 py-3 w-2/12 text-left">Created At</div>
-                        <div class="px-6 py-3 w-2/12 text-left">Status</div>
                         <div class="px-6 py-3 w-2/12 text-left flex flex-col mr-6">Action</div>
                     </div>
 
@@ -182,7 +249,7 @@
                     <div id="content-list" class="space-y-4 px-4 py-4 overflow-y-auto h-100">
                         @forelse ($contents as $content)
                             <div class="flex items-center bg-amber-100 rounded-lg shadow-md text-sm font-medium">
-                                <div class="px-6 py-3 w-4/12 text-gray-900">
+                                <div class="px-6 py-3 w-6/12 text-gray-900">
                                     <div class="flex items-center">
                                         <div
                                             class="flex-shrink-0 h-8 w-8 rounded-md bg-amber-500 flex items-center justify-center text-white">
@@ -200,7 +267,6 @@
                                     {{ $content->category->category }}</div>
                                 <div class="px-6 py-3 w-2/12 text-gray-700">
                                     {{ $content->created_at->format('d-m-Y') }}</div>
-                                <div class="px-6 py-3 w-2/12 text-gray-700">Belum pernah dipilih</div>
                                 <div class="px-6 py-3 w-2/12">
                                     <div class="flex items-center space-x-2">
                                         <div class="flex justify-center w-full">
@@ -224,129 +290,119 @@
                         @endforelse
                     </div>
 
-                    <!-- Loading indicator for AJAX -->
-                    <div id="loading-indicator" class="hidden text-center py-4">
+                    <div id="loading-indicator"
+                        class="absolute inset-0 bg-white/20 flex items-center justify-center z-50 hidden">
                         <div
-                            class="inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md text-gray-500 bg-white">
-                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-500"
-                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10"
-                                    stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor"
-                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                </path>
-                            </svg>
-                            Loading...
+                            class="loader w-10 h-10">
                         </div>
                     </div>
-                </div>
 
-                <div class="mt-4">
-                    <div class="flex flex-row justify-end gap-4">
-                        <button id="closeModal"
-                            class="py-1 w-34 text-indigo-700 bg-gray-50 border-2 border-indigo-700 rounded-lg text-center">Cancel</button>
-                        <button id="saveSelectedContent" type="button"
-                            class="py-1 w-34 text-gray-50 bg-indigo-700 border-2 border-indigo-700 rounded-lg text-center">Save</button>
+                    <div class="mt-4">
+                        <div class="flex flex-row justify-end gap-4">
+                            <button id="closeModal"
+                                class="py-1 w-34 text-indigo-700 bg-gray-50 border-2 border-indigo-700 rounded-lg text-center">Cancel</button>
+                            <button id="saveSelectedContent" type="button"
+                                class="py-1 w-34 text-gray-50 bg-indigo-700 border-2 border-indigo-700 rounded-lg text-center">Save</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <script>
-        // Gunakan nama yang benar dari hasil "php artisan route:list"
-        const SEARCH_URL = '{{ route('course.search') }}';
-    </script>
+        <script>
+            // Gunakan nama yang benar dari hasil "php artisan route:list"
+            const SEARCH_URL = '{{ route('course.search') }}';
+        </script>
 
-    <script>
-        // AJAX Search Implementation
-        const ajaxSearchInput = document.getElementById('ajax-search');
-        const ajaxCategoryFilter = document.getElementById('ajax-category-filter');
-        const ajaxSearchBtn = document.getElementById('ajax-search-btn');
-        const contentList = document.getElementById('content-list');
-        const loadingIndicator = document.getElementById('loading-indicator');
-        let selectedContents = [];
+        <script>
+            // AJAX Search Implementation
+            const ajaxSearchInput = document.getElementById('ajax-search');
+            const ajaxCategoryFilter = document.getElementById('ajax-category-filter');
+            const ajaxSearchBtn = document.getElementById('ajax-search-btn');
+            const contentList = document.getElementById('content-list');
+            const loadingIndicator = document.getElementById('loading-indicator');
+            let selectedContents = [];
 
-        function performAjaxSearch() {
-            const searchTerm = ajaxSearchInput.value;
-            const categoryId = ajaxCategoryFilter.value;
+            function performAjaxSearch() {
+                const searchTerm = ajaxSearchInput.value;
+                const categoryId = ajaxCategoryFilter.value;
 
-            // Show loading
-            loadingIndicator.classList.remove('hidden');
-            contentList.style.opacity = '0.5';
+                // Show loading
+                loadingIndicator.classList.remove('hidden');
+                contentList.style.opacity = '0.5';
 
-            const params = new URLSearchParams();
-            if (searchTerm) params.append('search', searchTerm);
-            if (categoryId) params.append('category', categoryId);
-            // params.append('ajax', '1'); // Ini tidak wajib jika Anda menggunakan header
+                const params = new URLSearchParams();
+                if (searchTerm) params.append('search', searchTerm);
+                if (categoryId) params.append('category', categoryId);
+                // params.append('ajax', '1'); // Ini tidak wajib jika Anda menggunakan header
 
-            // URL endpoint yang kita buat di Laravel
-            const url = `${SEARCH_URL}?${params.toString()}`;
+                // URL endpoint yang kita buat di Laravel
+                const url = `${SEARCH_URL}?${params.toString()}`;
 
 
-            console.log('SEARCH_URL:', SEARCH_URL);
-            console.log('Final URL:', url)
+                console.log('SEARCH_URL:', SEARCH_URL);
+                console.log('Final URL:', url)
 
-            fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        // Header ini penting agar Laravel tahu ini adalah request AJAX
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Accept': 'application/json',
-                    }
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // Panggil fungsi baru kita untuk update list
-                    updateContentList(data.contents);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    // Sekarang kita tahu errornya adalah SyntaxError, kita bisa lebih yakin masalahnya di sini.
-                    contentList.innerHTML =
-                        `<div class="text-center text-red-600 py-4">Terjadi kesalahan saat memuat data (Format salah).</div>`;
-                })
-                .finally(() => {
-                    // Selalu sembunyikan loading setelah selesai
-                    hideLoading();
-                });
-        }
-
-        function hideLoading() {
-            loadingIndicator.classList.add('hidden');
-            contentList.style.opacity = '1';
-        }
-
-        function updateContentList(contents) {
-            // Kosongkan daftar konten saat ini
-            contentList.innerHTML = '';
-
-            // Jika tidak ada konten yang ditemukan, tampilkan pesan
-            if (!contents || contents.length === 0) {
-                contentList.innerHTML =
-                    `<div class="text-center text-gray-600 py-4">Tidak ada konten yang ditemukan.</div>`;
-                return;
+                fetch(url, {
+                        method: 'GET',
+                        headers: {
+                            // Header ini penting agar Laravel tahu ini adalah request AJAX
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json',
+                        }
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Panggil fungsi baru kita untuk update list
+                        updateContentList(data.contents);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        // Sekarang kita tahu errornya adalah SyntaxError, kita bisa lebih yakin masalahnya di sini.
+                        contentList.innerHTML =
+                            `<div class="text-center text-red-600 py-4">Terjadi kesalahan saat memuat data (Format salah).</div>`;
+                    })
+                    .finally(() => {
+                        // Selalu sembunyikan loading setelah selesai
+                        hideLoading();
+                    });
             }
 
-            const currentlyChecked = [];
-            document.querySelectorAll('input[name="content_checkbox"]:checked').forEach(checkbox => {
-                currentlyChecked.push({
-                    id: parseInt(checkbox.value),
-                    title: checkbox.getAttribute('data-title')
+            function hideLoading() {
+                loadingIndicator.classList.add('hidden');
+                contentList.style.opacity = '1';
+            }
+
+            function updateContentList(contents) {
+                // Kosongkan daftar konten saat ini
+                contentList.innerHTML = '';
+
+                // Jika tidak ada konten yang ditemukan, tampilkan pesan
+                if (!contents || contents.length === 0) {
+                    contentList.innerHTML =
+                        `<div class="text-center text-gray-600 py-4">Tidak ada konten yang ditemukan.</div>`;
+                    return;
+                }
+
+                const currentlyChecked = [];
+                document.querySelectorAll('input[name="content_checkbox"]:checked').forEach(checkbox => {
+                    currentlyChecked.push({
+                        id: parseInt(checkbox.value),
+                        title: checkbox.getAttribute('data-title')
+                    });
                 });
-            });
 
-            let html = '';
-            contents.forEach(content => {
-                // **PENTING: Cek apakah konten ini sudah dipilih sebelumnya**
-                // Kita menggunakan array 'selectedContents' dari script Anda sebelumnya
-                const isChecked = selectedContents.some(item => item.id == content.id);
+                let html = '';
+                contents.forEach(content => {
+                    // **PENTING: Cek apakah konten ini sudah dipilih sebelumnya**
+                    // Kita menggunakan array 'selectedContents' dari script Anda sebelumnya
+                    const isChecked = selectedContents.some(item => item.id == content.id);
 
-                html += `
+                    html += `
             <div class="flex items-center bg-amber-100 rounded-lg shadow-md text-sm font-medium">
                 <div class="px-6 py-3 w-4/12 text-gray-900">
                     <div class="flex items-center">
@@ -377,145 +433,145 @@
                 </div>
             </div>
         `;
-            });
+                });
 
-            // Masukkan semua HTML yang sudah digenerate ke dalam list
-            contentList.innerHTML = html;
-        }
-
-        // Event listeners for AJAX search
-        ajaxSearchBtn.addEventListener('click', performAjaxSearch);
-        ajaxSearchInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                performAjaxSearch();
+                // Masukkan semua HTML yang sudah digenerate ke dalam list
+                contentList.innerHTML = html;
             }
-        });
-        ajaxCategoryFilter.addEventListener('change', performAjaxSearch);
 
-
-        // Original modal functionality
-        const modalOpen = document.querySelectorAll('#add_content');
-        const modal = document.querySelectorAll('#modal');
-        const modalClose = document.querySelectorAll('#closeModal');
-
-        for (let i = 0; i < modalOpen.length; i++) {
-            modalOpen[i].addEventListener('click', (e) => {
-                e.preventDefault();
-                modal[i].classList.remove('hidden');
-                setTimeout(() => {
-                    modal[i].classList.remove('opacity-0');
-                }, 10);
+            // Event listeners for AJAX search
+            ajaxSearchBtn.addEventListener('click', performAjaxSearch);
+            ajaxSearchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    performAjaxSearch();
+                }
             });
+            ajaxCategoryFilter.addEventListener('change', performAjaxSearch);
 
-            modalClose[i].addEventListener('click', (e) => {
-                e.preventDefault();
-                modal[i].classList.add('opacity-0');
-                setTimeout(() => {
-                    modal[i].classList.add('hidden');
-                    // Remove hash from URL when closing modal
-                    if (window.location.hash === '#modal') {
-                        window.history.replaceState(null, null, window.location.pathname);
-                    }
-                }, 500);
-            });
-        }
 
-        // Image Preview Functionality
-        const imageInput = document.getElementById('image');
-        const imagePreviewDiv = document.getElementById('image-preview');
-        const previewImage = document.getElementById('preview-img');
+            // Original modal functionality
+            const modalOpen = document.querySelectorAll('#add_content');
+            const modal = document.querySelectorAll('#modal');
+            const modalClose = document.querySelectorAll('#closeModal');
 
-        if (imageInput) {
-            imageInput.addEventListener('change', function() {
-                const file = this.files[0];
-                if (file) {
-                    if (file.type.startsWith('image/')) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            previewImage.src = e.target.result;
-                            imagePreviewDiv.classList.remove('hidden');
+            for (let i = 0; i < modalOpen.length; i++) {
+                modalOpen[i].addEventListener('click', (e) => {
+                    e.preventDefault();
+                    modal[i].classList.remove('hidden');
+                    setTimeout(() => {
+                        modal[i].classList.remove('opacity-0');
+                    }, 10);
+                });
+
+                modalClose[i].addEventListener('click', (e) => {
+                    e.preventDefault();
+                    modal[i].classList.add('opacity-0');
+                    setTimeout(() => {
+                        modal[i].classList.add('hidden');
+                        // Remove hash from URL when closing modal
+                        if (window.location.hash === '#modal') {
+                            window.history.replaceState(null, null, window.location.pathname);
                         }
-                        reader.readAsDataURL(file);
+                    }, 500);
+                });
+            }
+
+            // Image Preview Functionality
+            const imageInput = document.getElementById('image');
+            const imagePreviewDiv = document.getElementById('image-preview');
+            const previewImage = document.getElementById('preview-img');
+
+            if (imageInput) {
+                imageInput.addEventListener('change', function() {
+                    const file = this.files[0];
+                    if (file) {
+                        if (file.type.startsWith('image/')) {
+                            const reader = new FileReader();
+                            reader.onload = function(e) {
+                                previewImage.src = e.target.result;
+                                imagePreviewDiv.classList.remove('hidden');
+                            }
+                            reader.readAsDataURL(file);
+                        } else {
+                            previewImage.src = '#';
+                            imagePreviewDiv.classList.add('hidden');
+                            alert('Harap pilih file gambar (PNG, JPG, GIF).');
+                        }
                     } else {
                         previewImage.src = '#';
                         imagePreviewDiv.classList.add('hidden');
-                        alert('Harap pilih file gambar (PNG, JPG, GIF).');
-                    }
-                } else {
-                    previewImage.src = '#';
-                    imagePreviewDiv.classList.add('hidden');
-                }
-            });
-        }
-
-        // Content Selection Functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const saveSelectedContentBtn = document.getElementById('saveSelectedContent');
-            const selectedContentContainer = document.getElementById('selected-content-container');
-            const noContentMessage = document.getElementById('no-content-message');
-            const selectedContentIdsInput = document.getElementById('selected_content_ids'); 
-
-            if (saveSelectedContentBtn) {
-                saveSelectedContentBtn.addEventListener('click', function() {
-                    const checkedBoxes = document.querySelectorAll(
-                        'input[name="content_checkbox"]:checked');
-                    selectedContents = [];
-
-                    checkedBoxes.forEach(function(checkbox, index) {
-                        const contentId = checkbox.value;
-                        const contentTitle = checkbox.getAttribute('data-title');
-
-                        selectedContents.push({
-                            id: contentId,
-                            title: contentTitle,
-                            order: index + 1
-                        });
-                    });
-
-                    selectedContentIdsInput.value = JSON.stringify(selectedContents);
-                    updateSelectedContentDisplay();
-
-                    // Close modal
-                    const modalElement = document.querySelector('#modal');
-                    if (modalElement) {
-                        modalElement.classList.add('opacity-0');
-                        setTimeout(() => {
-                            modalElement.classList.add('hidden');
-                            // Remove hash from URL
-                            if (window.location.hash === '#modal') {
-                                window.history.replaceState(null, null, window.location.pathname);
-                            }
-                            const contentSection = document.getElementById(
-                                'selected-content-container').closest('.mb-4');
-                            if (contentSection) {
-                                contentSection.scrollIntoView({
-                                    behavior: 'smooth',
-                                    block: 'center'
-                                });
-                            }
-                        }, 500);
                     }
                 });
             }
 
-            function updateSelectedContentDisplay() {
-                selectedContentContainer.innerHTML = '';
+            // Content Selection Functionality
+            document.addEventListener('DOMContentLoaded', function() {
+                const saveSelectedContentBtn = document.getElementById('saveSelectedContent');
+                const selectedContentContainer = document.getElementById('selected-content-container');
+                const noContentMessage = document.getElementById('no-content-message');
+                const selectedContentIdsInput = document.getElementById('selected_content_ids');
 
-                if (selectedContents.length === 0) {
-                    noContentMessage.classList.remove('hidden');
-                    return;
+                if (saveSelectedContentBtn) {
+                    saveSelectedContentBtn.addEventListener('click', function() {
+                        const checkedBoxes = document.querySelectorAll(
+                            'input[name="content_checkbox"]:checked');
+                        selectedContents = [];
+
+                        checkedBoxes.forEach(function(checkbox, index) {
+                            const contentId = checkbox.value;
+                            const contentTitle = checkbox.getAttribute('data-title');
+
+                            selectedContents.push({
+                                id: contentId,
+                                title: contentTitle,
+                                order: index + 1
+                            });
+                        });
+
+                        selectedContentIdsInput.value = JSON.stringify(selectedContents);
+                        updateSelectedContentDisplay();
+
+                        // Close modal
+                        const modalElement = document.querySelector('#modal');
+                        if (modalElement) {
+                            modalElement.classList.add('opacity-0');
+                            setTimeout(() => {
+                                modalElement.classList.add('hidden');
+                                // Remove hash from URL
+                                if (window.location.hash === '#modal') {
+                                    window.history.replaceState(null, null, window.location.pathname);
+                                }
+                                const contentSection = document.getElementById(
+                                    'selected-content-container').closest('.mb-4');
+                                if (contentSection) {
+                                    contentSection.scrollIntoView({
+                                        behavior: 'smooth',
+                                        block: 'center'
+                                    });
+                                }
+                            }, 500);
+                        }
+                    });
                 }
 
-                noContentMessage.classList.add('hidden');
+                function updateSelectedContentDisplay() {
+                    selectedContentContainer.innerHTML = '';
 
-                selectedContents.forEach(function(content, index) {
-                    const contentCard = document.createElement('div');
-                    contentCard.className =
-                        'flex items-start p-4 border border-gray-300 rounded-md bg-white shadow-sm';
-                    contentCard.dataset.contentId = content.id;
+                    if (selectedContents.length === 0) {
+                        noContentMessage.classList.remove('hidden');
+                        return;
+                    }
 
-                    contentCard.innerHTML = `
+                    noContentMessage.classList.add('hidden');
+
+                    selectedContents.forEach(function(content, index) {
+                        const contentCard = document.createElement('div');
+                        contentCard.className =
+                            'flex items-start p-4 border border-gray-300 rounded-md bg-white shadow-sm';
+                        contentCard.dataset.contentId = content.id;
+
+                        contentCard.innerHTML = `
                 <div class="mr-3">
                     <div class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center font-bold">
                         ${index + 1}
@@ -544,65 +600,65 @@
                 </button>
             `;
 
-                    selectedContentContainer.appendChild(contentCard);
-                });
+                        selectedContentContainer.appendChild(contentCard);
+                    });
 
-                addContentCardEventListeners();
-            }
+                    addContentCardEventListeners();
+                }
 
-            function addContentCardEventListeners() {
-                document.querySelectorAll('.remove-content-btn').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const index = parseInt(this.dataset.index);
+                function addContentCardEventListeners() {
+                    document.querySelectorAll('.remove-content-btn').forEach(button => {
+                        button.addEventListener('click', function() {
+                            const index = parseInt(this.dataset.index);
 
-                        if (selectedContents[index]) {
-                            const contentIdToRemove = selectedContents[index].id;
+                            if (selectedContents[index]) {
+                                const contentIdToRemove = selectedContents[index].id;
 
-                            const checkboxToUncheck = document.querySelector(
-                                `input[name="content_checkbox"][value="${contentIdToRemove}"]`);
-                            if (checkboxToUncheck) {
-                                checkboxToUncheck.checked = false;
+                                const checkboxToUncheck = document.querySelector(
+                                    `input[name="content_checkbox"][value="${contentIdToRemove}"]`);
+                                if (checkboxToUncheck) {
+                                    checkboxToUncheck.checked = false;
+                                }
                             }
-                        }
 
-                        selectedContents.splice(index, 1);
-                        selectedContentIdsInput.value = JSON.stringify(selectedContents);
-                        updateSelectedContentDisplay();
-                        const correspondingCheckbox = document.querySelector(
-                            `input[name="content_checkbox"][value="${removedItem.id}"]`);
-                        if (correspondingCheckbox) {
-                            correspondingCheckbox.checked = false;
-                        }
-                    });
-                });
-
-                document.querySelectorAll('.move-up-btn').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const index = parseInt(this.dataset.index);
-                        if (index > 0) {
-                            [selectedContents[index], selectedContents[index - 1]] = [
-                                selectedContents[index - 1], selectedContents[index]
-                            ];
+                            selectedContents.splice(index, 1);
+                            selectedContentIdsInput.value = JSON.stringify(selectedContents);
                             updateSelectedContentDisplay();
-                        }
+                            const correspondingCheckbox = document.querySelector(
+                                `input[name="content_checkbox"][value="${removedItem.id}"]`);
+                            if (correspondingCheckbox) {
+                                correspondingCheckbox.checked = false;
+                            }
+                        });
                     });
-                });
 
-                document.querySelectorAll('.move-down-btn').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const index = parseInt(this.dataset.index);
-                        if (index < selectedContents.length - 1) {
-                            [selectedContents[index], selectedContents[index + 1]] = [
-                                selectedContents[index + 1], selectedContents[index]
-                            ];
-                            updateSelectedContentDisplay();
-                        }
+                    document.querySelectorAll('.move-up-btn').forEach(button => {
+                        button.addEventListener('click', function() {
+                            const index = parseInt(this.dataset.index);
+                            if (index > 0) {
+                                [selectedContents[index], selectedContents[index - 1]] = [
+                                    selectedContents[index - 1], selectedContents[index]
+                                ];
+                                updateSelectedContentDisplay();
+                            }
+                        });
                     });
-                });
-            }
-        });
 
-        ;
-    </script>
+                    document.querySelectorAll('.move-down-btn').forEach(button => {
+                        button.addEventListener('click', function() {
+                            const index = parseInt(this.dataset.index);
+                            if (index < selectedContents.length - 1) {
+                                [selectedContents[index], selectedContents[index + 1]] = [
+                                    selectedContents[index + 1], selectedContents[index]
+                                ];
+                                updateSelectedContentDisplay();
+                            }
+                        });
+                    });
+                }
+            });
+
+            ;
+        </script>
 
 </html>

@@ -30,7 +30,7 @@
                         </div>
                         <div class="flex items-center space-x-4 px-4">
                             <button>
-                                <i class="fa-regular fa-bell fa-lg text-black hover:text-gray-600"></i>
+                                <i class="fa-regular fa-bell fa-lg text-black hover:text-indigo-600"></i>
                             </button>
                             <div class="flex items-center space-x-2 px-3">
                                 <span

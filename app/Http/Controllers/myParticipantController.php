@@ -23,7 +23,14 @@ class myParticipantController extends Controller
      */
     public function index(Request $request)
     {
+        $loggedInUserId = Auth::id();
+
+        $coursescount = Course::all()->count();
+        $usercount = User::where('role', 'participant')->count();
+
         $query = Course::query();
+
+        $query->where('user_id', $loggedInUserId);
 
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
@@ -35,9 +42,10 @@ class myParticipantController extends Controller
 
         $query->withCount('enrollments');
 
+
         $courses = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
 
-        return view('admin.myParticipant.index', compact('courses'));
+        return view('admin.myParticipant.index', compact('courses', 'coursescount', 'usercount'));
     }
 
     /**
@@ -62,6 +70,7 @@ class myParticipantController extends Controller
     // app/Http/Controllers/MyParticipantController.php
     public function show($slug)
     {
+
         $course = Course::where('slug', $slug)->firstOrFail();
         $courseId = $course->id;
 
@@ -132,6 +141,7 @@ class myParticipantController extends Controller
         };
         // Ambil semua kursus yang diikuti, dan hitung total kontennya (withCount)
         $enrolledCourses = $user->enrolledCourses()
+            ->where('status', 1)
             ->with(['category', 'user'])
             ->withCount('contents') // <-- PENTING: Untuk efisiensi
             ->get();

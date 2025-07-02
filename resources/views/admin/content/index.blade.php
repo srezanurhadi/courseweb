@@ -59,8 +59,10 @@
                     </form>
                 </div>
                 <div class="">
+                    <a href="category" class="px-2 py-1 mr-2 bg-sky-500 rounded-lg text-white font-semibold"><i
+                            class="fas fa-plus text-gray-50"></i> Add Category</a>
                     <a href="/admin{{ Request::is('admin/mycontent') ? '/mycontent/create' : '/content/create' }}"
-                        class="px-2 py-1 bg-sky-500 rounded-lg text-white font-semibold"><i
+                        class="px-2 py-1 ml-2 bg-sky-500 rounded-lg text-white font-semibold"><i
                             class="fas fa-plus text-gray-50"></i> Add Content</a>
                 </div>
 
