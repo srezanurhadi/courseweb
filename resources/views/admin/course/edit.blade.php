@@ -13,7 +13,7 @@
     <div class="flex flex-1 relative">
         <x-sidebar></x-sidebar>
         <div class="flex-1 bg-gray-50 flex flex-col p-4">
-            <form action="{{ url('/admin/course/' . $course->slug) }}" method="POST" enctype="multipart/form-data">
+            <form action="/admin{{ Request::is('*/mycourse*') ? '/mycourse' : '/course' }}/{{ $course->slug }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div

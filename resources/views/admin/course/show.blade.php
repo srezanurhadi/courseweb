@@ -26,7 +26,7 @@
                 </div>
                 <div class="flex">
                     <div class="w-full flex gap-2 items-center p-3 pl-6 font-semibold">
-                        <a href="/admin{{ Request::is('*/mycourse*') ? '/mycourse' : '/course' }}/{{ $course->slug }}/edit">
+                        <a href="/admin{{ Request::is('*/mycourse*') ? '/mycourse' : '/course' }}">
                             <div class="  text-indigo-700"> <i class="fa-solid fa-play rotate-180"></i><span
                                     class="pl-2">Back</span>
                             </div>

@@ -19,7 +19,7 @@ class contentController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->is("admin/mycontent")) {
+        if ($request->is("*/mycontent*")) {
             $allcontents = Content::where('created_by', Auth::id())->get();
             $unusedContentCount = Content::where('created_by', Auth::id())->doesntHave('courses')->count();
             $usedContentCount = Content::where('created_by', Auth::id())->count() - $unusedContentCount;
