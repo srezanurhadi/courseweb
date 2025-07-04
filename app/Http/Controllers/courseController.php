@@ -19,8 +19,13 @@ class courseController extends Controller
      */
     public function index(Request $request)
     {
+        $querry = null;
+        if ($request->is('*/mycourse*')) {
+            $query = Course::where('user_id', Auth::id());
+        } else {
+            $query = Course::query();
+        }
 
-        $query = Course::query();
         $categories = Category::orderBy('category')->get();
         $coursescount = Course::all()->count();
         $coursesactive = Course::where('status', 1)->count();
@@ -45,12 +50,9 @@ class courseController extends Controller
                 $query->where('status', $status); // Laravel otomatis konversi string '1'/'0' ke boolean
             }
         }
-
         $query->withCount('enrollments');
-
         // Eksekusi query dengan pagination
         $courses = $query->orderBy('created_at', 'desc')->paginate(9)->withQueryString();
-
         // Kirim data ke view
         return view('admin.course.index', compact('courses', 'categories', 'coursescount', 'coursesactive', 'coursesdraft'));
     }
@@ -157,8 +159,10 @@ class courseController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Course $course)
+    public function show(string $slug)
     {
+        $course = Course::where('slug', $slug)->first();
+
         $course = Course::withCount('enrollments')->find($course->id);
         return view('admin.course.show', compact('course'));
     }
@@ -166,11 +170,12 @@ class courseController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Course $course)
+    public function edit(string $slug)
     {
 
         $loggedInUserId = Auth::id();
 
+        $course = Course::where('slug', $slug)->firstOrFail();
         $categories = Category::orderBy('category')->get();
         $contents = Content::with('category')
             ->where('created_by', $loggedInUserId) // <-- INI ADALAH FILTERNYA
@@ -182,8 +187,9 @@ class courseController extends Controller
         return view('admin.course.edit', compact('course', 'categories', 'contents'));
     }
 
-    public function update(Request $request, Course $course)
+    public function update(Request $request, string $slug)
     {
+        $course = Course::where('slug', $slug)->firstOrFail();
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -204,11 +210,8 @@ class courseController extends Controller
             }
             $data['image'] = $request->file('image')->store('course_images', 'public');
         }
-
         $course->update($data);
-
         $selectedContents = json_decode($request->selected_content_ids, true);
-
         if (is_array($selectedContents)) {
             $syncData = [];
             foreach ($selectedContents as $item) {
@@ -221,6 +224,9 @@ class courseController extends Controller
             $course->contents()->sync([]);
         }
 
+        if ($request->is('*/mycourse*')) {
+            return redirect('/admin/mycourse')->with('success', 'Course berhasil diperbarui!');
+        }
         return redirect('/admin/course')->with('success', 'Course berhasil diperbarui!');
     }
 
@@ -274,8 +280,9 @@ class courseController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Course $course)
+    public function destroy(string $slug, request $request)
     {
+        $course = Course::where('slug', $slug)->firstOrFail();
         try {
             // 1. Hapus gambar dari storage jika ada
             if ($course->image && Storage::disk('public')->exists($course->image)) {
@@ -290,7 +297,9 @@ class courseController extends Controller
 
             // 4. Hapus course itu sendiri
             $course->delete();
-
+            if ($request->is('*/mycourse*')) {
+                return redirect('/admin/mycourse')->with('success', 'Course berhasil dihapus!');
+            }
             return redirect('/admin/course')->with('success', 'Course berhasil dihapus!');
         } catch (\Exception $e) {
             return redirect('/admin/course')->with('error', 'Gagal menghapus course. Silakan coba lagi.');

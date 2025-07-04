@@ -19,7 +19,7 @@ class contentController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->is("admin/mycontent")) {
+        if ($request->is("*/mycontent*")) {
             $allcontents = Content::where('created_by', Auth::id())->get();
             $unusedContentCount = Content::where('created_by', Auth::id())->doesntHave('courses')->count();
             $usedContentCount = Content::where('created_by', Auth::id())->count() - $unusedContentCount;
@@ -124,7 +124,11 @@ class contentController extends Controller
             }
         }
 
-        return redirect('/admin/content')
+        if ($request->is("admin/content*")) {
+            return redirect('/admin/content')
+                ->with('success', 'Konten Berhasil Ditambahkan');
+        }
+        return redirect('/admin/mycontent')
             ->with('success', 'Konten Berhasil Ditambahkan');
     }
 
@@ -264,12 +268,15 @@ class contentController extends Controller
 
             DB::commit();
 
-            return redirect('/admin/content')->with('success', 'Konten berhasil diperbarui!');
+            if ($request->is("admin/content*")) {
+                return redirect('/admin/content')
+                    ->with('success', 'Konten Berhasil Diubah');
+            }
+            return redirect('/admin/mycontent')
+                ->with('success', 'Konten Berhasil Diubah');
         } catch (\Exception $e) {
-            // Jika ada kesalahan di tengah jalan, batalkan semua perubahan
             DB::rollBack();
-            Log::error('Update Konten Gagal: ' . $e->getMessage()); // Catat error untuk debug
-
+            Log::error('Update Konten Gagal: ' . $e->getMessage());
             return back()->with('error', 'Terjadi kesalahan saat memperbarui konten.');
         }
     }
@@ -277,7 +284,7 @@ class contentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $slug)
+    public function destroy(string $slug, Request $request)
     {
         $content = Content::where('slug', $slug)->first();
 
@@ -297,7 +304,12 @@ class contentController extends Controller
 
             $content->delete();
             DB::commit();
-            return redirect('/admin/content')->with('success', 'Konten berhasil dihapus!');
+            if ($request->is("admin/content*")) {
+                return redirect('/admin/content')
+                    ->with('success', 'Konten Berhasil Ditambahkan');
+            }
+            return redirect('/admin/mycontent')
+                ->with('success', 'Konten Berhasil Ditambahkan');
         } catch (\Exception $e) {
 
             DB::rollBack();

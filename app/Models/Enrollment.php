@@ -15,6 +15,7 @@ class Enrollment extends Model
         'user_id',
         'course_id',
         'last_content_id',
+        'completion_date', // Menambahkan kolom completion_date
     ];
 
     public function user(): BelongsTo

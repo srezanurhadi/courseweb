@@ -26,12 +26,10 @@ Route::prefix('/admin')->middleware(adminMiddleware::class)->group(function () {
 
     // Route khusus untuk AJAX search
     Route::get('/course/search', [courseController::class, 'search'])->name('course.search');
-
     Route::get('/', [homecontroller::class, 'index']);
     // route khusus image di editor
     Route::post('/upload-image', [ImageController::class, 'store'])->name('image.store');
     Route::post('/admin/delete-image', [ImageController::class, 'destroy'])->name('admin.image.destroy');
-
     Route::resource('/users', usersController::class);
     Route::resource('/course', courseController::class);
     Route::get('/course/{course:slug}/content/{content}', [CourseController::class, 'showContent'])
@@ -46,6 +44,8 @@ Route::prefix('/admin')->middleware(adminMiddleware::class)->group(function () {
 
     //area saya
     Route::resource('/mycourse', courseController::class);
+    Route::get('/mycourse/{course:slug}/content/{content}', [CourseController::class, 'showContent'])
+        ->name('admin.mycourse.content.show');
     Route::resource('/mycontent', contentController::class);
 });
 
@@ -107,6 +107,7 @@ Route::prefix('/user')->middleware(participantMiddleware::class)->name('user.')-
 
     Route::get('/profile/course/{id}', [myParticipantController::class, 'showCourseDetail'])->name('course.detail');
 
+    Route::get('/certificate/preview/{courseId}', [CertificateController::class, 'previewCertificate'])->name('certificate.preview');
     Route::get('/certificate/{courseId}', [CertificateController::class, 'generateCertificate'])->name('certificate.download');
 });
 
