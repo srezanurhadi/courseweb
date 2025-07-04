@@ -211,7 +211,7 @@
             @foreach ($users as $user)
                 <div class="">
                     <div id="modal"
-                        class="modal hidden opacity-0 absolute inset-0 bg-black/50 backdrop-blur-xs transition-all duration-500 ease-in-out flex items-center justify-center z-50 p-25">
+                        class="modal ml-54 hidden opacity-0 fixed inset-0 bg-black/50 backdrop-blur-xs transition-all duration-500 ease-in-out flex items-center justify-center z-50 p-25">
 
                         {{-- Konten Modal --}}
                         <div
@@ -292,121 +292,65 @@
                                 </div>
                             </div>
                             <div>
-                                <h2 class="block text-gray-700 text-sm font-bold mb-2">Course Created</h2>
-                                <div
-                                    class="bg-indigo-100  p-2 rounded-lg border-2 border-indigo-300 overflow-y-auto h-50 course-created-scrollable">
-                                    <ul class="space-y-2">
-                                        <li
-                                            class="bg-gray-100 rounded-md p-3 flex items-center justify-between shadow-sm">
-                                            <div class="flex items-center max-w-200 overflow-hidden">
-                                                <div class="size-4 rounded-md bg-yellow-300 mr-2 flex-shrink-0"></div>
-                                                <span class="truncate min-w-0">Tutorial Laravel 12 2024 mantap Lorem
-                                                    ipsum
-                                                    dolor sit amet consectetur adipisicing elit. Accusantium, modi? Ea
-                                                    est
-                                                    facere ad natus! Quos eaque nulla voluptatum aliquid, iste fugit
-                                                    quis
-                                                    est expedita incidunt possimus in, velit perspiciatis accusantium
-                                                    laudantium. Labore esse, laborum corrupti architecto consequuntur,
-                                                    molestias deserunt aspernatur omnis veritatis perferendis
-                                                    praesentium
-                                                    libero sit dicta et ad?</span>
-                                            </div>
-                                            <span class="text-sm text-gray-600">25 Konten</span>
-                                        </li>
-                                        <li
-                                            class="bg-gray-100 rounded-md p-3 flex items-center justify-between shadow-sm">
-                                            <div class="flex items-center max-w-200 overflow-hidden">
-                                                <div class="size-4 rounded-md bg-yellow-300 mr-2 flex-shrink-0"></div>
-                                                <span class="truncate min-w-0">Tutorial Laravel 12 2024 mantap Lorem
-                                                    ipsum
-                                                    dolor sit amet consectetur adipisicing elit. Accusantium, modi? Ea
-                                                    est
-                                                    facere ad natus! Quos eaque nulla voluptatum aliquid, iste fugit
-                                                    quis
-                                                    est expedita incidunt possimus in, velit perspiciatis accusantium
-                                                    laudantium. Labore esse, laborum corrupti architecto consequuntur,
-                                                    molestias deserunt aspernatur omnis veritatis perferendis
-                                                    praesentium
-                                                    libero sit dicta et ad?</span>
-                                            </div>
-                                            <span class="text-sm text-gray-600">25 Konten</span>
-                                        </li>
-                                        <li
-                                            class="bg-gray-100 rounded-md p-3 flex items-center justify-between shadow-sm">
-                                            <div class="flex items-center max-w-200 overflow-hidden">
-                                                <div class="size-4 rounded-md bg-yellow-300 mr-2 flex-shrink-0"></div>
-                                                <span class="truncate min-w-0">Tutorial Laravel 12 2024 mantap Lorem
-                                                    ipsum
-                                                    dolor sit amet consectetur adipisicing elit. Accusantium, modi? Ea
-                                                    est
-                                                    facere ad natus! Quos eaque nulla voluptatum aliquid, iste fugit
-                                                    quis
-                                                    est expedita incidunt possimus in, velit perspiciatis accusantium
-                                                    laudantium. Labore esse, laborum corrupti architecto consequuntur,
-                                                    molestias deserunt aspernatur omnis veritatis perferendis
-                                                    praesentium
-                                                    libero sit dicta et ad?</span>
-                                            </div>
-                                            <span class="text-sm text-gray-600">25 Konten</span>
-                                        </li>
-                                        <li
-                                            class="bg-gray-100 rounded-md p-3 flex items-center justify-between shadow-sm">
-                                            <div class="flex items-center max-w-200 overflow-hidden">
-                                                <div class="size-4 rounded-md bg-yellow-300 mr-2 flex-shrink-0"></div>
-                                                <span class="truncate min-w-0">Tutorial Laravel 12 2024 mantap Lorem
-                                                    ipsum
-                                                    dolor sit amet consectetur adipisicing elit. Accusantium, modi? Ea
-                                                    est
-                                                    facere ad natus! Quos eaque nulla voluptatum aliquid, iste fugit
-                                                    quis
-                                                    est expedita incidunt possimus in, velit perspiciatis accusantium
-                                                    laudantium. Labore esse, laborum corrupti architecto consequuntur,
-                                                    molestias deserunt aspernatur omnis veritatis perferendis
-                                                    praesentium
-                                                    libero sit dicta et ad?</span>
-                                            </div>
-                                            <span class="text-sm text-gray-600">25 Konten</span>
-                                        </li>
-                                        <li
-                                            class="bg-gray-100 rounded-md p-3 flex items-center justify-between shadow-sm">
-                                            <div class="flex items-center max-w-200 overflow-hidden">
-                                                <div class="size-4 rounded-md bg-yellow-300 mr-2 flex-shrink-0"></div>
-                                                <span class="truncate min-w-0">Tutorial Laravel 12 2024 mantap Lorem
-                                                    ipsum
-                                                    dolor sit amet consectetur adipisicing elit. Accusantium, modi? Ea
-                                                    est
-                                                    facere ad natus! Quos eaque nulla voluptatum aliquid, iste fugit
-                                                    quis
-                                                    est expedita incidunt possimus in, velit perspiciatis accusantium
-                                                    laudantium. Labore esse, laborum corrupti architecto consequuntur,
-                                                    molestias deserunt aspernatur omnis veritatis perferendis
-                                                    praesentium
-                                                    libero sit dicta et ad?</span>
-                                            </div>
-                                            <span class="text-sm text-gray-600">25 Konten</span>
-                                        </li>
-                                        <li
-                                            class="bg-gray-100 rounded-md p-3 flex items-center justify-between shadow-sm">
-                                            <div class="flex items-center max-w-200 overflow-hidden">
-                                                <div class="size-4 rounded-md bg-yellow-300 mr-2 flex-shrink-0"></div>
-                                                <span class="truncate min-w-0">Tutorial Laravel 12 2024 mantap Lorem
-                                                    ipsum
-                                                    dolor sit amet consectetur adipisicing elit. Accusantium, modi? Ea
-                                                    est
-                                                    facere ad natus! Quos eaque nulla voluptatum aliquid, iste fugit
-                                                    quis
-                                                    est expedita incidunt possimus in, velit perspiciatis accusantium
-                                                    laudantium. Labore esse, laborum corrupti architecto consequuntur,
-                                                    molestias deserunt aspernatur omnis veritatis perferendis
-                                                    praesentium
-                                                    libero sit dicta et ad?</span>
-                                            </div>
-                                            <span class="text-sm text-gray-600">25 Konten</span>
-                                        </li>
+                                @if (isset($user->course_type))
+                                    <h2 class="block text-gray-700 text-sm font-bold mb-2">
+                                        @if ($user->course_type === 'enrolled')
+                                            Courses Enrolled
+                                        @elseif($user->course_type === 'created')
+                                            Courses Created
+                                        @endif
+                                    </h2>
 
-                                    </ul>
-                                </div>
+                                    <div
+                                        class="bg-indigo-100 p-2 rounded-lg border-2 border-indigo-300 overflow-y-auto h-50 course-created-scrollable">
+                                        @if ($user->course_type === 'enrolled' && isset($user->enrolled_courses) && $user->enrolled_courses->count() > 0)
+                                            <ul class="space-y-2">
+                                                @foreach ($user->enrolled_courses->sortBy('title') as $enrolledCourse)
+                                                    <li
+                                                        class="bg-gray-100 rounded-md p-3 flex items-center justify-between shadow-sm">
+                                                        <div class="flex items-center max-w-200 overflow-hidden">
+                                                            <div
+                                                                class="size-4 rounded-md bg-yellow-300 mr-2 flex-shrink-0">
+                                                            </div>
+                                                            <span class="truncate min-w-0"
+                                                                title="{{ $enrolledCourse->title }}">
+                                                                {{ $enrolledCourse->title }}
+                                                            </span>
+                                                        </div>
+                                                        <span class="text-sm text-gray-600">Enrolled</span>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @elseif($user->course_type === 'created' && isset($user->created_courses) && $user->created_courses->count() > 0)
+                                            <ul class="space-y-2">
+                                                @foreach ($user->created_courses->sortBy('title') as $createdCourse)
+                                                    <li
+                                                        class="bg-gray-100 rounded-md p-3 flex items-center justify-between shadow-sm">
+                                                        <div class="flex items-center max-w-200 overflow-hidden">
+                                                            <div
+                                                                class="size-4 rounded-md bg-green-300 mr-2 flex-shrink-0">
+                                                            </div>
+                                                            <span class="truncate min-w-0"
+                                                                title="{{ $createdCourse->title }}">
+                                                                {{ $createdCourse->title }}
+                                                            </span>
+                                                        </div>
+                                                        <span class="text-sm text-gray-600">Created</span>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @else
+                                            <div class="text-center text-gray-500 py-4">
+                                                @if ($user->course_type === 'enrolled')
+                                                    <p>No courses enrolled yet</p>
+                                                @elseif($user->course_type === 'created')
+                                                    <p>No courses created yet</p>
+                                                @endif
+                                                <p class="text-xs">User ID: {{ $user->id }}</p>
+                                            </div>
+                                        @endif
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>

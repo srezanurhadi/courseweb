@@ -169,8 +169,13 @@ class courseController extends Controller
     public function edit(Course $course)
     {
 
+        $loggedInUserId = Auth::id();
+
         $categories = Category::orderBy('category')->get();
-        $contents = Content::orderBy('updated_at', 'desc')->paginate(10)->onEachSide(1);
+        $contents = Content::with('category')
+            ->where('created_by', $loggedInUserId) // <-- INI ADALAH FILTERNYA
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         $course->load('contents');
 
@@ -191,7 +196,7 @@ class courseController extends Controller
         $data = $validatedData;
         $data['slug'] = Str::slug($request->title);
         $data['category_id'] = $request->category;
-        $data['status'] = $request->has('status') ? 1 : 0;
+        $data['status'] = $request->input('status') == 1 ? 1 : 0;
 
         if ($request->hasFile('image')) {
             if ($course->image) {
