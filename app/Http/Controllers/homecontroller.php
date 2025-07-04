@@ -17,6 +17,13 @@ class homecontroller extends Controller
         $coursescount = Course::all()->count();
         $coursesactive = Course::where('status', 1)->count();
         $coursesdraft = Course::where('status', 0)->count();
-        return view('admin.dashboard', compact('categories','unusedContentCount','ContentCount','coursescount','coursesactive','coursesdraft'));
+
+        $popularCourses = Course::withCount('enrollments')
+            ->with('category') // Eager load category untuk mendapatkan icon dan warna
+            ->orderBy('enrollments_count', 'desc')
+            ->take(3)
+            ->get();
+
+        return view('admin.dashboard', compact('categories', 'unusedContentCount', 'ContentCount', 'coursescount', 'coursesactive', 'coursesdraft', 'popularCourses'));
     }
 }

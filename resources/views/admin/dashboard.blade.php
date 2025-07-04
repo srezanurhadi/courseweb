@@ -117,58 +117,36 @@
                     {{-- Header Section --}}
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-xl font-bold text-gray-800">Kursus Populer</h3>
-                        <a href="#" class="text-sm font-semibold text-indigo-600 hover:text-indigo-800">Lihat
+                        <a href="admin/course" class="text-sm font-semibold text-indigo-600 hover:text-indigo-800">Lihat
                             Semua</a>
                     </div>
 
                     {{-- List Kursus --}}
                     <div class="space-y-5">
-
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-4">
-                                <div class="bg-red-100 p-2 rounded-lg h-10 w-10">
-                                    <i class="fas fa-code text-xl text-red-500"></i>
+                        @forelse($popularCourses as $course)
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-4">
+                                    <div class="p-2 rounded-lg h-10 w-10 flex items-center justify-center"
+                                        style="background-color: {{ $course->category->color }}20;">
+                                        <i class="{{ $course->category->icon ?? 'fas fa-book' }} text-xl"
+                                            style="color: {{ $course->category->color }};"></i>
+                                    </div>
+                                    <span class="text-gray-700 font-medium truncate max-w-xs md:max-w-md">
+                                        {{ $course->title }}
+                                    </span>
                                 </div>
-                                <span class="text-gray-700 font-medium truncate max-w-xs md:max-w-md">
-                                    Tutorial HTML dan lain lain yang tidak terlalu penting
-                                </span>
-                            </div>
-                            <div class="flex items-center gap-2 text-red-500">
-                                <i class="fas fa-users"></i>
-                                <span class="font-semibold text-sm">44 Participant</span>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-4">
-                                <div class="bg-green-100 p-3 rounded-lg  h-10 w-10">
-                                    <i class="fab fa-css3-alt text-xl text-green-500"></i>
+                                <div class="flex items-center gap-2" style="color: {{ $course->category->color }};">
+                                    <i class="fas fa-users"></i>
+                                    <span class="font-semibold text-sm">{{ $course->enrollments_count }}
+                                        Participant</span>
                                 </div>
-                                <span class="text-gray-700 font-medium truncate max-w-xs md:max-w-md">
-                                    Tutorial CSS atau Tailwind dan lain lain yang tidak terlalu penting
-                                </span>
                             </div>
-                            <div class="flex items-center gap-2 text-green-500">
-                                <i class="fas fa-users"></i>
-                                <span class="font-semibold text-sm">35 Participant</span>
+                        @empty
+                            <div class="text-center py-8 text-gray-500">
+                                <i class="fas fa-inbox text-3xl mb-2"></i>
+                                <p>Belum ada kursus dengan enrollment</p>
                             </div>
-                        </div>
-
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-4">
-                                <div class="bg-blue-100 p-2 rounded-lg  h-10 w-10">
-                                    <i class="fas fa-laptop-code text-xl text-blue-500"></i>
-                                </div>
-                                <span class="text-gray-700 font-medium truncate max-w-xs md:max-w-md">
-                                    Laravel Itu Menyenangkan ya gessssssssssss...
-                                </span>
-                            </div>
-                            <div class="flex items-center gap-2 text-blue-500">
-                                <i class="fas fa-users"></i>
-                                <span class="font-semibold text-sm">25 Participant</span>
-                            </div>
-                        </div>
-
+                        @endforelse
                     </div>
                 </div>
             </div>

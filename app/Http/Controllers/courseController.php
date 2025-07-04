@@ -178,7 +178,7 @@ class courseController extends Controller
         $course = Course::where('slug', $slug)->firstOrFail();
         $categories = Category::orderBy('category')->get();
         $contents = Content::with('category')
-            ->where('created_by', $loggedInUserId) // <-- INI ADALAH FILTERNYA
+            ->where('created_by', $loggedInUserId)
             ->orderBy('created_at', 'desc')
             ->get();
 
