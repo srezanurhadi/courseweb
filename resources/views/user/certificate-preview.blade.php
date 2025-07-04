@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <title>Certificate of Completion</title>
     <style>
+        /* ... (Semua style CSS Anda tetap sama, tidak perlu diubah) ... */
         @page {
             margin: 0;
             size: A4 landscape;
@@ -34,8 +35,6 @@
             border-radius: 15px;
             box-shadow: 0 0 0 3px #290d6e, 0 0 20px rgba(0, 0, 0, 0.5);
         }
-
-        /* Hapus media print karena dompdf tidak support dengan baik */
 
         .corner-ornament {
             position: absolute;
@@ -112,15 +111,22 @@
             margin-bottom: 1rem;
         }
 
+        /* CSS untuk elemen nama peserta */
         .participant-name {
             font-family: 'Playfair Display', serif;
             font-size: 3rem;
+            /* Ukuran font awal yang besar */
             font-weight: 700;
             color: #ffffff;
             margin-bottom: 1rem;
             border-bottom: 2px solid #e0d03b;
             display: inline-block;
+            /* Penting agar border pas dengan teks */
             padding-bottom: 10px;
+            white-space: nowrap;
+            /* Mencegah nama turun ke baris baru */
+            max-width: 100%;
+            /* Pastikan tidak melebihi lebar kontainer */
         }
 
         .completion-text {
@@ -162,12 +168,13 @@
             width: 45%;
             position: absolute;
             right: 80px;
-            top: 80px;
+            top: 90px;
             text-align: center;
         }
 
         .signature-name,
         .date-text {
+            font-family: 'Playfair Display', serif;
             font-weight: 600;
             color: #ffffff;
             font-size: 1.1rem;
@@ -195,7 +202,9 @@
         <div class="certificate-body">
             <h1 class="main-title">Certificate of Completion</h1>
             <p class="subtitle">This certificate is proudly presented to:</p>
-            <div class="participant-name">{{ $userName }}</div>
+
+            <div id="participant-name" class="participant-name">{{ $userName }}</div>
+
             <p class="completion-text">For successfully completing the online course:</p>
             <div class="course-title">"{{ $courseTitle }}"</div>
         </div>
@@ -210,6 +219,28 @@
             </div>
         </div>
     </div>
+
+    <script>
+        window.onload = function() {
+            // Target elemen nama dengan ID yang benar
+            const nameElement = document.getElementById('participant-name');
+            // Elemen pembungkusnya adalah 'certificate-body'
+            const wrapperElement = document.querySelector('.certificate-body');
+
+            // Cek apakah elemen ditemukan untuk menghindari error
+            if (nameElement && wrapperElement) {
+                const maxWidth = wrapperElement.clientWidth;
+                let currentFontSize = parseFloat(window.getComputedStyle(nameElement, null).getPropertyValue(
+                    'font-size'));
+
+                // Loop untuk mengecilkan font jika lebar teks melebihi pembungkusnya
+                while (nameElement.scrollWidth > maxWidth && currentFontSize > 12) { // Batas minimum font 12px
+                    currentFontSize--; // Kurangi 1px
+                    nameElement.style.fontSize = currentFontSize + 'px';
+                }
+            }
+        };
+    </script>
 </body>
 
 </html>
