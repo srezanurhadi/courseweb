@@ -45,7 +45,7 @@ Route::prefix('/admin')->middleware(adminMiddleware::class)->group(function () {
     //area saya
     Route::resource('/mycourse', courseController::class);
     Route::get('/mycourse/{course:slug}/content/{content}', [CourseController::class, 'showContent'])
-        ->name('admin.mycourse.content.show');  
+        ->name('admin.mycourse.content.show');
     Route::resource('/mycontent', contentController::class);
 });
 
@@ -107,6 +107,7 @@ Route::prefix('/user')->middleware(participantMiddleware::class)->name('user.')-
 
     Route::get('/profile/course/{id}', [myParticipantController::class, 'showCourseDetail'])->name('course.detail');
 
+    Route::get('/certificate/preview/{courseId}', [CertificateController::class, 'previewCertificate'])->name('certificate.preview');
     Route::get('/certificate/{courseId}', [CertificateController::class, 'generateCertificate'])->name('certificate.download');
 });
 
