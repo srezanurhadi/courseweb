@@ -49,7 +49,7 @@ class Course extends Model
 
     public function contents(): BelongsToMany
     {
-        return $this->belongsToMany(Content::class, 'course_contents')
+        return $this->belongsToMany(Content::class, 'course_contents',  'course_id', 'content_id')
             ->withPivot('order')
             ->orderBy('course_contents.order');
     }
@@ -69,5 +69,4 @@ class Course extends Model
     {
         return $this->hasMany(UserCourseProgress::class);
     }
-    
 }

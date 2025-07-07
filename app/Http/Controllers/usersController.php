@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -36,6 +37,32 @@ class usersController extends Controller
         }
 
         $users = $query->orderBy('name')->paginate(10)->onEachSide(1);
+        // 3. Tambahkan logika courses untuk setiap user
+        foreach ($users as $user) {
+            if ($user->role === 'participant') {
+                // Ambil courses yang di-enroll oleh participant
+                $userCourses = DB::table('enrollments')
+                    ->join('courses', 'enrollments.course_id', '=', 'courses.id')
+                    ->where('enrollments.user_id', $user->id)
+                    ->select('courses.id', 'courses.title', 'courses.slug')
+                    ->get();
+
+                $user->enrolled_courses = $userCourses;
+                $user->course_type = 'enrolled'; // Untuk identifikasi di view
+
+            } elseif ($user->role === 'admin' || $user->role === 'author') {
+                // Ambil courses yang dibuat oleh admin/author
+                $createdCourses = DB::table('courses')
+                    ->where('user_id', $user->id)
+                    ->select('id', 'title', 'slug')
+                    ->get();
+
+                $user->created_courses = $createdCourses;
+                $user->course_type = 'created'; // Untuk identifikasi di view
+            }
+        }
+
+
         return view('admin.users.index', compact('users', 'admincount', 'usercount', 'authorcount', 'userscount'));
     }
 

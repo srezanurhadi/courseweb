@@ -230,17 +230,13 @@
                     {{-- Content List --}}
                     <div id="content-list" class="space-y-4 px-4 py-4 overflow-y-auto h-100">
                         @forelse ($contents as $content)
-                            <div class="flex items-center bg-amber-100 rounded-lg shadow-md text-sm font-medium">
+                            <div class="flex items-center  rounded-lg shadow-md text-sm font-medium"
+                                style="background-color: {{ $content->category->color }}20;">
                                 <div class="px-6 py-3 w-6/12 text-gray-900">
                                     <div class="flex items-center">
-                                        <div
-                                            class="flex-shrink-0 h-8 w-8 rounded-md bg-amber-500 flex items-center justify-center text-white">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                class="w-5 h-5">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L1.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09l2.846.813-.813 2.846a4.5 4.5 0 00-3.09 3.09zM18.25 12L17 14.25l-1.25-2.25L13.5 11l2.25-1.25L17 7.5l1.25 2.25L20.5 11l-2.25 1.25z" />
-                                            </svg>
+                                        <div class="flex-shrink-0 h-8 w-8 rounded-md bg-amber-500 flex items-center justify-center text-white"
+                                            style="background-color: {{ $content->category->color }};">
+                                            <i class="{{ $content->category->icon }}"></i>
                                         </div>
                                         <div class="ml-4 truncate">{{ $content->title }}</div>
                                     </div>

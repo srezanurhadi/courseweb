@@ -10,6 +10,7 @@ use App\Models\UserCourseProgress;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Enrollment;
+use Carbon\Carbon;
 
 class CourseController extends Controller
 {
@@ -191,6 +192,23 @@ class CourseController extends Controller
                     'content_id' => $currentContent->id,
                 ]
             );
+
+            if ($isEnrolled) { // Pastikan user terdaftar sebelum melanjutkan
+                // Hitung total konten dalam kursus
+                $totalContents = $course->contents()->count();
+
+                // Hitung konten yang sudah diselesaikan oleh user
+                $completedContentsCount = UserCourseProgress::where('user_id', Auth::id())
+                    ->where('course_id', $course->id)
+                    ->count();
+
+                // Jika semua konten selesai DAN tanggal penyelesaian belum pernah dicatat
+                if (($totalContents > 0 && $completedContentsCount >= $totalContents) && is_null($enrollment->completion_date)) {
+                    // Catat tanggal penyelesaian saat ini
+                    $enrollment->completion_date = \Carbon\Carbon::now();
+                    $enrollment->save();
+                }
+            }
         }
 
         // Mengubah string JSON dari database menjadi array PHP

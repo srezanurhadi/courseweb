@@ -68,18 +68,15 @@
                         <div class="mb-8">
                             <p class="text-lg text-gray-600 mb-4">Download the certificate below!</p>
                             <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 mb-4">
-                                <!-- Placeholder for certificate image -->
                                 <div class="flex justify-center">
-                                    <img src="{{ asset('images/certificate-placeholder.jpg') }}"
-                                        alt="Certificate Preview" class="max-w-full h-auto shadow-md">
+                                    <iframe src="{{ route('user.certificate.preview', ['courseId' => $course->id]) }}"
+                                        class="w-full h-[550px] shadow-md" style="border: none;"
+                                        title="Certificate Preview">
+                                    </iframe>
                                 </div>
                             </div>
                         </div>
 
-                        {{-- <button
-                            class="bg-indigo-700 text-white rounded-md px-6 py-2 text-lg font-semibold hover:bg-indigo-800 transition-colors">
-                            Download Certificate
-                        </button> --}}
                         <a href="{{ route('user.certificate.download', ['courseId' => $course->id]) }}" target="_blank"
                             class="bg-indigo-700 text-white rounded-md px-6 py-2 text-lg font-semibold hover:bg-indigo-800 transition-colors">
                             Download Certificate
