@@ -34,9 +34,9 @@ class usersController extends Controller
             $category = $request->input('category');
             $query->where('role', $category);
         }
-        
+
         $users = $query->orderBy('name')->paginate(10)->onEachSide(1);
-        return view('admin.users.index', compact('users', 'admincount', 'usercount', 'authorcount','userscount'));
+        return view('admin.users.index', compact('users', 'admincount', 'usercount', 'authorcount', 'userscount'));
     }
 
     /**
@@ -130,12 +130,13 @@ class usersController extends Controller
     public function destroy(string $id)
     {
         $user = User::where('name', $id)->first();
+        $user->content()->delete();
 
         if ($user->image) {
             Storage::delete($user->image);
         }
         $user->delete();
 
-        return redirect("/admin/users")->with('success', 'User Berhasil diubah');
+        return redirect("/admin/users")->with('success', 'User Berhasil dihapus');
     }
 }

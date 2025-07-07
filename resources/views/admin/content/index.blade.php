@@ -25,7 +25,7 @@
             </div>
             <div class="w-full flex pt-8 px-4 justify-between">
                 <div class="flex gap-4">
-                    <form action="{{ Request::is('admin/mycontent') ? '/admin/mycontent' : '/admin/content' }}"
+                    <form action="/{{ Auth::user()->role }}{{ Request::is('*/mycontent') ? '/mycontent' : '/content' }}"
                         method="GET" class="flex gap-4" id="search-form">
                         <div class="flex gap-2">
                             {{-- Input Pencarian --}}
@@ -35,7 +35,6 @@
                                     class="rounded-lg min-w-56 focus:outline-none px-2 placeholder:font-semibold placeholder:italic bg-transparent"
                                     placeholder="Search Content...">
                             </div>
-
                             <div class="flex gap-1 items-center rounded-lg border-gray-400 border-2 px-2">
                                 <i class="fas fa-filter text-gray-500"></i> {{-- Mengganti ikon agar lebih sesuai --}}
                                 <select name="category" id="category"
@@ -61,7 +60,7 @@
                 <div class="">
                     <a href="category" class="px-2 py-1 mr-2 bg-sky-500 rounded-lg text-white font-semibold"><i
                             class="fas fa-plus text-gray-50"></i> Add Category</a>
-                    <a href="/admin{{ Request::is('admin/mycontent') ? '/mycontent/create' : '/content/create' }}"
+                    <a href="/{{ Auth::user()->role }}{{ Request::is('*/mycontent') ? '/mycontent/create' : '/content/create' }}"
                         class="px-2 py-1 ml-2 bg-sky-500 rounded-lg text-white font-semibold"><i
                             class="fas fa-plus text-gray-50"></i> Add Content</a>
                 </div>
@@ -150,14 +149,14 @@
                                     <div class="flex items-center space-x-2">
 
                                         {{-- Tombol Lihat (View) --}}
-                                        <a href="/admin{{ Request::is('admin/mycontent*') ? '/mycontent' : '/content' }}/{{ $content->slug }}"
+                                        <a href="/{{ Auth::user()->role }}{{ Request::is('*/mycontent*') ? '/mycontent' : '/content' }}/{{ $content->slug }}"
                                             class="w-8 h-8 rounded-sm bg-sky-500 hover:bg-sky-600 text-white flex items-center justify-center"
                                             aria-label="Lihat">
                                             <i class="fas fa-eye"></i>
                                         </a>
 
                                         {{-- Tombol Ubah (Edit) --}}
-                                        <a href="/admin{{ Request::is('admin/mycontent*') ? '/mycontent' : '/content' }}/{{ $content->slug }}/edit"
+                                        <a href="/{{ Auth::user()->role }}{{ Request::is('*/mycontent*') ? '/mycontent' : '/content' }}/{{ $content->slug }}/edit"
                                             class="w-8 h-8 rounded-sm bg-amber-400 hover:bg-amber-500 text-white flex items-center justify-center"
                                             aria-label="Ubah">
                                             <i class="fas fa-pencil-alt"></i>
@@ -165,7 +164,7 @@
 
                                         {{-- Form Hapus (Delete) --}}
                                         <form
-                                            action="/admin{{ Request::is('admin/mycontent*') ? '/mycontent' : '/content' }}/{{ $content->slug }}"
+                                            action="/{{ Auth::user()->role }}{{ Request::is('*/mycontent*') ? '/mycontent' : '/content' }}/{{ $content->slug }}"
                                             method="post" class="w-8 h-8">
                                             @method('delete')
                                             @csrf

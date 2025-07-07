@@ -15,7 +15,9 @@
     <div class="flex flex-1 ">
         <x-sidebar></x-sidebar>
         <div class="w-full overflow-hidden bg-gray-50 flex flex-col p-4">
-            <form action="/admin/content/{{ $content->slug }}" method="POST" id="contentForm">
+            <form
+                action="/{{ Auth::user()->role }}{{ Request::is('*/mycontent*') ? '/mycontent' : '/content' }}/{{ $content->slug }}"
+                method="POST" id="contentForm">
                 @csrf
                 @method('PUT') {{-- PENTING: Untuk metode update HTTP --}}
 

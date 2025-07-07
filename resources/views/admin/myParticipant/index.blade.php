@@ -125,7 +125,7 @@
 
                                     <!-- Kolom Action - lebar tetap 80px -->
                                     <td class="px-6 py-4 w-20 text-center">
-                                        <a href="{{ url('admin/myparticipant/' . $course->slug) }}">
+                                        <a href="/{{ Auth::user()->role }}/myparticipant/{{ $course->slug }}">
                                             <button id="show"
                                                 class="w-8 h-8 rounded-sm bg-indigo-400 hover:bg-indigo-500 text-white flex items-center justify-center hover:cursor-pointer"
                                                 aria-label="show">

@@ -35,12 +35,12 @@
                                     <span class="pl-2">Back</span>
                                 </a>
                             </div>
-                            <a href="/admin{{ Request::is('admin/mycontent*') ? '/mycontent' : '/content' }}/{{ $content->slug }}/edit"
+                            <a href="/{{ Auth::user()->role }}{{ Request::is('*/mycontent*') ? '/mycontent' : '/content' }}/{{ $content->slug }}/edit"
                                 class=" py-0.5 px-3 border-amber-500 text-amber-500 hover:bg-amber-50  bg-amber-100 rounded-sm border-2 transition-all duration-200 shadow-inherit">
                                 <i class="fas fa-pencil-alt"></i> <span class="pl-2">Edit</span>
                             </a>
                             <form
-                                action="/admin{{ Request::is('admin/mycontent*') ? '/mycontent' : '/content' }}/{{ $content->slug }}"
+                                action="/{{ Auth::user()->role }}{{ Request::is('*/mycontent*') ? '/mycontent' : '/content' }}/{{ $content->slug }}"
                                 method="POST" class="inline-block">
                                 @method('delete')
                                 @csrf

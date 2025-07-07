@@ -19,10 +19,6 @@
     <div class="flex flex-1 ">
         <x-sidebar></x-sidebar>
         <div class="w-full bg-gray-50 flex flex-col px-8 py-4">
-            {{-- PERHATIKAN: Pastikan action form Anda benar. Jika Anda mengedit user dengan ID tertentu,
-                 biasanya route-nya akan seperti /admin/users/{user_id} dengan method PUT/PATCH.
-                 Namun, kita bisa menggunakan POST dengan method spoofing di Laravel.
-                 Untuk saat ini, kita biarkan sesuai kode Anda. --}}
             <form action="/admin/users/{{ $name->id }}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('PUT') {{-- Method Spoofing untuk update --}}
@@ -39,12 +35,9 @@
                         {{-- Area Pratinjau Gambar --}}
                         <div id="image-preview"
                             class="mt-1 aspect-6/4 h-48 flex justify-center items-center border-2 bg-gray-50 border-gray-300 relative">
-                            {{-- PERBAIKAN: Menampilkan gambar yang ada dari storage.
-                                 Asumsinya gambar disimpan di 'storage/nama_file.jpg' dan Anda sudah menjalankan `php artisan storage:link` --}}
                             <img id="preview-img" src="{{ $name->image ? asset('storage/' . $name->image) : '#' }}"
                                 class="aspect-6/4 h-48 object-cover object-center border-2 border-gray-400 rounded-md"
                                 alt="Image preview" />
-
                             {{-- Tombol untuk mengganti gambar --}}
                             <button type="button" id="change-image-button"
                                 class="absolute bg-white/50 hover:bg-white rounded-full p-1 shadow-md text-gray-600 hover:text-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
@@ -119,7 +112,8 @@
                                 </option>
                                 <option value="author" {{ old('role', $name->role) == 'author' ? 'selected' : '' }}>
                                     Author</option>
-                                <option value="user" {{ old('role', $name->role) == 'user' ? 'selected' : '' }}>User
+                                <option value="participant"
+                                    {{ old('role', $name->role) == 'participant' ? 'selected' : '' }}>Participant
                                 </option>
                             </select>
                             <div

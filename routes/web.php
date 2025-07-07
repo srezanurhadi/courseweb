@@ -45,35 +45,27 @@ Route::prefix('/admin')->middleware(adminMiddleware::class)->group(function () {
     //area saya
     Route::resource('/mycourse', courseController::class);
     Route::get('/mycourse/{course:slug}/content/{content}', [CourseController::class, 'showContent'])
-        ->name('admin.mycourse.content.show');  
+        ->name('admin.mycourse.content.show');
     Route::resource('/mycontent', contentController::class);
 });
 
 Route::prefix('/author')->middleware(authorMiddleware::class)->group(function () {
     Route::get('/', [homecontroller::class, 'index']);
-    Route::resource('/users', usersController::class);
-    Route::resource('/course', courseController::class);
-    Route::resource('/content', contentController::class);
+    // route khusus image di editor
+    Route::post('/upload-image', [ImageController::class, 'store'])->name('image.store');
+    Route::resource('/mycourse', courseController::class);
+    Route::resource('/mycontent', contentController::class);
+    Route::resource('/myparticipant', myParticipantController::class);
+
+    //category
+    Route::resource('/category', categoryController::class);
+    Route::get('/mycourse/{course:slug}/content/{content}', [CourseController::class, 'showContent'])
+        ->name('admin.course.content.show');
+    Route::get('/myparticipant/{myparticipant:slug}/{user:id}/edit', [myParticipantController::class, 'editNilai'])
+        ->name('admin.myparticipant.edit');
 });
 
 //BAGUSSS PUNYAAA DO NOT TOCHHH PLSS, THANKS b(^_^)d//
-
-Route::get('/author', function () {
-    return view('author.course.index');
-});
-Route::get('/authorcoursecreate', function () {
-    return view('admin.course.create');
-});
-Route::get('/authorcourseshow', function () {
-    return view('admin.course.show');
-});
-
-Route::get('/adminindex', function () {
-    return view('admin.content.index');
-});
-Route::get('/deepseek', function () {
-    return view('admin.course.deepseek');
-});
 //BAGUSSS PUNYAAA DO NOT TOCHHH PLSS, THANKS b(^_^)d//
 
 //admin

@@ -26,7 +26,7 @@
             </div>
             <div class="w-full flex pt-6 pb-2 px-6 justify-between">
                 <div class="flex gap-4">
-                    <form action="{{ url('/admin/mycourse') }}" method="GET" class="flex gap-2">
+                    <form action="/{{ Auth::user()->role }}{{ Request::is('*/mycourse') ? '/mycourse' : '/course' }}" method="GET" class="flex gap-2">
                         <div class=" flex gap-1 items-center rounded-lg border-gray-400 border-2 pl-2">
                             <i class="fas fa-search text-gray-500"></i>
                             <input type="text" name="search" value="{{ request('search') }}"
@@ -38,7 +38,7 @@
                             <select name="category" id="category"
                                 class="min-w-56 focus:outline-none px-2 text-gray-900" onchange="this.form.submit()">
 
-                                <option value="" {{ request('category') ? '' : 'selected' }}>All Category</option>
+                                <option value="" {{ request('category') ? ' ' : 'selected' }}>All Category</option>
 
                                 @foreach ($categories as $category)
                                     <option value="{{ $category->id }}"
@@ -65,7 +65,7 @@
 
                 </div>
                 <div class="">
-                    <a href="/admin{{ Request::is('admin/mycourse') ? '/mycourse/create' : '/course/create' }}"
+                    <a href="/{{ Auth::user()->role }}{{ Request::is('*/mycourse') ? '/mycourse/create' : '/course/create' }}"
                         class="px-2 py-1 bg-sky-500 rounded-lg text-white font-semibold"><i
                             class="fas fa-plus text-gray-50"></i> Add Course</a>
                 </div>
@@ -167,7 +167,7 @@
                                 </div>
                             </div>
                             <div class="pl-2 pt-2 font-semibold line-clamp-2 text-lg text-gray-900 hover:cursor-pointer"
-                                onclick="window.location.href='/admin{{ Request::is('*/mycourse*') ? '/mycourse' : '/course' }}/{{ $course->slug }}'">
+                                onclick="window.location.href='/{{ Auth::user()->role }}{{ Request::is('*/mycourse*') ? '/mycourse' : '/course' }}/{{ $course->slug }}'">
                                 {{ $course->title }}</div>
                             <div class="pl-2 pt-2 text-sm text-gray-500 line-clamp-2">
                                 {{ $course->description }}</div>
