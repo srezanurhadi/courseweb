@@ -10,6 +10,7 @@ use App\Http\Middleware\authorMiddleware;
 use App\Http\Controllers\courseController;
 use App\Http\Controllers\contentController;
 use App\Http\Controllers\categoryController;
+use App\Http\Controllers\myProfileController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Middleware\participantMiddleware;
 use App\Http\Controllers\Auth\RegisterController;
@@ -35,9 +36,7 @@ Route::prefix('/admin')->middleware(adminMiddleware::class)->group(function () {
     Route::get('/course/{course:slug}/content/{content}', [CourseController::class, 'showContent'])
         ->name('admin.course.content.show');
     Route::resource('/content', contentController::class);
-    Route::resource('/myparticipant', myParticipantController::class);
-    Route::get('/myparticipant/{myparticipant:slug}/{user:id}/edit', [myParticipantController::class, 'editNilai'])
-        ->name('admin.myparticipant.edit');
+    
 
     //category
     Route::resource('/category', categoryController::class);
@@ -47,6 +46,10 @@ Route::prefix('/admin')->middleware(adminMiddleware::class)->group(function () {
     Route::get('/mycourse/{course:slug}/content/{content}', [CourseController::class, 'showContent'])
         ->name('admin.mycourse.content.show');
     Route::resource('/mycontent', contentController::class);
+    Route::resource('/myparticipant', myParticipantController::class);
+    Route::get('/myparticipant/{myparticipant:slug}/{user:id}/edit', [myParticipantController::class, 'editNilai'])
+        ->name('admin.myparticipant.edit');
+    Route::resource('/myprofile', myProfileController::class);   
 });
 
 Route::prefix('/author')->middleware(authorMiddleware::class)->group(function () {

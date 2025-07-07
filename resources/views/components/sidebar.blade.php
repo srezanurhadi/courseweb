@@ -1,6 +1,6 @@
 <div class="h-screen flex sticky top-0 left-0 z-999">
     <aside class="bg-gradient-to-b from-sky-600 to-indigo-900 w-54 flex flex-col space-y-1">
-        <div class="text-white text-3xl mt-4 pl-6 font-bold">R. DOSEN</div>
+        <div class="text-white text-3xl mt-4 pl-6 font-bold mb-8">R. DOSEN</div>
 
         @if (Request::is('admin*') || Request::is('author*'))
             <a href="{{ url('/admin') }}"
@@ -44,7 +44,7 @@
                 class="{{ Request::is('admin/myparticipant*') ? 'border-white bg-white/20 shadow-lg' : 'border-white/30 hover:inset-shadow-sm inset-shadow-black/20' }} ml-6 p-2 mr-2 rounded-lg border-l-8 hover:border-white hover:bg-white/20 transition-all duration-200">
                 <i class="fas fa-user-gear text-white pl-1"></i>
                 <span class="text-white pl-1 font-semibold text-20">My Participant</span></a>
-            <a href="{{ url('/author/myprofile') }}"
+            <a href="{{ url('/admin/myprofile') }}"
                 class="{{ Request::is('author/myprofile*') ? 'border-white bg-white/20 shadow-lg' : 'border-white/30 hover:inset-shadow-sm inset-shadow-black/20' }} ml-6 p-2 mr-2 rounded-lg border-l-8 hover:border-white hover:bg-white/20 transition-all duration-200">
                 <i class="fas fa-user text-white pl-1"></i>
                 <span class="text-white pl-1 font-semibold text-20">My Profile</span></a>

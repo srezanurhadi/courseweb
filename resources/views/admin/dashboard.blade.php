@@ -162,7 +162,7 @@
         },
         colors: ['#303F9F'],
         title: {
-            text: 'Total Pendaftaran Tiap Bulan',
+            text: 'Total Pendaftaran Tiap Bulan (2025)',
             align: 'center',
             style: {
                 fontSize: '16px',
@@ -171,32 +171,52 @@
             }
         },
         series: [{
-
-            name: 'Sales',
-            data: [30, 40, 45, 50, 49, 60, 70, 91, 125, 80, 90, 100]
+            name: 'Pendaftaran',
+            data: {!! json_encode($chartData) !!}
         }],
         xaxis: {
-            categories: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September',
-                'Oktober', 'November',
-                'Desember'
+            categories: [
+                'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
             ]
+        },
+        yaxis: {
+            title: {
+                text: 'Jumlah Pendaftaran'
+            }
+        },
+        dataLabels: {
+            enabled: true,
+            formatter: function(val) {
+                return val;
+            }
+        },
+        plotOptions: {
+            bar: {
+                horizontal: false,
+                columnWidth: '70%',
+                endingShape: 'rounded'
+            }
+        },
+        grid: {
+            show: true,
+            borderColor: '#e7e7e7',
+            strokeDashArray: 5
         }
-
     };
 
     var chartBar = new ApexCharts(document.querySelector("#chart1"), optionsBar);
     chartBar.render();
 
-
     // --- Konfigurasi dan Render untuk Pie Chart ---
     var optionsPie = {
-        series: [40, 25, 35],
+        series: {!! json_encode($roleData) !!},
         chart: {
             width: 450,
             type: 'pie',
         },
         colors: ['#303F9F', '#388E3C', '#f59e0b'],
-        labels: ['Admin', 'Author', 'Participant'],
+        labels: {!! json_encode($roleLabels) !!},
         responsive: [{
             breakpoint: 480,
             options: {
@@ -207,8 +227,18 @@
                     position: 'bottom'
                 }
             }
-        }]
-
+        }],
+        legend: {
+            position: 'right',
+            offsetY: 0,
+            height: 230,
+        },
+        dataLabels: {
+            enabled: true,
+            formatter: function(val, opts) {
+                return opts.w.config.series[opts.seriesIndex];
+            }
+        }
     };
 
     var chartPie = new ApexCharts(document.querySelector("#chart2"), optionsPie);
