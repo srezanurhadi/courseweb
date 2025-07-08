@@ -4,358 +4,386 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Category Management - Admin Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        .modal {
-            transition: opacity 0.25s ease;
-        }
-
-        .modal-enter {
-            opacity: 0;
-        }
-
-        .modal-enter-active {
-            opacity: 1;
-        }
-
-        .modal-exit {
-            opacity: 1;
-        }
-
-        .modal-exit-active {
-            opacity: 0;
-        }
-    </style>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <x-headcomponent></x-headcomponent>
 </head>
 
-<body class="bg-gray-50 min-h-screen">
-    <div class="container mx-auto px-6 py-8">
-        <!-- Header -->
-        <div class="flex justify-between items-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-800">Category Management</h1>
-            <button onclick="createCategory()"
-                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2">
-                <i class="fas fa-plus"></i>
-                Create New Category
-            </button>
-        </div>
+<body>
+    <div class="flex flex-1 h-screen"> {{-- Ditambahkan h-screen untuk memastikan flex container mengisi tinggi layar --}}
+        <x-sidebar></x-sidebar>
+        <div class="w-full bg-gray-50 relative h-full overflow-y-auto">
 
-        <!-- Search Bar -->
-        <div class="mb-6">
-            <div class="relative max-w-md">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <i class="fas fa-search text-gray-400"></i>
+            {{-- Header yang Sticky --}}
+            <div class="p-4 shadow-lg font-bold flex bg-gray-100 flex-row justify-between top-0 sticky z-30">
+                <div class="text-3xl font-bold pl-4">Management users</div>
+                <div class="profile flex items-center gap-2 pr-4">
+                    <i class="fas fa-bell text-xl"></i>
+                    <div class="rounded-full justify-center flex bg-gray-300 h-8 w-8">
+                        <span class="text-xl">A</span>
+                    </div>
+                    <div class="">Admin</div>
                 </div>
-                <input type="text" id="searchInput" placeholder="Search categories..."
-                    class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    onkeyup="searchCategories()">
             </div>
-        </div>
 
-        <!-- Table -->
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name
-                        </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Icon
-                        </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Color
-                        </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="categoryTableBody" class="bg-white divide-y divide-gray-200">
-                    <!-- Table rows will be populated by JavaScript -->
-                </tbody>
-            </table>
-        </div>
+            {{-- search --}}
+            <div class="w-full flex pt-8 px-4 justify-between">
+                <div class="flex gap-4">
+                    <form action="{{ url('/admin/users') }}" method="GET" class="flex gap-4" id="search-form">
+                        <div class="flex gap-2">
+                            {{-- Input Pencarian --}}
+                            <div class="flex gap-1 items-center rounded-lg border-gray-400 border-2 pl-2">
+                                <i class="fas fa-search text-gray-500"></i>
+                                <input type="text" name="search" {{-- [PENTING] Tambahkan atribut name --}}
+                                    value="{{ request('search') }}" {{-- Menampilkan kembali keyword pencarian --}}
+                                    class="rounded-lg min-w-56 focus:outline-none px-2 placeholder:font-semibold placeholder:italic bg-transparent"
+                                    placeholder="Search User...">
+                            </div>
 
-        <!-- Pagination -->
-        <div class="flex items-center justify-between mt-6">
-            <div class="text-sm text-gray-700">
-                Showing <span id="showingStart">1</span> to <span id="showingEnd">10</span> of <span
-                    id="totalItems">0</span> results
-            </div>
-            <div class="flex items-center space-x-2">
-                <button id="prevBtn" onclick="changePage(-1)"
-                    class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                    disabled>
-                    Previous
-                </button>
-                <span id="pageInfo" class="px-3 py-2 text-sm font-medium text-gray-700">
-                    Page 1 of 1
-                </span>
-                <button id="nextBtn" onclick="changePage(1)"
-                    class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                    disabled>
-                    Next
-                </button>
-            </div>
-        </div>
-    </div>
+                            {{-- Dropdown Kategori --}}
+                            <div class="flex gap-1 items-center rounded-lg border-gray-400 border-2 px-2">
+                                <i class="fas fa-filter text-gray-500"></i> {{-- Mengganti ikon agar lebih sesuai --}}
+                                <select name="category" id="category"
+                                    class="min-w-56 focus:outline-none px-2 text-gray-900 bg-transparent"
+                                    onchange="this.form.submit()"> {{-- [OPSIONAL] Otomatis submit saat kategori diubah --}}
+                                    <option value="">All Roles</option>
+                                    <option value="admin" {{ request('category') == 'admin' ? 'selected' : '' }}>Admin
+                                    </option>
+                                    <option value="author" {{ request('category') == 'author' ? 'selected' : '' }}>
+                                        Author</option>
+                                    <option value="participant"
+                                        {{ request('category') == 'participant' ? 'selected' : '' }}>
+                                        Participant</option>
+                                </select>
+                            </div>
 
-    <!-- Delete Confirmation Modal -->
-    <div id="deleteModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
-        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onclick="closeDeleteModal()"></div>
-
-            <div
-                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <div class="sm:flex sm:items-start">
-                        <div
-                            class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                            <i class="fas fa-exclamation-triangle text-red-600"></i>
+                            {{-- Tombol Search --}}
+                            <button type="submit" class="bg-sky-600 px-4 rounded-lg">
+                                <p class="font-medium text-base text-white">Search</p>
+                            </button>
                         </div>
-                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900">Delete Category</h3>
-                            <div class="mt-2">
-                                <p class="text-sm text-gray-500">
-                                    Are you sure you want to delete this category? This action cannot be undone.
-                                </p>
+                    </form>
+                </div>
+                <div class="">
+                    <a href="users/create" class="px-2 py-1 bg-sky-500 rounded-lg text-white font-semibold"><i
+                            class="fas fa-plus text-gray-50"></i> Add User</a>
+                </div>
+            </div>
+
+            {{-- head --}}
+            <div class="p-4 flex justify-around gap-2">
+                <div
+                    class="border-l-4 border-indigo-700 bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl w-1/4 flex justify-between items-center pl-2 ">
+                    <div class="p-2 flex flex-col font-semibold ">
+                        <div class="text-base text-gray-800">All User</div>
+                        <div class="text-3xl text-indigo-700 pl-4">{{ $userscount }}</div>
+                    </div>
+                    <div
+                        class="rounded-full text-indigo-200 justify-center flex items-center bg-indigo-300 h-10 w-10 m-4">
+                        <i class="fas fa-users text-2xl text-indigo-700"></i>
+                    </div>
+                </div>
+                <div
+                    class="border-l-4 border-green-700 bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl w-1/4 flex justify-between items-center pl-2 ">
+                    <div class="p-2 flex flex-col font-semibold ">
+                        <div class="text-base text-gray-800">Participant</div>
+                        <div class="text-3xl text-green-700 pl-4">{{ $usercount }}</div>
+                    </div>
+                    <div class="rounded-full justify-center flex items-center bg-green-300 h-10 w-10 m-4">
+                        <i class="fas fa-user text-2xl text-green-700"></i>
+                    </div>
+                </div>
+                <div
+                    class="border-l-4 border-amber-500 bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl w-1/4 flex justify-between items-center pl-2">
+                    <div class="p-2 flex flex-col font-semibold ">
+                        <div class="text-base text-gray-800">Author</div>
+                        <div class="text-3xl text-amber-500 pl-4">{{ $authorcount }}</div>
+                    </div>
+                    <div class="rounded-full justify-center flex items-center bg-amber-200 h-10 w-10 m-4">
+                        <i class="fas fa-user-tie text-2xl text-amber-500"></i>
+                    </div>
+                </div>
+                <div
+                    class="border-l-4 border-rose-500 bg-gray-100 shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] rounded-xl w-1/4 flex justify-between items-center pl-2">
+                    <div class="p-2 flex flex-col font-semibold ">
+                        <div class="text-base text-gray-800">Admin</div>
+                        <div class="text-3xl text-rose-500 pl-4">{{ $admincount }}</div>
+                    </div>
+                    <div class="rounded-full justify-center flex items-center bg-rose-200 h-10 w-10 m-4">
+                        <i class="fas fa-user-secret text-2xl text-rose-500"></i>
+                    </div>
+                </div>
+            </div>
+
+            {{-- tabel --}}
+            <div class="container mx-auto p-4">
+                <div class="overflow-x-auto shadow-md sm:rounded-lg">
+                    <table class="w-full text-sm text-left text-gray-500">
+                        <thead class="text-xs text-white bg-indigo-600">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">Full Name</th>
+                                <th scope="col" class="px-6 py-3">Email Address</th>
+                                <th scope="col" class="px-6 py-3">Phone Number</th>
+                                <th scope="col" class="px-6 py-3">Role</th>
+                                <th scope="col" class="px-6 py-3">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{-- Contoh Baris Tabel --}}
+                            @foreach ($users as $user)
+                                <tr class="bg-white border-t hover:bg-gray-50">
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 h-10 w-10">
+                                                @if ($user->image)
+                                                    <img src="{{ asset('storage/' . $user->image) }}"
+                                                        class="bg-purple-600 object-cover text-white rounded-full h-10 w-10 flex items-center justify-center text-lg font-semibold">
+                                                    </img>
+                                                @else
+                                                    <div
+                                                        class="bg-purple-600 text-white rounded-full h-10 w-10 flex items-center justify-center text-lg font-semibold">
+                                                        {{ substr($user->name, 0, 1) }}
+                                                    </div>
+                                                @endif
+
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="text-sm font-medium text-gray-900">{{ $user->name }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-gray-900">{{ $user->email }}</td>
+                                    <td class="px-6 py-4 text-gray-900">
+                                        @if ($user->no_telp)
+                                            {{ $user->no_telp }}
+                                        @else
+                                            -
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span
+                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                            {{ $user->role }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex space-x-2">
+                                            <button id="show"
+                                                class="w-8 h-8 rounded-sm bg-indigo-400 hover:bg-indigo-500 text-white flex items-center justify-center"
+                                                aria-label="show">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <a href="users/{{ $user->name }}/edit"
+                                                class="w-8 h-8 rounded-sm bg-amber-400 hover:bg-amber-500 text-white flex items-center justify-center"
+                                                aria-label="edit">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </a>
+                                            <form action="users/{{ $user->name }}" method="post">
+                                                @method('delete')
+                                                @csrf
+
+                                                <button
+                                                    onclick="return confirm('anda yakin ingin menghapus {{ $user->name }}')"">
+                                                    <div
+                                                        class="bg-red-500 p-1 rounded-sm w-8 h-8 flex items-center justify-center group hover:bg-white hover:border-2 hover:border-red-500">
+                                                        <span
+                                                            class="fa-solid fa-trash cursor-pointer text-white group-hover:text-red-500">
+                                                        </span>
+                                                    </div>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+
+
+                            {{-- Akhir Contoh Baris Tabel (Ulangi sesuai kebutuhan) --}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="mt-4 mb-10">
+                {{ $users->appends(request()->all())->links() }}
+            </div>
+            {{-- modal start --}}
+            @foreach ($users as $user)
+                <div class="">
+                    <div id="modal"
+                        class="modal ml-54 hidden opacity-0 fixed inset-0 bg-black/50 backdrop-blur-xs transition-all duration-500 ease-in-out flex items-center justify-center z-50 p-25">
+
+                        {{-- Konten Modal --}}
+                        <div
+                            class="min-w-full bg-slate-100 rounded-lg pl-15 p-3  max-h-[90vh] flex flex-col gap-4 overflow-y-auto">
+                            <div class="flex justify-end relative">
+                                <button id="closeModal" class="text-red-500 hover:text-red-700 focus:outline-none">
+                                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="flex gap-2">
+                                <div class=" w-2/3">
+                                    <div class="mb-2">
+                                        <div for="full-name" class="block text-gray-700 text-sm font-bold mb-2">Full
+                                            Name</div>
+                                        <div
+                                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                            {{ $user->name }}
+                                        </div>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label for="email"
+                                            class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                                        <div
+                                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                            {{ $user->email }}
+                                        </div>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label for="handphone"
+                                            class="block text-gray-700 text-sm font-bold mb-2">Handphone</label>
+                                        <div
+                                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                            {{ $user->no_telp }}
+                                        </div>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label for="role"
+                                            class="block text-gray-700 text-sm font-bold mb-2">Role</label>
+                                        <div
+                                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                            {{ $user->role }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="  w-1/3 flex justify-center items-start">
+                                    <div class="relative ">
+                                        <div
+                                            class="rounded-full size-62 bg-gray-300 flex items-center justify-center overflow-hidden">
+                                            {{-- Placeholder untuk foto profil --}}
+                                            @if ($user->image)
+                                                <img src=" {{ asset('storage/' . $user->image) }}" alt=""
+                                                    class="w-full object-cover rounded-full size-62 bg-gray-300 flex items-center justify-center">
+                                            @else
+                                                <svg class="w-20 h-20 text-gray-500" fill="currentColor"
+                                                    viewBox="0 0 20 20"
+                                                    xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)">
+                                                    <path fill-rule="evenodd"
+                                                        d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                                        clip-rule="evenodd"></path>
+                                                </svg>
+                                            @endif
+
+                                        </div>
+                                        <button
+                                            class="absolute bottom-0 right-0 bg-gray-200 rounded-full p-1 hover:bg-gray-300 focus:outline-none focus:shadow-outline">
+                                            <svg class="size-10 text-gray-700" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0010.07 4h3.86a2 2 0 001.664.89l.812 1.22A2 2 0 0118.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                @if (isset($user->course_type))
+                                    <h2 class="block text-gray-700 text-sm font-bold mb-2">
+                                        @if ($user->course_type === 'enrolled')
+                                            Courses Enrolled
+                                        @elseif($user->course_type === 'created')
+                                            Courses Created
+                                        @endif
+                                    </h2>
+
+                                    <div
+                                        class="bg-indigo-100 p-2 rounded-lg border-2 border-indigo-300 overflow-y-auto h-50 course-created-scrollable">
+                                        @if ($user->course_type === 'enrolled' && isset($user->enrolled_courses) && $user->enrolled_courses->count() > 0)
+                                            <ul class="space-y-2">
+                                                @foreach ($user->enrolled_courses->sortBy('title') as $enrolledCourse)
+                                                    <li
+                                                        class="bg-gray-100 rounded-md p-3 flex items-center justify-between shadow-sm">
+                                                        <div class="flex items-center max-w-200 overflow-hidden">
+                                                            <div
+                                                                class="size-4 rounded-md bg-yellow-300 mr-2 flex-shrink-0">
+                                                            </div>
+                                                            <span class="truncate min-w-0"
+                                                                title="{{ $enrolledCourse->title }}">
+                                                                {{ $enrolledCourse->title }}
+                                                            </span>
+                                                        </div>
+                                                        <span class="text-sm text-gray-600">Enrolled</span>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @elseif($user->course_type === 'created' && isset($user->created_courses) && $user->created_courses->count() > 0)
+                                            <ul class="space-y-2">
+                                                @foreach ($user->created_courses->sortBy('title') as $createdCourse)
+                                                    <li
+                                                        class="bg-gray-100 rounded-md p-3 flex items-center justify-between shadow-sm">
+                                                        <div class="flex items-center max-w-200 overflow-hidden">
+                                                            <div
+                                                                class="size-4 rounded-md bg-green-300 mr-2 flex-shrink-0">
+                                                            </div>
+                                                            <span class="truncate min-w-0"
+                                                                title="{{ $createdCourse->title }}">
+                                                                {{ $createdCourse->title }}
+                                                            </span>
+                                                        </div>
+                                                        <span class="text-sm text-gray-600">Created</span>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @else
+                                            <div class="text-center text-gray-500 py-4">
+                                                @if ($user->course_type === 'enrolled')
+                                                    <p>No courses enrolled yet</p>
+                                                @elseif($user->course_type === 'created')
+                                                    <p>No courses created yet</p>
+                                                @endif
+                                                <p class="text-xs">User ID: {{ $user->id }}</p>
+                                            </div>
+                                        @endif
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                    <button type="button" onclick="confirmDelete()"
-                        class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
-                        Delete
-                    </button>
-                    <button type="button" onclick="closeDeleteModal()"
-                        class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                        Cancel
-                    </button>
-                </div>
-            </div>
+            @endforeach
+
+
+
+            {{-- modal End --}}
         </div>
     </div>
-
-    <script>
-        // Sample data
-        const categories = [{
-                id: 1,
-                name: 'Technology',
-                icon: 'fas fa-laptop',
-                color: '#3B82F6'
-            },
-            {
-                id: 2,
-                name: 'Food & Drink',
-                icon: 'fas fa-utensils',
-                color: '#EF4444'
-            },
-            {
-                id: 3,
-                name: 'Travel',
-                icon: 'fas fa-plane',
-                color: '#10B981'
-            },
-            {
-                id: 4,
-                name: 'Sports',
-                icon: 'fas fa-football',
-                color: '#F59E0B'
-            },
-            {
-                id: 5,
-                name: 'Music',
-                icon: 'fas fa-music',
-                color: '#8B5CF6'
-            },
-            {
-                id: 6,
-                name: 'Education',
-                icon: 'fas fa-graduation-cap',
-                color: '#06B6D4'
-            },
-            {
-                id: 7,
-                name: 'Health',
-                icon: 'fas fa-heart',
-                color: '#EC4899'
-            },
-            {
-                id: 8,
-                name: 'Business',
-                icon: 'fas fa-briefcase',
-                color: '#6B7280'
-            },
-            {
-                id: 9,
-                name: 'Art & Design',
-                icon: 'fas fa-palette',
-                color: '#F97316'
-            },
-            {
-                id: 10,
-                name: 'Gaming',
-                icon: 'fas fa-gamepad',
-                color: '#7C3AED'
-            },
-            {
-                id: 11,
-                name: 'Photography',
-                icon: 'fas fa-camera',
-                color: '#059669'
-            },
-            {
-                id: 12,
-                name: 'Fashion',
-                icon: 'fas fa-tshirt',
-                color: '#DC2626'
-            },
-            {
-                id: 13,
-                name: 'Books',
-                icon: 'fas fa-book',
-                color: '#92400E'
-            },
-            {
-                id: 14,
-                name: 'Movies',
-                icon: 'fas fa-film',
-                color: '#1F2937'
-            },
-            {
-                id: 15,
-                name: 'Nature',
-                icon: 'fas fa-leaf',
-                color: '#16A34A'
-            }
-        ];
-
-        let filteredCategories = [...categories];
-        let currentPage = 1;
-        const itemsPerPage = 10;
-        let categoryToDelete = null;
-
-        // Helper function to convert hex to rgba
-        function hexToRgba(hex, alpha) {
-            const r = parseInt(hex.slice(1, 3), 16);
-            const g = parseInt(hex.slice(3, 5), 16);
-            const b = parseInt(hex.slice(5, 7), 16);
-            return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-        }
-
-        function renderTable() {
-            const tableBody = document.getElementById('categoryTableBody');
-            const startIndex = (currentPage - 1) * itemsPerPage;
-            const endIndex = startIndex + itemsPerPage;
-            const currentItems = filteredCategories.slice(startIndex, endIndex);
-
-            tableBody.innerHTML = currentItems.map(category => `
-                <tr class="hover:bg-gray-50">
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium" style="background-color: ${hexToRgba(category.color, 0.2)}; color: ${category.color};">
-                            ${category.name}
-                        </div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="flex items-center justify-center w-10 h-10 rounded-md" style="background-color: ${hexToRgba(category.color, 0.1)};">
-                            <i class="${category.icon}" style="color: ${category.color};"></i>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="flex items-center">
-                            <div class="w-6 h-6 rounded-full mr-3" style="background-color: ${category.color};"></div>
-                            <span class="text-sm text-gray-900">${category.color.toUpperCase()}</span>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button 
-                            onclick="editCategory(${category.id})"
-                            class="text-indigo-600 hover:text-indigo-900 mr-4 inline-flex items-center"
-                        >
-                            <i class="fas fa-edit mr-1"></i>
-                            Edit
-                        </button>
-                        <button 
-                            onclick="deleteCategory(${category.id})"
-                            class="text-red-600 hover:text-red-900 inline-flex items-center"
-                        >
-                            <i class="fas fa-trash mr-1"></i>
-                            Delete
-                        </button>
-                    </td>
-                </tr>
-            `).join('');
-
-            updatePagination();
-        }
-
-        function updatePagination() {
-            const totalItems = filteredCategories.length;
-            const totalPages = Math.ceil(totalItems / itemsPerPage);
-            const startIndex = (currentPage - 1) * itemsPerPage + 1;
-            const endIndex = Math.min(currentPage * itemsPerPage, totalItems);
-
-            document.getElementById('showingStart').textContent = totalItems > 0 ? startIndex : 0;
-            document.getElementById('showingEnd').textContent = endIndex;
-            document.getElementById('totalItems').textContent = totalItems;
-            document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
-
-            document.getElementById('prevBtn').disabled = currentPage === 1;
-            document.getElementById('nextBtn').disabled = currentPage === totalPages || totalPages === 0;
-        }
-
-        function changePage(direction) {
-            const totalPages = Math.ceil(filteredCategories.length / itemsPerPage);
-            const newPage = currentPage + direction;
-
-            if (newPage >= 1 && newPage <= totalPages) {
-                currentPage = newPage;
-                renderTable();
-            }
-        }
-
-        function searchCategories() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            filteredCategories = categories.filter(category =>
-                category.name.toLowerCase().includes(searchTerm)
-            );
-            currentPage = 1;
-            renderTable();
-        }
-
-        function createCategory() {
-            alert('Create new category functionality would be implemented here');
-        }
-
-        function editCategory(id) {
-            const category = categories.find(c => c.id === id);
-            alert(`Edit category functionality would be implemented here for: ${category.name}`);
-        }
-
-        function deleteCategory(id) {
-            categoryToDelete = id;
-            document.getElementById('deleteModal').classList.remove('hidden');
-        }
-
-        function closeDeleteModal() {
-            document.getElementById('deleteModal').classList.add('hidden');
-            categoryToDelete = null;
-        }
-
-        function confirmDelete() {
-            if (categoryToDelete) {
-                const index = categories.findIndex(c => c.id === categoryToDelete);
-                if (index > -1) {
-                    categories.splice(index, 1);
-                    searchCategories(); // Refresh the filtered list and table
-                }
-                closeDeleteModal();
-            }
-        }
-
-        // Initialize the table
-        renderTable();
-    </script>
 </body>
+<script>
+    const modalOpen = document.querySelectorAll('#show');
+    const modal = document.querySelectorAll('#modal');
+    const modalClose = document.querySelectorAll('#closeModal');
+
+    for (let i = 0; i < modalOpen.length; i++) {
+        modalOpen[i].addEventListener('click', () => {
+            modal[i].classList.remove('hidden');
+            setTimeout(() => {
+                modal[i].classList.remove('opacity-0')
+            }, 10);
+
+
+        });
+        modalClose[i].addEventListener('click', () => {
+            modal[i].classList.add('opacity-0');
+            setTimeout(() => {
+                modal[i].classList.add('hidden')
+            }, 500);
+        })
+    }
+</script>
 
 </html>
