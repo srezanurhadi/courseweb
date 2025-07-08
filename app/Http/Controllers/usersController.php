@@ -84,7 +84,7 @@ class usersController extends Controller
             'email' => 'required|email:dns|unique:users',
             'password' => 'required|min:8|max:255|same:password_confirmation',
             'role' => 'required',
-            'no_telp' => 'required',
+            'no_telp' => 'string|min:10|max:15|regex:/^(\+62|62|0)8[1-9][0-9]{6,9}$/',
             'image' => 'image|file|max:2048'
         ]);
         if ($request->file('image')) {
@@ -128,7 +128,7 @@ class usersController extends Controller
         $rules = [
             'name' => 'required|string|max:255',
             'role' => 'required',
-            'no_telp' => 'required',
+            'no_telp' => 'nullable|string|min:10|max:15',
             'image' => 'image|file|max:2048'
         ];
         if ($request->email != $user->email) {

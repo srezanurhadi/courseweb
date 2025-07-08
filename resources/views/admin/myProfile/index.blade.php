@@ -113,7 +113,7 @@
                                         </div>
 
                                         <div class="col-span-full mt-4">
-                                            <a href="{{ route('user.profile.edit') }}"
+                                            <a href="/admin/myprofile/{{ $user->name }}/edit"
                                                 class="text-indigo-700 border border-indigo-700 rounded-md px-8 py-2 text-sm font-semibold hover:bg-indigo-700 hover:text-white transition-colors">Edit</a>
                                         </div>
                                     </form>
@@ -164,11 +164,14 @@
                 </div>
                 <div class="flex justify-center px-4 lg:px-16">
                     <div class="w-full max-w-6xl">
-                        <div class="mb-2">
-                            <h2 class="text-lg font-bold text-gray-800">Course Created</h2>
+                        <div class="mb-2 flex justify-between items-center">
+                            <h2 class="text-lg font-bold text-gray-800">Course Created </h2>
+                            <div class="text-gray-600 font-semibold tex">
+                                Total Courses Created: {{ $totalCourses }}
+                            </div>
                         </div>
                         <div
-                            class="bg-indigo-100  p-2 rounded-lg border-2 border-indigo-300 overflow-y-auto h-50 course-created-scrollable">
+                            class="bg-indigo-100  p-2 rounded-lg border-2 border-indigo-300 overflow-y-auto h-100 course-created-scrollable">
                             <ul class="space-y-2 w-full">
                                 @foreach ($createdCourses as $createdCourse)
                                     <li class=" rounded-md py-3 px-6 flex justify-between items-center shadow-sm"

@@ -25,7 +25,9 @@ class myProfileController extends Controller
             ->where('user_id', $user->id)
             ->get();
 
-        return view('admin.myProfile.index', compact('user', 'createdCourses'));
+        $totalCourses = $createdCourses->count();
+
+        return view('admin.myProfile.index', compact('user', 'createdCourses', 'totalCourses'));
     }
 
     /**
@@ -57,7 +59,9 @@ class myProfileController extends Controller
      */
     public function edit(myProfile $myProfile)
     {
-        //
+        $user = Auth::user();
+        $categories = Category::all();
+        return view('admin.myProfile.edit', compact('user', ));
     }
 
     /**
