@@ -113,7 +113,7 @@
                                         </div>
 
                                         <div class="col-span-full mt-4">
-                                            <a href="/admin/myprofile/{{ $user->name }}/edit"
+                                            <a href="/{{ Auth::user()->role }}/myprofile/{{ $user->name }}/edit"
                                                 class="text-indigo-700 border border-indigo-700 rounded-md px-8 py-2 text-sm font-semibold hover:bg-indigo-700 hover:text-white transition-colors">Edit</a>
                                         </div>
                                     </form>
