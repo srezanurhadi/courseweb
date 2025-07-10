@@ -71,9 +71,10 @@
                             <div class="p-4 lg:p-6 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
                                 <!-- Profile Form -->
                                 <div class="flex-1 w-full">
-                                    <form method="POST" action="{{ route('user.profile.update') }}"
+                                    <form method="POST" action="/admin/myprofile/{{ $user->id }}"
                                         enctype="multipart/form-data" class="grid grid-cols-1 gap-4 w-full max-w-2xl">
                                         @csrf
+                                        @method('PUT')
                                         <!-- Include image input inside the form -->
                                         <input type="file" id="image" name="image" class="hidden"
                                             accept="image/*">
@@ -85,7 +86,10 @@
                                             <input
                                                 class="border border-gray-400 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 w-full"
                                                 id="fullname" name="name" type="text"
-                                                value="{{ $user->name }}" />
+                                                value="{{ old('name', $user->name) }}" />
+                                            @error('name')
+                                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                            @enderror
                                         </div>
                                         <div class="flex flex-col">
                                             <label class="text-sm font-semibold mb-1 select-none"
@@ -98,10 +102,38 @@
                                         <div class="flex flex-col">
                                             <label class="text-sm font-semibold mb-1 select-none"
                                                 for="password">Password</label>
-                                            <input
-                                                class="border border-gray-400 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 w-full"
-                                                id="password" name="password" type="password"
-                                                placeholder="Kosongkan jika tidak ingin diubah" />
+                                            <div class="relative mt-1">
+                                                <input
+                                                    class="border border-gray-400 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 w-full"
+                                                    id="password" name="password" type="password"
+                                                    placeholder="Kosongkan jika tidak ingin diubah"
+                                                    oninput="toggleConfirmPasswordRequired()" />
+
+                                                <button type="button" id="toggle-pass-visibility"
+                                                    class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700 focus:outline-none transition duration-200">
+                                                    <i id="password-icon" class="fas fa-eye-slash"></i>
+                                                </button>
+                                            </div>
+                                            @error('password')
+                                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+                                        <div class="mb-2 ">
+                                            <label for="password_confirmation" class="block text-sm font-semibold">
+                                                confirm password
+                                            </label>
+                                            <div class="relative mt-1">
+                                                <input id="password" name="password_confirmation" type="password"
+                                                    placeholder="Confirm Password"
+                                                    class="border border-gray-400 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 w-full">
+                                                <button type="button" id="toggle-pass-visibility"
+                                                    class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700 focus:outline-none transition duration-200">
+                                                    <i id="password-icon" class="fas fa-eye-slash"></i>
+                                                </button>
+                                            </div>
+                                            @error('password_confirmation')
+                                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                            @enderror
                                         </div>
                                         <div class="flex flex-col">
                                             <label class="text-sm font-semibold mb-1 select-none"
@@ -110,6 +142,9 @@
                                                 class="border border-gray-400 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 w-full"
                                                 id="handphone" name="no_telp" type="text"
                                                 value="{{ $user->no_telp }}" />
+                                            @error('no_telp')
+                                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                            @enderror
                                         </div>
                                         <div class="flex flex-col">
                                             <label class="text-sm font-semibold mb-1 select-none"
@@ -128,7 +163,8 @@
                                                     value="{{ $user->created_at->format('Y') }}" readonly />
                                             </div>
                                             <div class="flex flex-col">
-                                                <label class="text-sm font-semibold mb-1 select-none" for="enddate">End
+                                                <label class="text-sm font-semibold mb-1 select-none"
+                                                    for="enddate">End
                                                     Date</label>
                                                 <input
                                                     class="border border-gray-400 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 w-full bg-gray-100"
@@ -323,6 +359,51 @@
                 deleteButton.remove();
             }
         }
+
+        // eye icon password
+        const hideButtons = document.querySelectorAll(
+            '#toggle-pass-visibility');
+        const passwordFields = document.querySelectorAll('#password');
+        const loopCount = Math.min(hideButtons.length, passwordFields.length);
+
+        for (let i = 0; i < loopCount; i++) {
+            hideButtons[i].addEventListener('click', () => {
+
+                const currentPasswordField = passwordFields[i];
+                const icon = hideButtons[i].querySelector('i');
+
+                if (currentPasswordField.type === 'password') {
+                    currentPasswordField.type = 'text';
+                    if (icon) {
+                        icon.classList.remove('fa-eye-slash');
+                        icon.classList.add('fa-eye');
+                    }
+                } else {
+                    currentPasswordField.type = 'password';
+                    if (icon) {
+                        icon.classList.remove('fa-eye');
+                        icon.classList.add('fa-eye-slash');
+                    }
+                }
+            });
+        }
+
+        function toggleConfirmPasswordRequired() {
+            const passwordInput = document.getElementById('password');
+            const confirmInput = document.getElementById('password_confirmation');
+
+            if (passwordInput.value.trim() !== '') {
+                confirmInput.required = true;
+            } else {
+                confirmInput.required = false;
+                confirmInput.value = ''; // Reset value jika password kosong
+            }
+        }
+
+        // Panggil saat halaman dimuat untuk set initial state
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleConfirmPasswordRequired();
+        });
     </script>
 </body>
 
