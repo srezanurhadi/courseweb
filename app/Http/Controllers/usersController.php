@@ -79,12 +79,13 @@ class usersController extends Controller
      */
     public function store(Request $request)
     {
+
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email:dns|unique:users',
             'password' => 'required|min:8|max:255|same:password_confirmation',
             'role' => 'required',
-            'no_telp' => 'string|min:10|max:15|regex:/^(\+62|62|0)8[1-9][0-9]{6,9}$/',
+            'no_telp' => ['nullable','string', 'min:10', 'max:15', 'regex:/^(\+62|62|0)8[1-9][0-9]{6,9}$/'],
             'image' => 'image|file|max:2048'
         ]);
         if ($request->file('image')) {
@@ -129,7 +130,7 @@ class usersController extends Controller
             'name' => 'required|string|max:255',
             'role' => 'required',
             'no_telp' => 'nullable|string|min:10|max:15',
-            'image' => 'image|file|max:2048'
+            'image' => 'nullable|image|file|max:2048'
         ];
         if ($request->email != $user->email) {
             $rules['email'] = 'required|email:dns|unique:users';
@@ -137,10 +138,19 @@ class usersController extends Controller
 
         $validatedData = $request->validate($rules);
 
-        if ($request->file('image')) {
-            if ($oldimage) {
-                Storage::delete($oldimage);
+        if ($request->input('delete_image') == '1') {
+            // Jika ada permintaan untuk menghapus gambar
+            if ($user->image) {
+                Storage::delete($user->image);
             }
+            $validatedData['image'] = null; // Set kolom image di database menjadi NULL
+    
+        } elseif ($request->file('image')) {
+            // Jika ada gambar baru yang di-upload
+            if ($user->image) {
+                Storage::delete($user->image); // Hapus gambar lama
+            }
+            // Simpan gambar baru
             $validatedData['image'] = $request->file('image')->store('profile-picture');
         }
         // Langkah 3: Update data user di database

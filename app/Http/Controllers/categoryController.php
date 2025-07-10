@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class categoryController extends Controller
@@ -66,9 +67,12 @@ class categoryController extends Controller
                 'color' => $request->color,
             ]);
 
-
-            // Redirect with success message
-            return redirect()->route('category.index')
+            $role = Auth::user()->role;
+            if ($request->is("*/mycontent*")) {
+                return redirect("/{$role}/mycontent/add/category")
+                    ->with('success', 'Category created successfully!');
+            }
+            return redirect("/{$role}/content/add/category")
                 ->with('success', 'Category created successfully!');
         } catch (\Exception $e) {
             // Handle any database errors
@@ -128,10 +132,14 @@ class categoryController extends Controller
                 'icon' => $request->icon,
                 'color' => $request->color,
             ]);
-
+            $role = Auth::user()->role;
             // Redirect with success message
-            return redirect()->route('category.index')
-                ->with('success', 'Category updated successfully!');
+            if ($request->is("*/mycontent*")) {
+                return redirect("/{$role}/mycontent/add/category")
+                    ->with('success', 'Category created successfully!');
+            }
+            return redirect("/{$role}/content/add/category")
+                ->with('success', 'Category created successfully!');
         } catch (\Exception $e) {
             // Handle any database errors
             return redirect()->back()

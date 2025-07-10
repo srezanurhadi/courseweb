@@ -36,20 +36,20 @@ Route::prefix('/admin')->middleware(adminMiddleware::class)->group(function () {
     Route::get('/course/{course:slug}/content/{content}', [CourseController::class, 'showContent'])
         ->name('admin.course.content.show');
     Route::resource('/content', contentController::class);
-    
-
     //category
-    Route::resource('/category', categoryController::class);
+    Route::resource('/content/add/category', categoryController::class);
+
 
     //area saya
     Route::resource('/mycourse', courseController::class);
     Route::get('/mycourse/{course:slug}/content/{content}', [CourseController::class, 'showContent'])
         ->name('admin.mycourse.content.show');
     Route::resource('/mycontent', contentController::class);
+    Route::resource('/mycontent/add/category', categoryController::class);
     Route::resource('/myparticipant', myParticipantController::class);
     Route::get('/myparticipant/{myparticipant:slug}/{user:id}/edit', [myParticipantController::class, 'editNilai'])
         ->name('admin.myparticipant.edit');
-    Route::resource('/myprofile', myProfileController::class);   
+    Route::resource('/myprofile', myProfileController::class);
 });
 
 Route::prefix('/author')->middleware(authorMiddleware::class)->group(function () {
@@ -73,7 +73,7 @@ Route::prefix('/author')->middleware(authorMiddleware::class)->group(function ()
 
 //admin
 Route::get('/coba', function () {
-    return view('admin.users.index');
+    return view('admin.course.deepseek');
 });
 
 // AUDENA PUNYA

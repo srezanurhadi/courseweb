@@ -17,17 +17,25 @@
                 <div class="text-3xl font-bold pl-4">Create New Category</div>
                 <div class="profile flex items-center gap-2 pr-4">
                     <i class="fas fa-bell text-xl"></i>
-                    <div class="rounded-full justify-center flex bg-gray-300 h-8 w-8">
-                        <span class="text-xl">A</span>
+                    <div class="rounded-full justify-center flex bg-gray-300 h-8 w-8 overflow-hidden">
+
+                        @if (Auth::user()->image)
+                            <img src="{{ asset('storage/' . Auth::user()->image) }}" alt=""
+                                class="aspect-square object-cover">
+                        @else
+                            <span class="text-xl">{{ Auth::user()->name[0] }}</span>
+                        @endif
+
                     </div>
-                    <div class="">Admin</div>
+                    <div class="">{{ Auth::User()->name }}</div>
                 </div>
             </div>
 
             <!-- Form -->
             <div class="mx-6 mb-6">
                 <div class="bg-white rounded-lg shadow-sm p-6">
-                    <form id="createCategoryForm" method="POST" action="/admin/category">
+                    <form id="createCategoryForm" method="POST"
+                        action="/{{ Auth::user()->role }}{{ Request::is('*/mycontent*') ? '/mycontent' : '/content' }}/add/category">
                         @csrf
                         <div class="space-y-6">
                             <!-- Category Name -->
@@ -38,6 +46,9 @@
                                 <input type="text" id="category" name="category" required
                                     placeholder="Enter category name"
                                     class="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                @error('category')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             <!-- Icon -->
