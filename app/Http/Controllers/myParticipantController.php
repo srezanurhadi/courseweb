@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Course;
 use App\Models\Content;
 use App\Models\Category;
+use App\Models\Enrollment;
 use Illuminate\Http\Request;
 use App\Models\MyParticipant;
 use App\Models\UserCourseProgress;
@@ -68,20 +69,44 @@ class myParticipantController extends Controller
      * Display the specified resource.
      */
     // app/Http/Controllers/MyParticipantController.php
-    public function show($slug)
+    public function show($slug, Request $request)
     {
+        // Ambil course dengan menghitung total konten
+        $course = Course::where('slug', $slug)
+            ->withCount('contents')
+            ->firstOrFail();
 
-        $course = Course::where('slug', $slug)->firstOrFail();
-        $courseId = $course->id;
+        // Query dasar untuk user yang terdaftar di course ini
+        $enrolledUsersQuery = User::whereHas('enrollments', function ($query) use ($course) {
+            $query->where('course_id', $course->id);
+        });
 
-        $userIds = DB::table('enrollments')
-            ->where('course_id', $courseId)
-            ->pluck('user_id');
+        // Filter berdasarkan search (nama user)
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $enrolledUsersQuery->where('name', 'like', "%{$search}%");
+        }
 
-        $enrolledUsers = User::whereIn('id', $userIds)->get();
+        // Ambil user yang sudah difilter
+        $enrolledUsers = $enrolledUsersQuery->get();
 
-        // Manual cara: ambil courses untuk setiap user
+        // Ambil semua progress user di course ini sekaligus (optimasi query)
+        $userProgress = UserCourseProgress::where('course_id', $course->id)
+            ->whereIn('user_id', $enrolledUsers->pluck('id'))
+            ->select('user_id', DB::raw('COUNT(*) as completed_count'))
+            ->groupBy('user_id')
+            ->get()
+            ->keyBy('user_id');
+
+
+        // Hitung progress untuk setiap user
         foreach ($enrolledUsers as $user) {
+            $completed = $userProgress[$user->id]->completed_count ?? 0;
+            $total = $course->contents_count;
+
+            $user->progress_percentage = $total > 0
+                ? round(($completed / $total) * 100)
+                : 0;
             $userCourses = DB::table('enrollments')
                 ->join('courses', 'enrollments.course_id', '=', 'courses.id')
                 ->where('enrollments.user_id', $user->id)
@@ -90,6 +115,21 @@ class myParticipantController extends Controller
 
             // Tambahkan sebagai attribute
             $user->enrolled_courses = $userCourses;
+        }
+
+        // Filter berdasarkan status setelah progress dihitung
+        if ($request->filled('status')) {
+            $status = $request->status;
+            $enrolledUsers = $enrolledUsers->filter(function ($user) use ($status) {
+                if ($status == '1') {
+                    // Status finished (progress 100%)
+                    return $user->progress_percentage == 100;
+                } elseif ($status == '0') {
+                    // Status ongoing (progress < 100%)
+                    return $user->progress_percentage < 100;
+                }
+                return true;
+            });
         }
 
         return view('admin.myParticipant.show', compact('course', 'enrolledUsers'));
@@ -114,10 +154,24 @@ class myParticipantController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(MyParticipant $myParticipant)
+
+    public function destroy(Course $course, User $user)
     {
-        //
+        // 1. Hapus progress course milik user
+        UserCourseProgress::where('course_id', $course->id)
+            ->where('user_id', $user->id)
+            ->delete();
+
+        // 2. Hapus data enrollment
+        Enrollment::where('course_id', $course->id)
+            ->where('user_id', $user->id)
+            ->delete();
+
+        // 3. Redirect ke halaman partisipan course yang spesifik
+        return redirect('admin/myparticipant/' . $course->slug)
+            ->with('success', 'Participant berhasil dihapus dari course.');
     }
+
 
     /**
      * Menampilkan halaman profil utama milik participant.

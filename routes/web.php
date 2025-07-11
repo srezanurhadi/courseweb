@@ -36,7 +36,7 @@ Route::prefix('/admin')->middleware(adminMiddleware::class)->group(function () {
     Route::get('/course/{course:slug}/content/{content}', [CourseController::class, 'showContent'])
         ->name('admin.course.content.show');
     Route::resource('/content', contentController::class);
-    
+
 
     //category
     Route::resource('/category', categoryController::class);
@@ -49,7 +49,9 @@ Route::prefix('/admin')->middleware(adminMiddleware::class)->group(function () {
     Route::resource('/myparticipant', myParticipantController::class);
     Route::get('/myparticipant/{myparticipant:slug}/{user:id}/edit', [myParticipantController::class, 'editNilai'])
         ->name('admin.myparticipant.edit');
-    Route::resource('/myprofile', myProfileController::class);   
+    Route::delete('/admin/myparticipant/{course:slug}/{user}', [MyParticipantController::class, 'destroy'])
+        ->name('myparticipant.destroy');
+    Route::resource('/myprofile', myProfileController::class);
 });
 
 Route::prefix('/author')->middleware(authorMiddleware::class)->group(function () {
