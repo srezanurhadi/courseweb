@@ -49,6 +49,8 @@ Route::prefix('/admin')->middleware(adminMiddleware::class)->group(function () {
     Route::resource('/myparticipant', myParticipantController::class);
     Route::get('/myparticipant/{myparticipant:slug}/{user:id}/edit', [myParticipantController::class, 'editNilai'])
         ->name('admin.myparticipant.edit');
+    Route::delete('/admin/myparticipant/{course:slug}/{user}', [MyParticipantController::class, 'destroy'])
+        ->name('myparticipant.destroy');
     Route::resource('/myprofile', myProfileController::class);
 });
 
