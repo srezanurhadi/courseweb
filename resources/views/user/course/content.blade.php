@@ -71,7 +71,7 @@
 
             {{-- - Content Area - --}}
             <div class="max-w-6xl mx-auto py-4">
-                <a href="{{ url()->previous() }}"
+                <a href="{{ route('user.course.show', ['course' => $course->slug, 'from' => $from ?? 'course']) }}"
                     class="flex items-center text-indigo-700 hover:text-indigo-800 text-2xl font-bold pb-2 rounded-lg transition-colors gap-2">
                     <i class="fa-solid fa-caret-left text-4xl"></i>
                     Back

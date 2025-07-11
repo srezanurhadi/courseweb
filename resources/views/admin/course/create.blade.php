@@ -83,7 +83,9 @@
     <div class="flex flex-1 relative">
         <x-sidebar></x-sidebar>
         <div class="flex-1 bg-gray-50 flex flex-col p-4">
-            <form action="/admin/course" method="POST" enctype="multipart/form-data">
+            <form
+                action="/{{ Auth::user()->role }}{{ Request::is('*/mycourse*') ? '/mycourse' : '/course' }}"
+                method="POST" enctype="multipart/form-data">
                 @csrf
                 <div
                     class="bg-gray-100 h-full p-4 pl-6 rounded-lg shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] flex flex-col gap-2">

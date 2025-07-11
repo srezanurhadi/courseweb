@@ -3,8 +3,8 @@
         <div class="text-white text-3xl mt-4 pl-6 font-bold mb-8">R. DOSEN</div>
 
         @if (Request::is('admin*') || Request::is('author*'))
-            <a href="{{ url('/admin') }}"
-                class="{{ Request::is('admin') && !Request::is('admin/*') ? 'border-white bg-white/20 shadow-lg' : 'border-white/30 hover:inset-shadow-sm inset-shadow-black/20' }} ml-6 p-2 mr-2 rounded-lg border-l-8 hover:border-white hover:bg-white/20 transition-all duration-200">
+            <a href="/{{ Auth::user()->role }}"
+                class="{{ Request::is('author') || Request::is('admin') ? 'border-white bg-white/20 shadow-lg' : 'border-white/30 hover:inset-shadow-sm inset-shadow-black/20' }} ml-6 p-2 mr-2 rounded-lg border-l-8 hover:border-white hover:bg-white/20 transition-all duration-200">
                 <i class="fas fa-gauge text-white pl-1"></i>
                 <span class="text-white pl-1 font-semibold text-20">Dashboard</span></a>
         @elseif (Request::is('user*'))
@@ -52,12 +52,12 @@
 
         @if (Request::is('author*'))
             <div class="text-xs text-white pl-8 mt-4 border-t-1 border-white/50">Area Saya</div>
-            <a href="{{ url('/author/content') }}"
-                class="{{ Request::is('author/content*') ? 'border-white bg-white/20 shadow-lg' : 'border-white/30 hover:inset-shadow-sm inset-shadow-black/20' }} ml-6 p-2 mr-2 rounded-lg border-l-8 hover:border-white hover:bg-white/20 transition-all duration-200">
+            <a href="{{ url('/author/mycontent') }}"
+                class="{{ Request::is('author/mycontent*') ? 'border-white bg-white/20 shadow-lg' : 'border-white/30 hover:inset-shadow-sm inset-shadow-black/20' }} ml-6 p-2 mr-2 rounded-lg border-l-8 hover:border-white hover:bg-white/20 transition-all duration-200">
                 <i class="fas fa-sheet-plastic text-white pl-1"></i>
                 <span class="text-white pl-1 font-semibold text-20">My Content</span></a>
-            <a href="{{ url('/author/course') }}"
-                class="{{ Request::is('author/course*') ? 'border-white bg-white/20 shadow-lg' : 'border-white/30 hover:inset-shadow-sm inset-shadow-black/20' }} ml-6 p-2 mr-2 rounded-lg border-l-8 hover:border-white hover:bg-white/20 transition-all duration-200">
+            <a href="{{ url('/author/mycourse') }}"
+                class="{{ Request::is('author/mycourse*') ? 'border-white bg-white/20 shadow-lg' : 'border-white/30 hover:inset-shadow-sm inset-shadow-black/20' }} ml-6 p-2 mr-2 rounded-lg border-l-8 hover:border-white hover:bg-white/20 transition-all duration-200">
                 <i class="fas fa-book text-white pl-1"></i>
                 <span class="text-white pl-1 font-semibold text-20">My Course</span></a>
             <a href="{{ url('/author/myparticipant') }}"

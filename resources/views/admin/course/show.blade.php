@@ -18,20 +18,28 @@
                     <div class="text-3xl font-bold pl-4">Preview Course</div>
                     <div class="profile flex items-center gap-2 pr-4">
                         <i class="fas fa-bell text-xl"></i>
-                        <div class="rounded-full justify-center flex bg-gray-300 h-8 w-8">
-                            <span class="text-xl">A</span>
+                        <div class="rounded-full justify-center flex bg-gray-300 h-8 w-8 overflow-hidden">
+
+                            @if (Auth::user()->image)
+                                <img src="{{ asset('storage/' . Auth::user()->image) }}" alt=""
+                                    class="aspect-square object-cover">
+                            @else
+                                <span class="text-xl">{{ Auth::user()->name[0] }}</span>
+                            @endif
+
                         </div>
-                        <div class="">Admin</div>
+                        <div class="">{{ Auth::User()->name }}</div>
                     </div>
                 </div>
                 <div class="flex">
                     <div class="w-full flex gap-2 items-center p-3 pl-6 font-semibold">
-                        <a href="/admin{{ Request::is('*/mycourse*') ? '/mycourse' : '/course' }}">
+                        <a href="/{{ Auth::user()->role }}{{ Request::is('*/mycourse*') ? '/mycourse' : '/course' }}">
                             <div class="  text-indigo-700"> <i class="fa-solid fa-play rotate-180"></i><span
                                     class="pl-2">Back</span>
                             </div>
                         </a>
-                        <a href="/admin{{ Request::is('*/mycourse*') ? '/mycourse' : '/course' }}/{{ $course->slug }}/edit">
+                        <a
+                            href="/{{ Auth::user()->role }}{{ Request::is('*/mycourse*') ? '/mycourse' : '/course' }}/{{ $course->slug }}/edit">
                             <div class=" py-0.5 px-3 border-amber-500 text-amber-500 bg-amber-100 rounded-sm border-2">
                                 <i class="fas fa-pencil-alt"></i> <span class="pl-2">Edit</span>
                             </div>
@@ -84,7 +92,7 @@
                         <div class="text-xl font-semibold sticky top-0 bg-indigo-50 pt-2 z-10">Content</div>
                         @foreach ($orderedContents as $index => $content)
                             <a
-                                href="{{ route(Request::is('*/mycourse*') ? 'admin.mycourse.content.show' : 'admin.course.content.show', ['course' => $course->slug, 'content' => $content->id]) }}">
+                                href="/{{ Auth::user()->role }}{{ Request::is('*/mycourse*') ? '/mycourse' : '/course' }}/{{ $course->slug }}/content/{{ $content->id }}">
                                 <div class="font pl-2 py-1 line-clamp-2">{{ $index + 1 }}. {{ $content->title }}
                                 </div>
                             </a>
@@ -96,7 +104,7 @@
                             <div class="pt-2 text-md/5 line-clamp-6">{{ $course->description }}</div>
                         </div>
                         <div class="mt-4 mb-10">
-                            {{-- {{ $courses->appends(request()->all())->links() }} --}} 
+                            {{-- {{ $courses->appends(request()->all())->links() }} --}}
                         </div>
                     </div>
                 </div>

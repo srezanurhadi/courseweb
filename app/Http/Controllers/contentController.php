@@ -123,12 +123,12 @@ class contentController extends Controller
                 $content->images()->saveMany($imagesToAssociate);
             }
         }
-
-        if ($request->is("admin/content*")) {
-            return redirect('/admin/content')
+        $role = Auth::user()->role;
+        if ($request->is("*/content*")) {
+            return redirect("/{$role}/content")
                 ->with('success', 'Konten Berhasil Ditambahkan');
         }
-        return redirect('/admin/mycontent')
+        return redirect("/{$role}/mycontent")
             ->with('success', 'Konten Berhasil Ditambahkan');
     }
 
@@ -265,14 +265,15 @@ class contentController extends Controller
                 }
             }
 
+            $role = Auth::user()->role;
 
             DB::commit();
 
-            if ($request->is("admin/content*")) {
-                return redirect('/admin/content')
+            if ($request->is("*/content*")) {
+                return redirect("/{$role}/content")
                     ->with('success', 'Konten Berhasil Diubah');
             }
-            return redirect('/admin/mycontent')
+            return redirect("/{$role}/mycontent")
                 ->with('success', 'Konten Berhasil Diubah');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -304,12 +305,13 @@ class contentController extends Controller
 
             $content->delete();
             DB::commit();
-            if ($request->is("admin/content*")) {
-                return redirect('/admin/content')
-                    ->with('success', 'Konten Berhasil Ditambahkan');
+            $role = Auth::user()->role;
+            if ($request->is("*/content*")) {
+                return redirect("/{$role}/content")
+                    ->with('success', 'Konten Berhasil Dihapus');
             }
-            return redirect('/admin/mycontent')
-                ->with('success', 'Konten Berhasil Ditambahkan');
+            return redirect("/{$role}/mycontent")
+                ->with('success', 'Konten Berhasil Dihapus');
         } catch (\Exception $e) {
 
             DB::rollBack();

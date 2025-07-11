@@ -57,6 +57,11 @@ class User extends Authenticatable
         return $this->hasMany(Course::class);
     }
 
+    public function content()
+    {
+        return $this->hasMany(Content::class, 'created_by');
+    }
+
     /**
      * The courses that the user has enrolled in.
      */

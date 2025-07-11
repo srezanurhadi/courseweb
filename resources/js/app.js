@@ -16,6 +16,8 @@ import Table from '@editorjs/table';
 // 2. Ambil elemen-elemen penting dari DOM
 const contentForm = document.getElementById('contentForm');
 const editorContentInput = document.getElementById('editor_content');
+const editorHolder = document.getElementById('editorjs');
+const userRole = editorHolder.dataset.role;
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
 // Inisialisasi initialEditorData di luar DOMContentLoaded jika ingin diakses di scope yang lebih luas
@@ -56,8 +58,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         uploadByFile(file) {
                             let formData = new FormData();
                             formData.append('image', file);
-
-                            return fetch('/admin/upload-image', { 
+                            const uploadUrl = `/${userRole}/upload-image`;
+                            return fetch(uploadUrl, { 
                                     method: 'POST',
                                     body: formData,
                                     headers: {

@@ -15,7 +15,7 @@
     <div class="flex flex-1 ">
         <x-sidebar></x-sidebar>
         <div class="w-full bg-gray-50 flex flex-col p-4 overflow-hidden">
-            <form action="/admin{{ Request::is('admin/mycontent*') ? '/mycontent' : '/content' }}" method="POST"
+            <form action="/{{ Auth::user()->role }}{{ Request::is('*/mycontent*') ? '/mycontent' : '/content' }}" method="POST"
                 id="contentForm">
                 @csrf
                 <div
@@ -37,7 +37,7 @@
 
                             <div id="editorjs-wrapper"
                                 class="bg-white border-2 border-gray-300 rounded-md flex-1 min-h-[300px]">
-                                <div id="editorjs" class="px-10"></div>
+                                <div id="editorjs" data-role="{{ Auth::user()->role }}"  class="px-10"></div>
                             </div>
                             <input type="hidden" name="content" id="editor_content">
                         </div>

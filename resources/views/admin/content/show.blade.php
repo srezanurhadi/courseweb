@@ -18,10 +18,17 @@
                     <div class="text-3xl font-bold pl-4">Management Content</div>
                     <div class="profile flex items-center gap-2 pr-4">
                         <i class="fas fa-bell text-xl"></i>
-                        <div class="rounded-full justify-center flex bg-gray-300 h-8 w-8">
-                            <span class="text-xl">A</span>
+                        <div class="rounded-full justify-center flex bg-gray-300 h-8 w-8 overflow-hidden">
+
+                            @if (Auth::user()->image)
+                                <img src="{{ asset('storage/' . Auth::user()->image) }}" alt=""
+                                    class="aspect-square object-cover">
+                            @else
+                                <span class="text-xl">{{ Auth::user()->name[0] }}</span>
+                            @endif
+
                         </div>
-                        <div class="">Admin</div>
+                        <div class="">{{ Auth::User()->name }}</div>
                     </div>
                 </div>
                 <div class="w-full flex pt-8 px-4 justify-between pb-2">
@@ -35,12 +42,12 @@
                                     <span class="pl-2">Back</span>
                                 </a>
                             </div>
-                            <a href="/admin{{ Request::is('admin/mycontent*') ? '/mycontent' : '/content' }}/{{ $content->slug }}/edit"
+                            <a href="/{{ Auth::user()->role }}{{ Request::is('*/mycontent*') ? '/mycontent' : '/content' }}/{{ $content->slug }}/edit"
                                 class=" py-0.5 px-3 border-amber-500 text-amber-500 hover:bg-amber-50  bg-amber-100 rounded-sm border-2 transition-all duration-200 shadow-inherit">
                                 <i class="fas fa-pencil-alt"></i> <span class="pl-2">Edit</span>
                             </a>
                             <form
-                                action="/admin{{ Request::is('admin/mycontent*') ? '/mycontent' : '/content' }}/{{ $content->slug }}"
+                                action="/{{ Auth::user()->role }}{{ Request::is('*/mycontent*') ? '/mycontent' : '/content' }}/{{ $content->slug }}"
                                 method="POST" class="inline-block">
                                 @method('delete')
                                 @csrf
@@ -272,6 +279,7 @@
                         </div>
                     </div>
                 </div>
+                
 
             </div>
         </div>

@@ -27,9 +27,9 @@ class courseController extends Controller
         }
 
         $categories = Category::orderBy('category')->get();
-        $coursescount = Course::all()->count();
-        $coursesactive = Course::where('status', 1)->count();
-        $coursesdraft = Course::where('status', 0)->count();
+        $coursescount = (clone $query)->count();
+        $coursesactive = (clone $query)->where('status', 1)->count();
+        $coursesdraft = (clone $query)->where('status', 0)->count();
 
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
@@ -122,7 +122,11 @@ class courseController extends Controller
             $course->contents()->attach($syncData);
         }
 
-        return redirect("/admin/course")->with('success', 'Course Berhasil Ditambahkan');
+        $role = Auth::user()->role;
+        if ($request->is('*/mycourse*')) {
+            return redirect("/{$role}/mycourse")->with('success', 'Course berhasil Ditambahkan!');
+        }
+        return redirect("/{$role}/course")->with('success', 'Course Berhasil Ditambahkan');
     }
 
     public function search(Request $request)

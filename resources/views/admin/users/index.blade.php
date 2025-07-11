@@ -19,10 +19,17 @@
                 <div class="text-3xl font-bold pl-4">Management users</div>
                 <div class="profile flex items-center gap-2 pr-4">
                     <i class="fas fa-bell text-xl"></i>
-                    <div class="rounded-full justify-center flex bg-gray-300 h-8 w-8">
-                        <span class="text-xl">A</span>
+                    <div class="rounded-full justify-center flex bg-gray-300 h-8 w-8 overflow-hidden">
+
+                        @if (Auth::user()->image)
+                            <img src="{{ asset('storage/' . Auth::user()->image) }}" alt=""
+                                class="aspect-square object-cover">
+                        @else
+                            <span class="text-xl">{{ Auth::user()->name[0] }}</span>
+                        @endif
+
                     </div>
-                    <div class="">Admin</div>
+                    <div class="">{{ Auth::User()->name }}</div>
                 </div>
             </div>
 
