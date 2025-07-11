@@ -66,6 +66,7 @@ Route::prefix('/author')->middleware(authorMiddleware::class)->group(function ()
         ->name('admin.course.content.show');
     Route::get('/myparticipant/{myparticipant:slug}/{user:id}/edit', [myParticipantController::class, 'editNilai'])
         ->name('admin.myparticipant.edit');
+    Route::resource('/myprofile', myProfileController::class);
 });
 
 //BAGUSSS PUNYAAA DO NOT TOCHHH PLSS, THANKS b(^_^)d//

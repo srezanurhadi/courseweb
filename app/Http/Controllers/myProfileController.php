@@ -123,8 +123,11 @@ class myProfileController extends Controller
 
         // Simpan perubahan
         $user->save();
-
+        $role = Auth::user()->role;
         // Redirect dengan pesan sukses
+        if ($role == 'author') {
+            return redirect("/author/myprofile")->with('Profile updated successfully', 'Profile ');
+        }
         return redirect("/admin/myprofile")->with('Profile updated successfully', 'Profile ');
     }
 
