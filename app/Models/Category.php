@@ -12,4 +12,16 @@ class Category extends Model
         'icon',
         'color',
     ];
+
+    // Relasi ke Courses
+    public function courses()
+    {
+        return $this->hasMany(Course::class);
+    }
+
+    // Relasi ke Contents
+    public function contents()
+    {
+        return $this->hasMany(Content::class);
+    }
 }

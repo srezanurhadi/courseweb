@@ -96,12 +96,13 @@
                                     </a>
                                     <form method="POST"
                                         action="/{{ Auth::user()->role }}/content/add/category/{{ $category->id }}"
-                                        class="inline-block"
-                                        onsubmit="return confirm('Are you sure you want to delete this category?')">
+                                        class="inline-block">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit"
-                                            class="text-red-600 hover:text-red-900 inline-flex items-center">
+                                            class="delete-btn text-red-600 hover:text-red-900 inline-flex items-center"
+                                            data-title="{{ $category->category }}">
+
                                             <i class="fas fa-trash mr-1"></i>
                                             Delete
                                         </button>
@@ -164,85 +165,211 @@
                 </div>
             @endif
 
-            @if (session('success'))
-                <div x-data="{
-                    show: true,
-                    progress: 100,
-                    duration: 5000, // Durasi notifikasi dalam milidetik
-                    intervalId: null,
-                
-                    // Fungsi untuk memulai timer dan progress bar
-                    startTimer() {
-                        // Hentikan timer sebelumnya jika ada (untuk keamanan)
-                        clearInterval(this.intervalId);
-                
-                        const stepDuration = 10; // Update setiap 50ms untuk animasi mulus
-                        const decrement = (stepDuration / this.duration) * 100;
-                
-                        this.intervalId = setInterval(() => {
-                            this.progress -= decrement;
-                
-                            // Jika progress habis, tutup notifikasi
-                            if (this.progress <= 0) {
-                                this.close();
-                            }
-                        }, stepDuration);
-                    },
-                    close() {
-                        this.show = false;
-                        clearInterval(this.intervalId);
-                    }
-                }" x-init="startTimer()" x-show="show"
-                    x-transition:enter="transition ease-out duration-300"
-                    x-transition:enter-start="opacity-0 transform translate-y-4"
-                    x-transition:enter-end="opacity-100 transform translate-y-0"
-                    x-transition:leave="transition ease-in duration-200"
-                    x-transition:leave-start="opacity-100 transform translate-y-0"
-                    x-transition:leave-end="opacity-0 transform translate-y-4"
-                    class="fixed top-5 right-5 z-50 rounded-lg bg-green-100 border-l-4 border-green-500 w-full max-w-sm p-4 shadow-lg"
-                    role="alert">
+            @foreach (['success', 'error'] as $type)
+                @if (session($type))
+                    <div x-data="{
+                        show: true,
+                        progress: 100,
+                        duration: 5000,
+                        intervalId: null,
+                        startTimer() {
+                            clearInterval(this.intervalId);
+                            const stepDuration = 10;
+                            const decrement = (stepDuration / this.duration) * 100;
+                    
+                            this.intervalId = setInterval(() => {
+                                this.progress -= decrement;
+                                if (this.progress <= 0) {
+                                    this.close();
+                                }
+                            }, stepDuration);
+                        },
+                        close() {
+                            this.show = false;
+                            clearInterval(this.intervalId);
+                        }
+                    }" x-init="startTimer()" x-show="show"
+                        x-transition:enter="transition ease-out duration-300"
+                        x-transition:enter-start="opacity-0 transform translate-y-4"
+                        x-transition:enter-end="opacity-100 transform translate-y-0"
+                        x-transition:leave="transition ease-in duration-200"
+                        x-transition:leave-start="opacity-100 transform translate-y-0"
+                        x-transition:leave-end="opacity-0 transform translate-y-4"
+                        class="fixed top-5 right-5 z-50 rounded-lg w-full max-w-sm p-4 shadow-lg
+                {{ $type == 'success' ? 'bg-green-100 border-l-4 border-green-500' : 'bg-red-100 border-l-4 border-red-500' }}"
+                        role="alert">
 
-                    <div class="flex items-start">
-                        {{-- Icon --}}
-                        <div class="flex-shrink-0">
-                            <svg class="h-6 w-6 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                fill="currentColor" aria-hidden="true">
-                                <path fill-rule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </div>
-                        {{-- Pesan --}}
-                        <div class="ml-3 flex-1">
-                            <p class="text-sm font-medium text-green-800">
-                                {{ session('success') }}
-                            </p>
-                        </div>
-                        {{-- Tombol Close --}}
-                        <div class="ml-auto pl-3">
-                            <div class="-mx-1.5 -my-1.5">
-                                <button @click="close()" type="button"
-                                    class="inline-flex rounded-md bg-green-100 p-1.5 text-green-500 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 focus:ring-offset-green-100">
-                                    <span class="sr-only">Dismiss</span>
-                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                        fill="currentColor" aria-hidden="true">
-                                        <path
-                                            d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                        <div class="flex items-start">
+                            {{-- Icon --}}
+                            <div class="flex-shrink-0">
+                                @if ($type == 'success')
+                                    {{-- Success Icon --}}
+                                    <svg class="h-6 w-6 text-green-500" xmlns="http://www.w3.org/2000/svg"
+                                        fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                            clip-rule="evenodd" />
                                     </svg>
-                                </button>
+                                @else
+                                    {{-- Error Icon --}}
+                                    <svg class="h-6 w-6 text-red-500" xmlns="http://www.w3.org/2000/svg"
+                                        fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M18 10A8 8 0 11 2 10a8 8 0 0116 0zm-8 3a1 1 0 100-2 1 1 0 000 2zm-.707-7.707a1 1 0 011.414 0L10 6.586l.293-.293a1 1 0 011.414 1.414L11.414 8l.293.293a1 1 0 01-1.414 1.414L10 9.414l-.293.293a1 1 0 01-1.414-1.414L8.586 8l-.293-.293a1 1 0 010-1.414z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                @endif
+                            </div>
+
+                            {{-- Pesan --}}
+                            <div class="ml-3 flex-1">
+                                <p
+                                    class="text-sm font-medium {{ $type == 'success' ? 'text-green-800' : 'text-red-800' }}">
+                                    {{ session($type) }}
+                                </p>
+                            </div>
+
+                            {{-- Tombol Close --}}
+                            <div class="ml-auto pl-3">
+                                <div class="-mx-1.5 -my-1.5">
+                                    <button @click="close()" type="button"
+                                        class="inline-flex rounded-md p-1.5 
+                                {{ $type == 'success' ? 'bg-green-100 text-green-500 hover:bg-green-200 focus:ring-green-600 focus:ring-offset-green-100' : 'bg-red-100 text-red-500 hover:bg-red-200 focus:ring-red-600 focus:ring-offset-red-100' }}
+                                focus:outline-none focus:ring-2 focus:ring-offset-2">
+                                        <span class="sr-only">Dismiss</span>
+                                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                            viewBox="0 0 20 20">
+                                            <path
+                                                d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Progress bar --}}
+                        <div
+                            class="absolute bottom-0 left-0 right-0 h-1.5 
+                {{ $type == 'success' ? 'bg-green-200/75' : 'bg-red-200/75' }} overflow-hidden rounded-bl-lg rounded-br-lg">
+                            <div class="h-full {{ $type == 'success' ? 'bg-green-500' : 'bg-red-500' }}"
+                                :style="{ width: progress + '%' }"></div>
+                        </div>
+                    </div>
+                @endif
+            @endforeach
+
+
+            <div id="delete-confirmation-modal"
+                class="fixed inset-0 ml-54 z-49 flex items-center justify-center bg-white/10 backdrop-blur-sm bg-opacity-50 transition-all duration-300 ease-in-out opacity-0 scale-95 pointer-events-none">
+                <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+                    <div class="p-6">
+                        <div class="flex items-start">
+                            <div
+                                class="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                                <svg class="h-6 w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                            </div>
+                            <div class="ml-4 text-left">
+                                <h3 class="text-lg leading-6 font-bold text-gray-900" id="modal-title">
+                                    Konfirmasi Hapus
+                                </h3>
+                                <div class="mt-2">
+                                    {{-- PERUBAHAN DI SINI --}}
+                                    <p class="text-sm text-gray-600">
+                                        Apakah Anda yakin ingin menghapus Category
+                                        <strong id="content-title-to-delete" class="text-gray-900"></strong>?
+                                        <br>Tindakan ini tidak dapat dibatalkan.
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                    <div
-                        class="absolute bottom-0 left-0 right-0 h-1.5 bg-green-200/75 overflow-hidden rounded-bl-lg rounded-br-lg">
-                        <div class="h-full bg-green-500" :style="{ width: progress + '%' }"></div>
+                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse rounded-b-lg">
+                        {{-- Tombol tidak berubah --}}
+                        <button type="button" id="confirmDeleteBtn"
+                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
+                            Ya, Hapus
+                        </button>
+                        <button type="button" id="cancelDeleteBtn"
+                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:w-auto sm:text-sm">
+                            Batal
+                        </button>
                     </div>
                 </div>
-            @endif
+            </div>
         </div>
     </div>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('delete-confirmation-modal');
+            const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+            const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+            const deleteButtons = document.querySelectorAll('.delete-btn');
+            const contentTitleElement = document.getElementById('content-title-to-delete');
+
+            let formToSubmit = null;
+
+            // Fungsi untuk menampilkan modal dengan transisi
+            const showModal = (form, title) => {
+                formToSubmit = form;
+                contentTitleElement.textContent = title; // fix
+                modal.classList.remove('pointer-events-none');
+
+                setTimeout(() => {
+                    modal.classList.add('opacity-100', 'scale-100');
+                    modal.classList.remove('opacity-0', 'scale-95');
+                }, 10);
+            };
+
+
+            // Fungsi untuk menyembunyikan modal dengan transisi
+            const hideModal = () => {
+                // 1. Tambahkan kelas untuk memicu animasi 'fade out' dan 'scale down'
+                modal.classList.remove('opacity-100', 'scale-100');
+                modal.classList.add('opacity-0', 'scale-95');
+
+                // 2. Setelah animasi selesai (300ms), buat modal tidak bisa diklik lagi
+                setTimeout(() => {
+                    modal.classList.add('pointer-events-none');
+                    formToSubmit = null;
+                    contentTitleElement.textContent = '';
+                }, 300);
+            };
+
+            // Tambahkan event listener untuk setiap tombol hapus
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function() {
+
+                    event.preventDefault();
+
+                    const form = this.closest('form');
+                    const title = this.dataset.title;
+                    showModal(form, title);
+                });
+            });
+
+            // Event listener untuk tombol konfirmasi
+            confirmDeleteBtn.addEventListener('click', () => {
+                if (formToSubmit) {
+                    formToSubmit.submit();
+                }
+            });
+
+            // Event listener untuk tombol batal
+            cancelDeleteBtn.addEventListener('click', hideModal);
+
+            // Event listener untuk menutup modal jika klik di area luar (backdrop)
+            modal.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    hideModal();
+                }
+            });
+        });
+    </script>
 
 </body>
 
