@@ -29,12 +29,13 @@
             {{-- search --}}
             <div class="w-full flex pt-8 pb-4 px-4 justify-center">
                 <div class="flex gap-4">
-                    <form class="flex gap-2">
+                    <form class="flex gap-2" action="/{{ Auth::user()->role }}/myparticipant" method="GET">
+
                         <div class=" flex gap-1 items-center rounded-lg border-gray-400 border-2 pl-2">
                             <i class="fas fa-search text-gray-500"></i>
-                            <input type="text"
+                            <input type="text" name="search" value="{{ request('search') }}"
                                 class="rounded-lg min-w-56 focus:outline-none px-2 placeholder:font-semibold placeholder:italic bg-transparent"
-                                {{-- Ditambahkan bg-transparent jika input di dalam bg-gray-50 --}} placeholder="Search User...">
+                                {{-- Ditambahkan bg-transparent jika input di dalam bg-gray-50 --}} placeholder="Search Course Name...">
                         </div>
                         <button class="bg-sky-600 px-2 rounded-lg">
                             <p class=" font-medium text-base text-white">search</p>

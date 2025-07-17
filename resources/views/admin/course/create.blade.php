@@ -83,8 +83,7 @@
     <div class="flex flex-1 relative">
         <x-sidebar></x-sidebar>
         <div class="flex-1 bg-gray-50 flex flex-col p-4">
-            <form
-                action="/{{ Auth::user()->role }}{{ Request::is('*/mycourse*') ? '/mycourse' : '/course' }}"
+            <form action="/{{ Auth::user()->role }}{{ Request::is('*/mycourse*') ? '/mycourse' : '/course' }}"
                 method="POST" enctype="multipart/form-data">
                 @csrf
                 <div
@@ -145,40 +144,65 @@
 
                     {{-- description --}}
                     <div class="mb-4">
-                        <label for="description" class="text-sm">Course Description<span
-                                class="text-red-500">*</span></label>
+                        <label for="description" class="text-sm">Course Description
+                            <span class="text-red-500">*</span>
+                        </label>
                         <textarea name="description" id="description" rows="4"
-                            class="w-full bg-gray-50 border-2 border-gray-300 rounded-lg p-2" placeholder="Description of the course...">{{ old('description') }}</textarea>
+                            class="w-full bg-gray-50 border-2 border-gray-300 rounded-lg p-2 @error('description') is-invalid @enderror"
+                            placeholder="Description of the course..." required>{{ old('description') }}</textarea>
+
+                        @error('description')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="mb-4">
                         <div
-                            class="w-full bg-gray-50 border-2 border-gray-300 rounded-lg flex flex-col justify-center items-center p-4">
+                            class="w-full bg-gray-50 border-2 border-gray-300 rounded-lg flex flex-col justify-center items-center p-4 @error('selected_content_ids') is-invalid @enderror">
                             <div class="flex flex-row justify-between w-full">
-                                <label for="course-content" class="text-sm">Course Content<span
-                                        class="text-red-500">*</span></label>
-                                <button id="add_content" class="text-sm rounded-lg bg-indigo-700 text-gray-50 p-2">+
-                                    add content</button>
+                                <label for="course-content" class="text-sm">Course Content
+                                    <span class="text-red-500">*</span>
+                                </label>
+                                <button id="add_content" type="button"
+                                    class="text-sm rounded-lg bg-indigo-700 text-gray-50 p-2">+ Add Content</button>
                             </div>
-                            <div id="no-content-message" class="text-sm text-gray-700 p-4">No content add yet. click
-                                "Add Content" to Add
-                                course materials</div>
+
+                            <div id="no-content-message" class="text-sm text-gray-700 p-4">
+                                No content added yet. Click "Add Content" to add course materials.
+                            </div>
+
                             <div id="selected-content-container" class="space-y-4 w-full">
                                 <!-- Selected content will be displayed here -->
                             </div>
-                            <input type="hidden" name="selected_content_ids" id="selected_content_ids" value="">
 
+                            <input type="hidden" name="selected_content_ids" id="selected_content_ids"
+                                value="{{ old('selected_content_ids') }}" required>
                         </div>
+
+                        @error('selected_content_ids')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
+
                     <div class="mb-4">
                         <label for="category" class="text-sm">Course Category<span class="text-red-500">*</span></label>
                         <select name="category" id="category"
-                            class="w-full bg-gray-50 border-2 border-gray-300 rounded-lg p-2 text-sm text-gray-700">
+                            class="w-full bg-gray-50 border-2 border-gray-300 rounded-lg p-2 text-sm text-gray-700 @error('category') is-invalid @enderror">
+                            <option value="" hidden {{ old('category') ? '' : 'selected' }}>Select Category
+                            </option>
                             @foreach ($categories as $category)
-                                <option value="" hidden selected>Select Category</option>
-                                <option value="{{ $category->id }}">{{ $category->category }}</option>
+                                <option value="{{ $category->id }}"
+                                    {{ old('category') == $category->id ? 'selected' : '' }}>
+                                    {{ $category->category }}
+                                </option>
                             @endforeach
                         </select>
+
+                        {{-- Optional: Menampilkan pesan error di bawah select --}}
+                        @error('category')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
+
                     <div class="mb-4">
                         <input type="hidden" name="status" value="0">
                         <label class="inline-flex items-center">
@@ -307,9 +331,10 @@
             </div>
         </div>
         <script>
-            // Gunakan nama yang benar dari hasil "php artisan route:list"
-            const SEARCH_URL = '{{ route('course.search') }}';
+            const SEARCH_URL =
+                "{{ Auth::user()->role === 'admin' ? route('admin.course.search') : route('author.course.search') }}";
         </script>
+
 
         <script>
             // AJAX Search Implementation
@@ -401,36 +426,37 @@
                     const isChecked = selectedContents.some(item => item.id == content.id);
 
                     html += `
-            <div class="flex items-center bg-amber-100 rounded-lg shadow-md text-sm font-medium">
-                <div class="px-6 py-3 w-4/12 text-gray-900">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0 h-8 w-8 rounded-md bg-amber-500 flex items-center justify-center text-white">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L1.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09l2.846.813-.813 2.846a4.5 4.5 0 00-3.09 3.09zM18.25 12L17 14.25l-1.25-2.25L13.5 11l2.25-1.25L17 7.5l1.25 2.25L20.5 11l-2.25 1.25z" />
-                            </svg>
-                        </div>
-                        <div class="ml-4 truncate">${content.title}</div>
-                    </div>
-                </div>
-                <div class="px-6 py-3 w-2/12 text-gray-700 truncate">${content.category_name}</div>
-                <div class="px-6 py-3 w-2/12 text-gray-700">${content.created_at}</div>
-                <div class="px-6 py-3 w-2/12 text-gray-700">Belum pernah dipilih</div>
-                <div class="px-6 py-3 w-2/12">
-                    <div class="flex items-center space-x-2">
-                        <div class="flex justify-center w-full">
-                            <input type="checkbox" name="content_checkbox" value="${content.id}" data-title="${content.title}"
-                                class="h-6 w-6 border-gray-300 rounded focus:ring-indigo-700 text-indigo-700"
-                                ${isChecked ? 'checked' : ''}> 
-                        </div>
-                        <a href="/admin/content/${content.slug}" target="_blank">
-                            <button class="lihat-btn w-6 h-6 p-2 rounded-sm bg-sky-500 hover:bg-sky-600 text-white flex items-center justify-center" aria-label="Lihat">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </a>
-                    </div>
-                </div>
+            <div class="flex items-center rounded-lg shadow-md text-sm font-medium" style="background-color: ${content.category_color}20;">
+    <div class="px-6 py-3 w-6/12 text-gray-900">
+        <div class="flex items-center">
+            <div class="flex-shrink-0 h-8 w-8 rounded-md flex items-center justify-center text-white" style="background-color: ${content.category_color};">
+                <i class="${content.category_icon}"></i>
             </div>
-        `;
+            <div class="ml-4 truncate">${content.title}</div>
+        </div>
+    </div>
+    <div class="px-6 py-3 w-2/12 text-gray-700 truncate">
+        ${content.category_name}
+    </div>
+    <div class="px-6 py-3 w-2/12 text-gray-700">
+        ${content.created_at}
+    </div>
+    <div class="px-6 py-3 w-2/12">
+        <div class="flex items-center space-x-2">
+            <div class="flex justify-center w-full">
+                <input type="checkbox" id="content_${content.id}" name="content_checkbox" value="${content.id}" data-title="${content.title}"
+                    class="h-6 w-6 border-gray-300 rounded focus:ring-indigo-700 text-indigo-700" ${isChecked ? 'checked' : ''}>
+            </div>
+            <a href="/admin/content/${content.slug}" target="_blank">
+                <button class="lihat-btn w-6 h-6 p-2 rounded-sm bg-sky-500 hover:bg-sky-600 text-white flex items-center justify-center"
+                    aria-label="Lihat" data-content-id="${content.id}">
+                    <i class="fas fa-eye"></i>
+                </button>
+            </a>
+        </div>
+    </div>
+</div>
+`;
                 });
 
                 // Masukkan semua HTML yang sudah digenerate ke dalam list

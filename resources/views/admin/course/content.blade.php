@@ -20,22 +20,8 @@
                         <div class="flex items-center px-4">
                             <h1 class="text-xl font-bold text-gray-800">
 
-                                <a href="{{ url()->previous() }}" class="hover:text-indigo-900">Course</a>
+                                <a href="{{ url()->previous() }}" class="hover:text-indigo-900">Preview Course</a>
 
-                                <i class="fa-solid fa-chevron-right mx-1 text-xl"></i>
-
-                                <a href="{{ route('user.course.show', [
-                                    'course' => $course->slug,
-                                    'from' => $from ?? 'course',
-                                ]) }}"
-                                    class="hover:text-indigo-900">
-                                    {{ \Illuminate\Support\Str::limit($course->title, 25) }}
-                                </a>
-
-                                <i class="fa-solid fa-chevron-right mx-1 text-xl"></i>
-
-                                <span
-                                    class="text-gray-600">{{ \Illuminate\Support\Str::limit($course->title ?? 'Content 1', 25) }}</span>
                             </h1>
                         </div>
                         <div class="flex items-center space-x-4 px-4">

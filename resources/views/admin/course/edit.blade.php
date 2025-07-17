@@ -13,7 +13,8 @@
     <div class="flex flex-1 relative">
         <x-sidebar></x-sidebar>
         <div class="flex-1 bg-gray-50 flex flex-col p-4">
-            <form action="/admin{{ Request::is('*/mycourse*') ? '/mycourse' : '/course' }}/{{ $course->slug }}" method="POST" enctype="multipart/form-data">
+            <form action="/admin{{ Request::is('*/mycourse*') ? '/mycourse' : '/course' }}/{{ $course->slug }}"
+                method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div
@@ -300,8 +301,8 @@
 
 </body>
 <script>
-    // Gunakan nama yang benar dari hasil "php artisan route:list"
-    const SEARCH_URL = '{{ route('course.search') }}';
+    const SEARCH_URL =
+        "{{ Auth::user()->role === 'admin' ? route('admin.course.search') : route('author.course.search') }}";
 </script>
 
 <script>
@@ -394,35 +395,36 @@
             const isChecked = selectedContents.some(item => item.id == content.id);
 
             html += `
-            <div class="flex items-center bg-amber-100 rounded-lg shadow-md text-sm font-medium">
-                <div class="px-6 py-3 w-4/12 text-gray-900">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0 h-8 w-8 rounded-md bg-amber-500 flex items-center justify-center text-white">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L1.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09l2.846.813-.813 2.846a4.5 4.5 0 00-3.09 3.09zM18.25 12L17 14.25l-1.25-2.25L13.5 11l2.25-1.25L17 7.5l1.25 2.25L20.5 11l-2.25 1.25z" />
-                            </svg>
-                        </div>
-                        <div class="ml-4 truncate">${content.title}</div>
-                    </div>
-                </div>
-                <div class="px-6 py-3 w-2/12 text-gray-700 truncate">${content.category_name}</div>
-                <div class="px-6 py-3 w-2/12 text-gray-700">${content.created_at}</div>
-                <div class="px-6 py-3 w-2/12 text-gray-700">Belum pernah dipilih</div>
-                <div class="px-6 py-3 w-2/12">
-                    <div class="flex items-center space-x-2">
-                        <div class="flex justify-center w-full">
-                            <input type="checkbox" name="content_checkbox" value="${content.id}" data-title="${content.title}"
-                                class="h-6 w-6 border-gray-300 rounded focus:ring-indigo-700 text-indigo-700"
-                                ${isChecked ? 'checked' : ''}> 
-                        </div>
-                        <a href="/admin/content/${content.slug}" target="_blank">
-                            <button class="lihat-btn w-6 h-6 p-2 rounded-sm bg-sky-500 hover:bg-sky-600 text-white flex items-center justify-center" aria-label="Lihat">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </a>
-                    </div>
-                </div>
+            <div class="flex items-center rounded-lg shadow-md text-sm font-medium" style="background-color: ${content.category_color}20;">
+    <div class="px-6 py-3 w-6/12 text-gray-900">
+        <div class="flex items-center">
+            <div class="flex-shrink-0 h-8 w-8 rounded-md flex items-center justify-center text-white" style="background-color: ${content.category_color};">
+                <i class="${content.category_icon}"></i>
             </div>
+            <div class="ml-4 truncate">${content.title}</div>
+        </div>
+    </div>
+    <div class="px-6 py-3 w-2/12 text-gray-700 truncate">
+        ${content.category_name}
+    </div>
+    <div class="px-6 py-3 w-2/12 text-gray-700">
+        ${content.created_at}
+    </div>
+    <div class="px-6 py-3 w-2/12">
+        <div class="flex items-center space-x-2">
+            <div class="flex justify-center w-full">
+                <input type="checkbox" id="content_${content.id}" name="content_checkbox" value="${content.id}" data-title="${content.title}"
+                    class="h-6 w-6 border-gray-300 rounded focus:ring-indigo-700 text-indigo-700" ${isChecked ? 'checked' : ''}>
+            </div>
+            <a href="/admin/content/${content.slug}" target="_blank">
+                <button class="lihat-btn w-6 h-6 p-2 rounded-sm bg-sky-500 hover:bg-sky-600 text-white flex items-center justify-center"
+                    aria-label="Lihat" data-content-id="${content.id}">
+                    <i class="fas fa-eye"></i>
+                </button>
+            </a>
+        </div>
+    </div>
+</div>
         `;
         });
 
