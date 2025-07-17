@@ -155,6 +155,8 @@ class courseController extends Controller
                 'title' => $content->title,
                 'slug' => $content->slug,
                 'category_name' => $content->category->category,
+                'category_color' => $content->category->color, 
+                'category_icon' => $content->category->icon,
                 'created_at' => $content->created_at->format('d-m-Y'),
             ];
         });
@@ -289,6 +291,7 @@ class courseController extends Controller
     public function destroy(string $slug, request $request)
     {
         $course = Course::where('slug', $slug)->firstOrFail();
+        $role = Auth::user()->role;
         try {
             // 1. Hapus gambar dari storage jika ada
             if ($course->image && Storage::disk('public')->exists($course->image)) {
@@ -303,12 +306,13 @@ class courseController extends Controller
 
             // 4. Hapus course itu sendiri
             $course->delete();
+
             if ($request->is('*/mycourse*')) {
-                return redirect('/admin/mycourse')->with('success', 'Course berhasil dihapus!');
+                return redirect("/{$role}/mycourse")->with('success', 'Course berhasil dihapus!');
             }
-            return redirect('/admin/course')->with('success', 'Course berhasil dihapus!');
+            return redirect("/{$role}/course")->with('success', 'Course berhasil dihapus!');
         } catch (\Exception $e) {
-            return redirect('/admin/course')->with('error', 'Gagal menghapus course. Silakan coba lagi.');
+            return redirect("/{$role}/course")->with('error', 'Gagal menghapus course. Silakan coba lagi.');
         }
     }
 }

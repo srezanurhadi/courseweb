@@ -26,7 +26,8 @@ Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
 Route::prefix('/admin')->middleware(adminMiddleware::class)->group(function () {
 
     // Route khusus untuk AJAX search
-    Route::get('/course/search', [courseController::class, 'search'])->name('course.search');
+    Route::get('/course/search', [courseController::class, 'search'])->name('admin.course.search');
+
     Route::get('/', [homecontroller::class, 'index']);
     // route khusus image di editor
     Route::post('/upload-image', [ImageController::class, 'store'])->name('image.store');
@@ -55,6 +56,10 @@ Route::prefix('/admin')->middleware(adminMiddleware::class)->group(function () {
 });
 
 Route::prefix('/author')->middleware(authorMiddleware::class)->group(function () {
+
+    // Route khusus untuk AJAX search
+    Route::get('/course/search', [courseController::class, 'search'])->name('author.course.search');
+
     Route::get('/', [homecontroller::class, 'index']);
     // route khusus image di editor
     Route::post('/upload-image', [ImageController::class, 'store'])->name('image.store');
@@ -64,11 +69,16 @@ Route::prefix('/author')->middleware(authorMiddleware::class)->group(function ()
 
     //category
     Route::resource('/category', categoryController::class);
+<<<<<<< HEAD
     Route::get('/mycourse/{course:slug}/content/{content}', [CourseController::class, 'showContent'])
         ->name('admin.course.content.show');
     Route::get('/myparticipant/{myparticipant:slug}/{user:id}/edit', [myParticipantController::class, 'editNilai'])
         ->name('admin.myparticipant.edit');
     Route::resource('/myprofile', myProfileController::class);
+=======
+    Route::delete('/myparticipant/{course:slug}/{user}', [MyParticipantController::class, 'destroy'])
+        ->name('myparticipant.destroy');
+>>>>>>> d24effeb6120115f10738ed4b76b3f3f2b3db05b
 });
 
 //BAGUSSS PUNYAAA DO NOT TOCHHH PLSS, THANKS b(^_^)d//

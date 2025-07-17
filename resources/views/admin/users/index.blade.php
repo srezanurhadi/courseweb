@@ -198,7 +198,7 @@
                                                         <span
                                                             class="fa-solid fa-trash text-white group-hover:text-red-500"></span>
                                                     </div>
-                                                </button>
+                                                </button>   
                                             </form>
                                         </div>
                                     </td>
