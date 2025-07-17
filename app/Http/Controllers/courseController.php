@@ -274,7 +274,7 @@ class courseController extends Controller
 
         $from = $request->query('from');
 
-        return view('admin.course.content', compact('course', 'editorJsData', 'from', 'pagination'));
+        return view('admin.course.content', compact('course','currentContent', 'editorJsData', 'from', 'pagination'));
     }
 
     /**
