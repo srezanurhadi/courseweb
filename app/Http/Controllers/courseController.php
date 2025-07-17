@@ -231,11 +231,11 @@ class courseController extends Controller
         } else {
             $course->contents()->sync([]);
         }
-
+        $role = Auth::user()->role;
         if ($request->is('*/mycourse*')) {
-            return redirect('/admin/mycourse')->with('success', 'Course berhasil diperbarui!');
+            return redirect("/{$role}/mycourse")->with('success', 'Course berhasil diperbarui!');
         }
-        return redirect('/admin/course')->with('success', 'Course berhasil diperbarui!');
+        return redirect("/{$role}/course")->with('success', 'Course berhasil diperbarui!');
     }
 
     public function showContent(Course $course, $contentId, Request $request)
@@ -276,15 +276,10 @@ class courseController extends Controller
 
         $from = $request->query('from');
 
-        return view('admin.course.content', compact('course', 'editorJsData', 'from', 'pagination'));
+        return view('admin.course.content', compact('course', 'editorJsData','currentContent', 'from', 'pagination'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    /**
-     * Remove the specified resource from storage.
-     */
+   
     /**
      * Remove the specified resource from storage.
      */
@@ -297,16 +292,12 @@ class courseController extends Controller
             if ($course->image && Storage::disk('public')->exists($course->image)) {
                 Storage::disk('public')->delete($course->image);
             }
-
             // 2. Hapus relasi enrollments yang terkait
             $course->enrollments()->delete();
-
             // 3. Detach relasi dengan contents (hapus dari pivot table)
             $course->contents()->detach();
-
             // 4. Hapus course itu sendiri
             $course->delete();
-
             if ($request->is('*/mycourse*')) {
                 return redirect("/{$role}/mycourse")->with('success', 'Course berhasil dihapus!');
             }

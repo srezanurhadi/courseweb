@@ -177,14 +177,9 @@
                             <input type="hidden" name="selected_content_ids" id="selected_content_ids"
                                 value="{{ old('selected_content_ids') }}" required>
                         </div>
-<<<<<<< HEAD
-                        @error('selected_content_ids')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-=======
 
                         @error('selected_content_ids')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
->>>>>>> d24effeb6120115f10738ed4b76b3f3f2b3db05b
                         @enderror
                     </div>
 
@@ -201,15 +196,10 @@
                                 </option>
                             @endforeach
                         </select>
-<<<<<<< HEAD
-                        @error('category')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-=======
 
                         {{-- Optional: Menampilkan pesan error di bawah select --}}
                         @error('category')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
->>>>>>> d24effeb6120115f10738ed4b76b3f3f2b3db05b
                         @enderror
                     </div>
 

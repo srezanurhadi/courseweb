@@ -64,21 +64,14 @@ Route::prefix('/author')->middleware(authorMiddleware::class)->group(function ()
     // route khusus image di editor
     Route::post('/upload-image', [ImageController::class, 'store'])->name('image.store');
     Route::resource('/mycourse', courseController::class);
+    Route::get('/mycourse/{course:slug}/content/{content}', [CourseController::class, 'showContent']);
     Route::resource('/mycontent', contentController::class);
     Route::resource('/myparticipant', myParticipantController::class);
 
     //category
     Route::resource('/category', categoryController::class);
-<<<<<<< HEAD
-    Route::get('/mycourse/{course:slug}/content/{content}', [CourseController::class, 'showContent'])
-        ->name('admin.course.content.show');
-    Route::get('/myparticipant/{myparticipant:slug}/{user:id}/edit', [myParticipantController::class, 'editNilai'])
-        ->name('admin.myparticipant.edit');
-    Route::resource('/myprofile', myProfileController::class);
-=======
     Route::delete('/myparticipant/{course:slug}/{user}', [MyParticipantController::class, 'destroy'])
         ->name('myparticipant.destroy');
->>>>>>> d24effeb6120115f10738ed4b76b3f3f2b3db05b
 });
 
 //BAGUSSS PUNYAAA DO NOT TOCHHH PLSS, THANKS b(^_^)d//
