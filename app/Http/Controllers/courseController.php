@@ -155,7 +155,7 @@ class courseController extends Controller
                 'title' => $content->title,
                 'slug' => $content->slug,
                 'category_name' => $content->category->category,
-                'category_color' => $content->category->color, 
+                'category_color' => $content->category->color,
                 'category_icon' => $content->category->icon,
                 'created_at' => $content->created_at->format('d-m-Y'),
             ];
@@ -276,10 +276,10 @@ class courseController extends Controller
 
         $from = $request->query('from');
 
-        return view('admin.course.content', compact('course', 'editorJsData','currentContent', 'from', 'pagination'));
+        return view('admin.course.content', compact('course', 'currentContent', 'editorJsData', 'from', 'pagination'));
     }
 
-   
+
     /**
      * Remove the specified resource from storage.
      */

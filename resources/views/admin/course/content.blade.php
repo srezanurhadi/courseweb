@@ -20,7 +20,8 @@
                         <div class="flex items-center px-4">
                             <h1 class="text-xl font-bold text-gray-800">
 
-                                <a href="{{ url()->previous() }}" class="hover:text-indigo-900">Preview Course</a>
+                                <a href="/admin{{ Request::is('*/mycourse*') ? '/mycourse' : '/course' }}/{{ $course->slug }}"
+                                    class="hover:text-indigo-900">Preview Course</a>
 
                             </h1>
                         </div>
@@ -48,7 +49,52 @@
                     </div>
                 </div>
             </nav>
+            {{-- breadcumb --}}
+            <nav aria-label="Breadcrumb" role="navigation" class="bg-white px-6 py-3 ">
+                <ul class="flex flex-wrap items-center">
+                    <li class="inline-flex items-center">
+                        <a href="/{{ Auth::user()->role }}" aria-label="home"
+                            class="inline-flex items-center font-medium text-gray-500 hover:text-indigo-600 transition-colors">
+                            <svg class="w-4 h-4 mr-2 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25">
+                                </path>
+                            </svg>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="w-4 h-4 mx-2 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5">
+                            </path>
+                        </svg>
+                        <a href="/admin{{ Request::is('*/mycourse*') ? '/mycourse' : '/course' }}"
+                            class="font-medium text-gray-500 hover:text-indigo-600 transition-colors">Course</a>
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="w-4 h-4 mx-2 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5">
+                            </path>
+                        </svg>
+                        <a href="/admin{{ Request::is('*/mycourse*') ? '/mycourse' : '/course' }}/{{ $course->slug }}"
+                            class="font-medium text-gray-500 hover:text-indigo-600 transition-colors">{{ Str::limit($course->title, 20) }}
 
+                        </a>
+                    </li>
+                    <li class="flex items-center" aria-current="page">
+                        <svg class="w-4 h-4 mx-2 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5">
+                            </path>
+                        </svg>
+                        <span class="font-medium text-gray-700">{{ $currentContent->title }}</span>
+                    </li>
+                </ul>
+            </nav>
+            {{-- breadcumb --}}
             {{-- - Content Area - --}}
             <div class="max-w-6xl mx-auto p-4">
                 <a href="{{ url()->previous() }}"
@@ -56,6 +102,7 @@
                     <i class="fa-solid fa-caret-left text-2xl"></i>
                     Back
                 </a>
+
                 <div class="bg-gray-100 border-gray-200 border-2 rounded-xl shadow-lg p-8 m-4">
                     <h2 class="text-2xl font-bold text-gray-900 mb-6">{{ $pagination['current_page'] }}.
                         {{ $currentContent->title ?? 'Content 1' }}</h2>
