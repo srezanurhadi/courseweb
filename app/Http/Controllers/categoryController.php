@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -151,8 +152,21 @@ class categoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category)
+    public function destroy(string $id)
     {
-        //
+        $category = Category::find($id);
+
+        if (!$category) {
+            return redirect()->back()->with('error', 'Category not found');
+        }
+
+        if ($category->courses()->exists() || $category->contents()->exists()) {
+            return redirect()->back()->with('error', 'Category cannot be deleted because it is in use.');
+        }
+
+        $category->delete();
+
+        // ✅ Ini akan membawa pesan ke tampilan (view)
+        return redirect()->back()->with('success', 'Category deleted successfully');
     }
 }
