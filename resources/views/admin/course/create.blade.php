@@ -536,123 +536,132 @@
                 const noContentMessage = document.getElementById('no-content-message');
                 const selectedContentIdsInput = document.getElementById('selected_content_ids');
 
+                // Gunakan 'let' agar bisa diubah
+                let selectedContents = [];
+                try {
+                    // Coba parse data lama jika ada (berguna untuk validasi error)
+                    const oldData = JSON.parse(selectedContentIdsInput.value || '[]');
+                    if (Array.isArray(oldData)) {
+                        selectedContents = oldData;
+                    }
+                } catch (e) {
+                    console.error("Could not parse old content data:", e);
+                    selectedContents = [];
+                }
+
+
+                // Fungsi untuk sinkronisasi checkbox di modal dengan konten yang sudah terpilih
+                function syncCheckboxesWithSelectedContent() {
+                    const checkboxes = document.querySelectorAll('input[name="content_checkbox"]');
+                    checkboxes.forEach(checkbox => {
+                        // Cek apakah ID checkbox ini ada di array selectedContents
+                        checkbox.checked = selectedContents.some(item => item.id == checkbox.value);
+                    });
+                }
+
                 if (saveSelectedContentBtn) {
                     saveSelectedContentBtn.addEventListener('click', function() {
                         const checkedBoxes = document.querySelectorAll(
                             'input[name="content_checkbox"]:checked');
-                        selectedContents = [];
 
-                        checkedBoxes.forEach(function(checkbox, index) {
+                        // Buat daftar ID yang sedang tercentang
+                        const currentlyCheckedIds = Array.from(checkedBoxes).map(cb => cb.value);
+
+                        // 1. Hapus item yang tidak dicentang lagi
+                        selectedContents = selectedContents.filter(item => currentlyCheckedIds.includes(item
+                            .id));
+
+                        // 2. Tambah item baru yang dicentang
+                        checkedBoxes.forEach(function(checkbox) {
                             const contentId = checkbox.value;
                             const contentTitle = checkbox.getAttribute('data-title');
 
-                            selectedContents.push({
-                                id: contentId,
-                                title: contentTitle,
-                                order: index + 1
-                            });
+                            // Hanya tambahkan jika belum ada
+                            if (!selectedContents.some(item => item.id == contentId)) {
+                                selectedContents.push({
+                                    id: contentId,
+                                    title: contentTitle,
+                                    order: selectedContents.length + 1 // Beri urutan di akhir
+                                });
+                            }
                         });
 
-                        selectedContentIdsInput.value = JSON.stringify(selectedContents);
                         updateSelectedContentDisplay();
+                        updateHiddenInput(); // Panggil ini setelah menyimpan
 
                         // Close modal
                         const modalElement = document.querySelector('#modal');
-                        if (modalElement) {
-                            modalElement.classList.add('opacity-0');
-                            setTimeout(() => {
-                                modalElement.classList.add('hidden');
-                                // Remove hash from URL
-                                if (window.location.hash === '#modal') {
-                                    window.history.replaceState(null, null, window.location.pathname);
-                                }
-                                const contentSection = document.getElementById(
-                                    'selected-content-container').closest('.mb-4');
-                                if (contentSection) {
-                                    contentSection.scrollIntoView({
-                                        behavior: 'smooth',
-                                        block: 'center'
-                                    });
-                                }
-                            }, 500);
-                        }
+                        modalElement.classList.add('opacity-0');
+                        setTimeout(() => {
+                            modalElement.classList.add('hidden');
+                        }, 500);
                     });
                 }
 
                 function updateSelectedContentDisplay() {
                     selectedContentContainer.innerHTML = '';
-
                     if (selectedContents.length === 0) {
                         noContentMessage.classList.remove('hidden');
+                        updateHiddenInput(); // Pastikan input kosong jika tidak ada konten
                         return;
                     }
-
                     noContentMessage.classList.add('hidden');
 
-                    selectedContents.forEach(function(content, index) {
+                    // Selalu urutkan sebelum menampilkan
+                    selectedContents.sort((a, b) => a.order - b.order).forEach(function(content, index) {
                         const contentCard = document.createElement('div');
                         contentCard.className =
                             'flex items-start p-4 border border-gray-300 rounded-md bg-white shadow-sm';
                         contentCard.dataset.contentId = content.id;
 
                         contentCard.innerHTML = `
-                <div class="mr-3">
-                    <div class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center font-bold">
-                        ${index + 1}
+                    <div class="mr-3">
+                        <div class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center font-bold">
+                            ${index + 1}
+                        </div>
                     </div>
-                </div>
-                <div class="flex-1">
-                    <h3 class="font-semibold text-gray-800">${content.title}</h3>
-                    <p class="text-sm text-gray-600">Selected content item</p>
-                </div>
-                <div class="ml-3 flex flex-col items-center justify-center space-y-1">
-                    <button type="button" class="move-up-btn text-gray-500 hover:text-gray-700" data-index="${index}">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"></path>
-                        </svg>
+                    <div class="flex-1">
+                        <h3 class="font-semibold text-gray-800">${content.title}</h3>
+                        <p class="text-sm text-gray-600">Selected content item</p>
+                    </div>
+                    <div class="ml-3 flex flex-col items-center justify-center space-y-1">
+                        <button type="button" class="move-up-btn text-gray-500 hover:text-gray-700" data-index="${index}">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"></path></svg>
+                        </button>
+                        <button type="button" class="move-down-btn text-gray-500 hover:text-gray-700" data-index="${index}">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                    </div>
+                    <button type="button" class="remove-content-btn ml-3 text-red-500 hover:text-red-700" data-index="${index}">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M6 2a1 1 0 00-1 1v1H3.5a.5.5 0 000 1h.54l.7 10.11A2 2 0 006.73 17h6.54a2 2 0 001.99-1.89L16.96 5H17.5a.5.5 0 000-1H15V3a1 1 0 00-1-1H6zm1 4a.5.5 0 011 0v7a.5.5 0 01-1 0V6zm4 0a.5.5 0 011 0v7a.5.5 0 01-1 0V6z" /></svg>
                     </button>
-                    <button type="button" class="move-down-btn text-gray-500 hover:text-gray-700" data-index="${index}">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
-                        </svg>
-                    </button>
-                </div>
-                <button type="button" class="remove-content-btn ml-3 text-red-500 hover:text-red-700" data-index="${index}">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M6 2a1 1 0 00-1 1v1H3.5a.5.5 0 000 1h.54l.7 10.11A2 2 0 006.73 17h6.54a2 2 0 001.99-1.89L16.96 5H17.5a.5.5 0 000-1H15V3a1 1 0 00-1-1H6zm1 4a.5.5 0 011 0v7a.5.5 0 01-1 0V6zm4 0a.5.5 0 011 0v7a.5.5 0 01-1 0V6z" />
-                    </svg>
-                </button>
-            `;
-
+                `;
                         selectedContentContainer.appendChild(contentCard);
                     });
-
                     addContentCardEventListeners();
+                }
+
+                // TAMBAHKAN FUNGSI INI
+                function updateOrder() {
+                    selectedContents.forEach((item, index) => {
+                        item.order = index + 1;
+                    });
+                }
+
+                // TAMBAHKAN FUNGSI INI
+                function updateHiddenInput() {
+                    selectedContentIdsInput.value = JSON.stringify(selectedContents);
                 }
 
                 function addContentCardEventListeners() {
                     document.querySelectorAll('.remove-content-btn').forEach(button => {
                         button.addEventListener('click', function() {
                             const index = parseInt(this.dataset.index);
-
-                            if (selectedContents[index]) {
-                                const contentIdToRemove = selectedContents[index].id;
-
-                                const checkboxToUncheck = document.querySelector(
-                                    `input[name="content_checkbox"][value="${contentIdToRemove}"]`);
-                                if (checkboxToUncheck) {
-                                    checkboxToUncheck.checked = false;
-                                }
-                            }
-
                             selectedContents.splice(index, 1);
-                            selectedContentIdsInput.value = JSON.stringify(selectedContents);
+                            // PERBAIKI: Panggil fungsi-fungsi penting ini
+                            updateOrder();
                             updateSelectedContentDisplay();
-                            const correspondingCheckbox = document.querySelector(
-                                `input[name="content_checkbox"][value="${removedItem.id}"]`);
-                            if (correspondingCheckbox) {
-                                correspondingCheckbox.checked = false;
-                            }
+                            updateHiddenInput();
                         });
                     });
 
@@ -663,7 +672,10 @@
                                 [selectedContents[index], selectedContents[index - 1]] = [
                                     selectedContents[index - 1], selectedContents[index]
                                 ];
+                                // PERBAIKI: Panggil fungsi-fungsi penting ini
+                                updateOrder();
                                 updateSelectedContentDisplay();
+                                updateHiddenInput();
                             }
                         });
                     });
@@ -675,11 +687,26 @@
                                 [selectedContents[index], selectedContents[index + 1]] = [
                                     selectedContents[index + 1], selectedContents[index]
                                 ];
+                                // PERBAIKI: Panggil fungsi-fungsi penting ini
+                                updateOrder();
                                 updateSelectedContentDisplay();
+                                updateHiddenInput();
                             }
                         });
                     });
                 }
+
+                // Tambahkan event listener untuk membuka modal
+                const modalOpen = document.getElementById('add_content');
+                if (modalOpen) {
+                    modalOpen.addEventListener('click', () => {
+                        // Panggil fungsi ini setiap kali modal dibuka
+                        syncCheckboxesWithSelectedContent();
+                    });
+                }
+
+                // Panggil saat halaman pertama dimuat
+                updateSelectedContentDisplay();
             });
 
             ;
