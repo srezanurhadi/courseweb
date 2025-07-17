@@ -13,10 +13,9 @@
     <div class="flex flex-1 ">
         <x-sidebar></x-sidebar>
         <div class=" w-full bg-gray-50 overflow-hidden">
-            <div class="p-4 shadow-lg font-bold flex bg-gray-100 flex-row justify-between top-0 sticky z-20">
+            <div class="p-4 shadow-[0px_0px_4px_1px_rgba(0,0,0,0.4)] font-bold flex bg-gray-100 flex-row justify-between top-0 sticky z-20">
                 <div class="text-3xl font-bold pl-4">Management Content</div>
                 <div class="profile flex items-center gap-2 pr-4">
-                    <i class="fas fa-bell text-xl"></i>
                     <div class="rounded-full justify-center flex bg-gray-300 h-8 w-8 overflow-hidden">
 
                         @if (Auth::user()->image)
@@ -30,7 +29,7 @@
                     <div class="">{{ Auth::User()->name }}</div>
                 </div>
             </div>
-            <div class="w-full flex pt-8 px-4 justify-between">
+            <div class="w-full flex pt-8 pb-2 px-4 justify-between">
                 <div class="flex gap-4">
                     <form action="/{{ Auth::user()->role }}{{ Request::is('*/mycontent') ? '/mycontent' : '/content' }}"
                         method="GET" class="flex gap-4" id="search-form">
@@ -42,6 +41,11 @@
                                     class="rounded-lg min-w-56 focus:outline-none px-2 placeholder:font-semibold placeholder:italic bg-transparent"
                                     placeholder="Search Content...">
                             </div>
+                            {{-- Tombol Search --}}
+                            <button type="submit"
+                                class="bg-sky-600 px-4 rounded-lg hover:bg-sky-700 text-white font-semibold transition-all duration-300 cursor-pointer mr-4">
+                                <p class="font-medium text-base text-white">Search</p>
+                            </button>
                             <div class="flex gap-1 items-center rounded-lg border-gray-400 border-2 px-2">
                                 <i class="fas fa-filter text-gray-500"></i> {{-- Mengganti ikon agar lebih sesuai --}}
                                 <select name="category" id="category"
@@ -57,18 +61,16 @@
                                 </select>
                             </div>
 
-                            {{-- Tombol Search --}}
-                            <button type="submit" class="bg-sky-600 px-4 rounded-lg">
-                                <p class="font-medium text-base text-white">Search</p>
-                            </button>
+
                         </div>
                     </form>
                 </div>
                 <div class="">
-                    <a href="{{ Request::is('*/mycontent*') ? 'mycontent' : 'content' }}/add/category" class="px-2 py-1 mr-2 bg-sky-500 rounded-lg text-white font-semibold"><i
+                    <a href="{{ Request::is('*/mycontent*') ? 'mycontent' : 'content' }}/add/category"
+                        class="px-2 py-1 bg-sky-600 rounded-lg text-white font-semibold hover:bg-sky-700 transition-all duration-300"><i
                             class="fas fa-plus text-gray-50"></i> Add Category</a>
                     <a href="/{{ Auth::user()->role }}{{ Request::is('*/mycontent') ? '/mycontent/create' : '/content/create' }}"
-                        class="px-2 py-1 ml-2 bg-sky-500 rounded-lg text-white font-semibold"><i
+                        class="px-2 py-1 bg-sky-600 rounded-lg text-white font-semibold hover:bg-sky-700 transition-all duration-300"><i
                             class="fas fa-plus text-gray-50"></i> Add Content</a>
                 </div>
 
@@ -157,14 +159,14 @@
 
                                         {{-- Tombol Lihat (View) --}}
                                         <a href="/{{ Auth::user()->role }}{{ Request::is('*/mycontent*') ? '/mycontent' : '/content' }}/{{ $content->slug }}"
-                                            class="w-8 h-8 rounded-sm bg-sky-500 hover:bg-sky-600 text-white flex items-center justify-center"
+                                            class="w-8 h-8 rounded-sm bg-sky-500 hover:bg-sky-600 text-white flex items-center justify-center transition-all duration-200"
                                             aria-label="Lihat">
                                             <i class="fas fa-eye"></i>
                                         </a>
 
                                         {{-- Tombol Ubah (Edit) --}}
                                         <a href="/{{ Auth::user()->role }}{{ Request::is('*/mycontent*') ? '/mycontent' : '/content' }}/{{ $content->slug }}/edit"
-                                            class="w-8 h-8 rounded-sm bg-amber-400 hover:bg-amber-500 text-white flex items-center justify-center"
+                                            class="w-8 h-8 rounded-sm bg-amber-400 hover:bg-amber-500 text-white flex items-center justify-center transition-all duration-200"
                                             aria-label="Ubah">
                                             <i class="fas fa-pencil-alt"></i>
                                         </a>
@@ -176,7 +178,7 @@
                                             @method('delete')
                                             @csrf
                                             <button type="button"
-                                                class="delete-btn w-8 h-8 rounded-sm bg-red-500 hover:bg-red-600 text-white flex items-center justify-center cursor-pointer"
+                                                class="delete-btn w-8 h-8 rounded-sm bg-red-500 hover:bg-red-600 text-white flex items-center justify-center cursor-pointer transition-all duration-250"
                                                 data-title="{{ $content->title }}" aria-label="Hapus">
                                                 <i class="fas fa-trash"></i>
                                             </button>
@@ -300,11 +302,11 @@
                     <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse rounded-b-lg">
                         {{-- Tombol tidak berubah --}}
                         <button type="button" id="confirmDeleteBtn"
-                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
+                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow- px-4 py-2 bg-red-600 text-base font-medium text-white hover:shadow-none hover:bg-red-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm transition-all duration-300 cursor-pointer">
                             Ya, Hapus
                         </button>
                         <button type="button" id="cancelDeleteBtn"
-                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:w-auto sm:text-sm">
+                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700  hover:shadow-none hover:bg-gray-50 focus:outline-none sm:mt-0 sm:w-auto sm:text-sm transition-all duration-300 cursor-pointer">
                             Batal
                         </button>
                     </div>

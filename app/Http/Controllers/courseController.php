@@ -87,6 +87,8 @@ class courseController extends Controller
             'status' => 'nullable',
             'selected_content_ids' => 'required|string'
 
+        ], [
+            'selected_content_ids.required' => 'You must select at least one content for this course.'
         ]);
 
 

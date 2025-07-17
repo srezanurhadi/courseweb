@@ -83,8 +83,7 @@
     <div class="flex flex-1 relative">
         <x-sidebar></x-sidebar>
         <div class="flex-1 bg-gray-50 flex flex-col p-4">
-            <form
-                action="/{{ Auth::user()->role }}{{ Request::is('*/mycourse*') ? '/mycourse' : '/course' }}"
+            <form action="/{{ Auth::user()->role }}{{ Request::is('*/mycourse*') ? '/mycourse' : '/course' }}"
                 method="POST" enctype="multipart/form-data">
                 @csrf
                 <div
@@ -148,15 +147,21 @@
                         <label for="description" class="text-sm">Course Description<span
                                 class="text-red-500">*</span></label>
                         <textarea name="description" id="description" rows="4"
-                            class="w-full bg-gray-50 border-2 border-gray-300 rounded-lg p-2" placeholder="Description of the course...">{{ old('description') }}</textarea>
+                            class="w-full bg-gray-50 border-2 border-gray-300 rounded-lg p-2" placeholder="Description of the course..."
+                            required>{{ old('description') }}
+                        </textarea>
+                        @error('description')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="mb-4">
                         <div
                             class="w-full bg-gray-50 border-2 border-gray-300 rounded-lg flex flex-col justify-center items-center p-4">
-                            <div class="flex flex-row justify-between w-full">
+                            <div class="flex flex-row justify-between w-full mb-4">
                                 <label for="course-content" class="text-sm">Course Content<span
                                         class="text-red-500">*</span></label>
-                                <button id="add_content" class="text-sm rounded-lg bg-indigo-700 text-gray-50 p-2">+
+                                <button id="add_content"
+                                    class="text-sm rounded-lg bg-indigo-700 text-gray-50 p-2 hover:bg-indigo-600 transition-all duration-300 cursor-pointer">+
                                     add content</button>
                             </div>
                             <div id="no-content-message" class="text-sm text-gray-700 p-4">No content add yet. click
@@ -168,6 +173,9 @@
                             <input type="hidden" name="selected_content_ids" id="selected_content_ids" value="">
 
                         </div>
+                        @error('selected_content_ids')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="mb-4">
                         <label for="category" class="text-sm">Course Category<span class="text-red-500">*</span></label>
@@ -178,6 +186,9 @@
                                 <option value="{{ $category->id }}">{{ $category->category }}</option>
                             @endforeach
                         </select>
+                        @error('category')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="mb-4">
                         <input type="hidden" name="status" value="0">
@@ -192,10 +203,10 @@
                     <div class="mb-4">
                         <div class="flex flex-row justify-end gap-4">
                             <div onclick="window.location.href='{{ url('/admin/course') }}'"
-                                class="py-2 w-34 text-indigo-700 bg-gray-50 border-2 border-indigo-700 rounded-lg text-center">
+                                class="py-2 w-34 px-6 text-indigo-700 bg-gray-50 border-2 border-indigo-700 shadow-sm rounded-lg text-center hover:shadow-none hover:bg-gray-100 transition-all duration-300 cursor-pointer">
                                 Cancel</div>
                             <button type="submit"
-                                class="py-2 w-34 text-gray-50 bg-indigo-700 border-2 border-indigo-700 rounded-lg text-center">
+                                class="py-2 px-6 w-34 text-gray-50 bg-indigo-700 border-2 border-indigo-700  shadow-sm rounded-lg text-center hover:shadow-none hover:bg-indigo-800 transition-all duration-300 cursor-pointer">
                                 Save</button>
                         </div>
                     </div>
@@ -227,7 +238,8 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <button id="ajax-search-btn" class="bg-sky-600 px-2 rounded-lg">
+                                <button id="ajax-search-btn"
+                                    class="bg-sky-600 px-2 rounded-lg hover:bg-sky-700 text-white transition-all duration-300 cursor-pointer ">
                                     <p class=" font-medium text-base text-white">search</p>
                                 </button>
                             </div>
@@ -268,15 +280,15 @@
                                     {{ $content->created_at->format('d-m-Y') }}</div>
                                 <div class="px-6 py-3 w-2/12">
                                     <div class="flex items-center space-x-2">
-                                        <div class="flex justify-center w-full">
+                                        <div class="flex justify-center w-full transition-all duration-300">
                                             <input type="checkbox" id="content_{{ $content->id }}"
                                                 name="content_checkbox" value="{{ $content->id }}"
                                                 data-title="{{ $content->title }}"
-                                                class="h-6 w-6 border-gray-300 rounded focus:ring-indigo-700 text-indigo-700">
+                                                class="h-6 w-6 border-gray-300 rounded focus:ring-indigo-700 text-indigo-700 cursor-pointer transition-all duration-300">
                                         </div>
                                         <a href="{{ url('admin/content/' . $content->slug) }}" target="_blank">
                                             <button
-                                                class="lihat-btn w-6 h-6 p-2 rounded-sm bg-sky-500 hover:bg-sky-600 text-white flex items-center justify-center"
+                                                class="lihat-btn w-6 h-6 p-2 rounded-sm bg-sky-500 hover:bg-sky-600 text-white flex items-center justify-center transition-all duration-300 cursor-pointer"
                                                 aria-label="Lihat" data-content-id="{{ $content->id }}">
                                                 <i class="fas fa-eye"></i>
                                             </button>
@@ -298,9 +310,9 @@
                     <div class="mt-4">
                         <div class="flex flex-row justify-end gap-4">
                             <button id="closeModal"
-                                class="py-1 w-34 text-indigo-700 bg-gray-50 border-2 border-indigo-700 rounded-lg text-center">Cancel</button>
+                                class="py-2 px-6 text-indigo-700 bg-gray-50 border-2 border-indigo-700 shadow-sm rounded-lg text-center hover:shadow-none hover:bg-gray-100 transition-all duration-300 cursor-pointer">Cancel</button>
                             <button id="saveSelectedContent" type="button"
-                                class="py-1 w-34 text-gray-50 bg-indigo-700 border-2 border-indigo-700 rounded-lg text-center">Save</button>
+                                class="py-2 px-6 text-gray-50 bg-indigo-700 border-2 border-indigo-700  shadow-sm rounded-lg text-center hover:shadow-none hover:bg-indigo-800 transition-all duration-300 cursor-pointer">Save</button>
                         </div>
                     </div>
                 </div>

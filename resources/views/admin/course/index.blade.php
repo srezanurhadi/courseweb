@@ -16,8 +16,7 @@
             <div
                 class="p-4 shadow-[0px_0px_4px_1px_rgba(0,0,0,0.4)] font-bold flex bg-gray-100 flex-row justify-between sticky top-0">
                 <div class="text-3xl font-bold pl-4">Management Course</div>
-                <div class="profile flex items-center gap-2 pr-4">
-                    <i class="fas fa-bell text-xl"></i>
+                <a href="/{{ Auth::user()->role }}/myprofile" class="profile flex items-center gap-2 pr-4 hover:text-indigo-700 transition-all duration-150">
                     <div class="rounded-full justify-center flex bg-gray-300 h-8 w-8 overflow-hidden">
 
                         @if (Auth::user()->image)
@@ -29,9 +28,9 @@
 
                     </div>
                     <div class="">{{ Auth::User()->name }}</div>
-                </div>
+                </a>
             </div>
-            <div class="w-full flex pt-6 pb-2 px-6 justify-between">
+            <div class="w-full flex pt-8 pb-2 px-4 justify-between">
                 <div class="flex gap-4">
                     <form action="/{{ Auth::user()->role }}{{ Request::is('*/mycourse') ? '/mycourse' : '/course' }}"
                         method="GET" class="flex gap-2">
@@ -41,12 +40,15 @@
                                 class="rounded-lg min-w-56 focus:outline-none px-2 placeholder:font-semibold placeholder:italic"
                                 placeholder="Search Course...">
                         </div>
-                        <div class=" flex gap-1 items-center rounded-lg border-gray-400 border-2 px-2">
+                        <button class="bg-sky-600 px-4 rounded-lg mr-4 hover:bg-sky-700 text-white font-semibold transition-all duration-300 cursor-pointer">
+                            <p class=" font-medium text-base text-white">Search</p>
+                        </button>
+                        <div class="flex gap-1 items-center rounded-lg border-gray-400 border-2 px-2">
                             <i class="fas fa-filter text-gray-500"></i>
                             <select name="category" id="category"
                                 class="min-w-56 focus:outline-none px-2 text-gray-900" onchange="this.form.submit()">
 
-                                <option value="" {{ request('category') ? ' ' : 'selected' }}>All Category
+                                <option value="" {{ request('category') ? '' : 'selected' }}>All Category
                                 </option>
 
                                 @foreach ($categories as $category)
@@ -66,16 +68,14 @@
                                 <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>Draft</option>
                             </select>
                         </div>
-                        <button class="bg-sky-600 px-2 rounded-lg">
-                            <p class=" font-medium text-base text-white">search</p>
-                        </button>
+                        
                     </form>
 
 
                 </div>
                 <div class="">
                     <a href="/{{ Auth::user()->role }}{{ Request::is('*/mycourse') ? '/mycourse/create' : '/course/create' }}"
-                        class="px-2 py-1 bg-sky-500 rounded-lg text-white font-semibold"><i
+                        class="px-2 py-1 bg-sky-600 rounded-lg text-white font-semibold hover:bg-sky-700 transition-all duration-300"><i
                             class="fas fa-plus text-gray-50"></i> Add Course</a>
                 </div>
 
@@ -156,19 +156,19 @@
                                         role="menu" aria-orientation="vertical" aria-labelledby="dropdown-button">
                                         <div class="" role="none">
                                             <a href="/admin{{ Request::is('*/mycourse*') ? '/mycourse' : '/course' }}/{{ $course->slug }}/edit"
-                                                class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-300"
+                                                class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-300 transition-all duration-300"
                                                 role="menuitem" id="menu-item-0">Edit Course</a>
                                             <a href="/admin{{ Request::is('*/mycourse*') ? '/mycourse' : '/course' }}/{{ $course->slug }}"
-                                                class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-300"
+                                                class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-300 transition-all duration-300"
                                                 role="menuitem" id="menu-item-1">Show more</a>
                                             <form action="/{{ Auth::user()->role }}{{ Request::is('*/mycourse*') ? '/mycourse' : '/course' }}/{{ $course->slug }}" method="POST"
-                                                class="delete-btn text-rose-700 block px-4 py-2 text-sm hover:bg-rose-300 hover:text-red-900 hover:cursor-pointer"
+                                                class="delete-btn text-rose-700 block px-4 py-2 text-sm hover:bg-rose-300 hover:text-red-900 hover:cursor-pointer transition-all duration-300"
                                                 data-title="{{ $course->title }}">
                                                 @csrf
                                                 @method('DELETE')
                                                 {{-- PERUBAHAN DI SINI --}}
                                                 <div class="font-medium">
-                                                    Hapus
+                                                    Delete
                                                 </div>
                                             </form>
                                         </div>
