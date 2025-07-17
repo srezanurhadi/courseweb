@@ -14,7 +14,8 @@
         <div class="flex flex-1">
             <x-sidebar></x-sidebar>
             <div class=" w-full bg-gray-50 ">
-                <div class="p-4 shadow-lg font-bold flex bg-gray-100 flex-row justify-between top-0 sticky z-10">
+                <div
+                    class="p-4 shadow-[0px_0px_4px_1px_rgba(0,0,0,0.4)] font-bold flex bg-gray-100 flex-row justify-between top-0 sticky z-10">
                     <div class="text-3xl font-bold pl-4">Management Content</div>
                     <div class="profile flex items-center gap-2 pr-4">
                         <i class="fas fa-bell text-xl"></i>
@@ -68,17 +69,16 @@
                                 @if (isset($editorJsData) && is_array($editorJsData['blocks']))
                                     @foreach ($editorJsData['blocks'] as $block)
                                         @switch ($block['type'])
-                                            {{-- DISEMPURNAKAN: Menambahkan dukungan alignment --}}
                                             @case('paragraph')
                                                 @php
-                                                    // Tentukan class alignment berdasarkan data, default 'text-left'
                                                     $alignment = $block['data']['alignment'] ?? 'left';
-                                                    $alignmentClass = [
-                                                        'left' => 'text-left',
-                                                        'center' => 'text-center',
-                                                        'right' => 'text-right',
-                                                        'justify' => 'text-justify',
-                                                    ][$alignment];
+                                                    $alignmentClass =
+                                                        [
+                                                            'left' => 'text-left',
+                                                            'center' => 'text-center',
+                                                            'right' => 'text-right',
+                                                            'justify' => 'text-justify',
+                                                        ][$alignment] ?? 'text-left';
                                                 @endphp
                                                 <p class="mb-4 text-gray-700 leading-relaxed {{ $alignmentClass }}">
                                                     {!! $block['data']['text'] !!}</p>
@@ -86,29 +86,27 @@
 
                                             @case('header')
                                                 @php
-                                                    $level = $block['data']['level'];
+                                                    $level = $block['data']['level'] ?? 2;
                                                     $tag = 'h' . $level;
                                                     $classes = [
-                                                        'h1' => 'text-4xl font-bold mt-8 mb-4',
-                                                        'h2' => 'text-3xl font-bold mt-8 mb-4 border-b pb-2',
-                                                        'h3' => 'text-2xl font-bold mt-6 mb-3',
-                                                        'h4' => 'text-xl font-bold mt-6 mb-3',
-                                                        'h5' => 'text-lg font-bold mt-4 mb-2',
-                                                        'h6' => 'text-base font-bold mt-4 mb-2',
+                                                        1 => 'text-4xl font-bold mt-8 mb-4',
+                                                        2 => 'text-3xl font-bold mt-8 mb-4 border-b pb-2',
+                                                        3 => 'text-2xl font-bold mt-6 mb-3',
+                                                        4 => 'text-xl font-bold mt-6 mb-3',
+                                                        5 => 'text-lg font-bold mt-4 mb-2',
+                                                        6 => 'text-base font-bold mt-4 mb-2',
                                                     ];
                                                 @endphp
-                                                <{!! $tag !!} class="{{ $classes[$tag] ?? '' }}">
+                                                <{{ $tag }} class="{{ $classes[$level] ?? '' }}">
                                                     {!! $block['data']['text'] !!}
-                                                    </{!! $tag !!}>
+                                                    </{{ $tag }}>
                                                 @break
 
                                                 @case('image')
-                                                    {{-- SANGAT DIREKOMENDASIKAN menggunakan versi yang lebih aman ini --}}
                                                     @php
                                                         $isStretched = $block['data']['stretched'] ?? false;
                                                         $hasBorder = $block['data']['withBorder'] ?? false;
                                                         $hasBackground = $block['data']['withBackground'] ?? false;
-
                                                         $figureClasses = [
                                                             'my-8',
                                                             'mx-auto',
@@ -132,105 +130,90 @@
                                                     </figure>
                                                 @break
 
+                                                {{-- BLOK LIST YANG SUDAH DIPERBAIKI --}}
                                                 @case('list')
-                                                    {{-- Menangani Unordered dan Ordered List --}}
-                                                    @if ($block['data']['style'] === 'unordered' || $block['data']['style'] === 'ordered')
-                                                        @if ($block['data']['style'] === 'unordered')
-                                                            <ul class="list-disc pl-5 mb-4 space-y-2">
-                                                            @else
-                                                                <ol class="list-decimal pl-5 mb-4 space-y-2">
-                                                        @endif
-                                                        @foreach ($block['data']['items'] as $item)
-                                                            {{-- PASTIKAN item tidak kosong dan memiliki key 'content' --}}
-                                                            @if (is_array($item) && !empty($item['content']))
-                                                                <li>{!! $item['content'] !!}</li>
-                                                            @endif
-                                                        @endforeach
-                                                        @if ($block['data']['style'] === 'unordered')
-                                                            </ul>
-                                                        @else
-                                                            </ol>
-                                                        @endif
-
-                                                        {{-- BARU: Menangani Checklist --}}
-                                                    @elseif ($block['data']['style'] === 'checklist')
-                                                        <div class="mb-4 space-y-2">
-                                                            @foreach ($block['data']['items'] as $item)
-                                                                {{-- PASTIKAN item tidak kosong dan memiliki key 'content' --}}
-                                                                @if (is_array($item) && isset($item['content']))
-                                                                    <div class="flex items-center">
-                                                                        <input type="checkbox"
-                                                                            class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
-                                                                            {{ $item['meta']['checked'] ?? false ? 'checked' : '' }}
-                                                                            disabled>
-                                                                        <label
-                                                                            class="ml-2 text-gray-700">{!! $item['content'] !!}</label>
-                                                                    </div>
-                                                                @endif
-                                                            @endforeach
-                                                        </div>
-                                                    @endif
-                                                @break
-
-                                                @case('quote')
-                                                    <blockquote class="my-6 p-4 border-l-4 border-gray-400 bg-gray-50 italic">
-                                                        <p class="text-xl font-medium leading-relaxed text-gray-800">
-                                                            {!! $block['data']['text'] !!}</p>
-                                                        @if (!empty($block['data']['caption']))
-                                                            <footer class="mt-2 text-base text-gray-600">—
-                                                                {{ $block['data']['caption'] }}</footer>
-                                                        @endif
-                                                    </blockquote>
-                                                @break
-
-                                                @case('delimiter')
-                                                    <hr class="my-8">
-                                                @break
-
-                                                {{-- BARU: Menambahkan dukungan untuk CodeTool --}}
-                                                @case('code')
-                                                    <pre class="bg-gray-800 text-white text-sm rounded-lg p-4 my-6 overflow-x-auto"><code class="font-mono">{!! htmlspecialchars($block['data']['code']) !!}</code></pre>
-                                                @break
-
-                                                {{-- BARU: Menambahkan dukungan untuk Table --}}
-                                                @case('table')
                                                     @php
-                                                        $withHeadings = $block['data']['withHeadings'] ?? false;
-                                                        $content = $block['data']['content'];
-                                                        $header =
-                                                            $withHeadings && count($content) > 0
-                                                                ? array_shift($content)
-                                                                : null;
-                                                        $body = $content;
+                                                        $listStyle = $block['data']['style'] ?? 'unordered';
+                                                        $tag = $listStyle === 'ordered' ? 'ol' : 'ul';
+                                                        $class =
+                                                            $listStyle === 'ordered' ? 'list-decimal' : 'list-disc';
+
+                                                        // ----> 1. TAMBAHKAN BARIS INI <----
+                                                        // Ambil nomor awal, jika tidak ada, default ke 1
+                                                        $startNumber = $block['data']['meta']['start'] ?? 1;
                                                     @endphp
-                                                    <div class="my-6 overflow-x-auto">
-                                                        <table class="min-w-full border border-gray-300">
-                                                            @if ($header)
-                                                                <thead class="bg-gray-100">
-                                                                    <tr>
-                                                                        @foreach ($header as $cell)
-                                                                            <th
-                                                                                class="p-3 border-b border-gray-300 text-left text-sm font-semibold text-gray-700">
-                                                                                {!! $cell !!}</th>
-                                                                        @endforeach
-                                                                    </tr>
-                                                                </thead>
+
+                                                    {{-- ----> 2. MODIFIKASI BARIS INI <---- --}}
+                                                    {{-- Tambahkan atribut 'start' HANYA jika ini adalah ordered list (<ol>) --}}
+                                                    <{{ $tag }} class="{{ $class }} pl-5 mb-4 space-y-2"
+                                                        @if ($tag === 'ol') start="{{ $startNumber }}" @endif>
+                                                        @foreach ($block['data']['items'] as $item)
+                                                            @include('partials._list_item', [
+                                                                'item' => $item,
+                                                            ])
+                                                        @endforeach
+                                                        </{{ $tag }}>
+                                                    @break
+
+                                                    {{-- AKHIR BLOK LIST --}}
+                                                    @case('quote')
+                                                        <blockquote
+                                                            class="my-6 p-4 border-l-4 border-gray-400 bg-gray-50 italic">
+                                                            <p class="text-xl font-medium leading-relaxed text-gray-800">
+                                                                {!! $block['data']['text'] !!}</p>
+                                                            @if (!empty($block['data']['caption']))
+                                                                <footer class="mt-2 text-base text-gray-600">—
+                                                                    {{ $block['data']['caption'] }}</footer>
                                                             @endif
-                                                            <tbody>
-                                                                @foreach ($body as $row)
-                                                                    <tr class="hover:bg-gray-50">
-                                                                        @foreach ($row as $cell)
-                                                                            <td
-                                                                                class="p-3 border-b border-gray-300 text-gray-700">
-                                                                                {!! $cell !!}</td>
-                                                                        @endforeach
-                                                                    </tr>
-                                                                @endforeach
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                @break
-                                            @endswitch
+                                                        </blockquote>
+                                                    @break
+
+                                                    @case('delimiter')
+                                                        <hr class="my-8">
+                                                    @break
+
+                                                    @case('code')
+                                                        <pre class="bg-gray-800 text-white text-sm rounded-lg p-4 my-6 overflow-x-auto"><code class="font-mono">{!! htmlspecialchars($block['data']['code']) !!}</code></pre>
+                                                    @break
+
+                                                    @case('table')
+                                                        @php
+                                                            $withHeadings = $block['data']['withHeadings'] ?? false;
+                                                            $content = $block['data']['content'];
+                                                            $header =
+                                                                $withHeadings && count($content) > 0
+                                                                    ? array_shift($content)
+                                                                    : null;
+                                                            $body = $content;
+                                                        @endphp
+                                                        <div class="my-6 overflow-x-auto">
+                                                            <table class="min-w-full border border-gray-300">
+                                                                @if ($header)
+                                                                    <thead class="bg-gray-100">
+                                                                        <tr>
+                                                                            @foreach ($header as $cell)
+                                                                                <th
+                                                                                    class="p-3 border-b border-gray-300 text-left text-sm font-semibold text-gray-700">
+                                                                                    {!! $cell !!}</th>
+                                                                            @endforeach
+                                                                        </tr>
+                                                                    </thead>
+                                                                @endif
+                                                                <tbody>
+                                                                    @foreach ($body as $row)
+                                                                        <tr class="hover:bg-gray-50">
+                                                                            @foreach ($row as $cell)
+                                                                                <td
+                                                                                    class="p-3 border-b border-gray-300 text-gray-700">
+                                                                                    {!! $cell !!}</td>
+                                                                            @endforeach
+                                                                        </tr>
+                                                                    @endforeach
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    @break
+                                                @endswitch
                                     @endforeach
                                 @else
                                     <p class="text-gray-500 italic">Tidak ada konten yang tersedia.</p>
@@ -240,9 +223,8 @@
                     </div>
                 </div>
                 <div id="delete-confirmation-modal"
-                    class="fixed inset-0 z-[100] flex items-center bg-white/10 justify-center transition-all duration-150 ease-in-out opacity-0 scale-95 pointer-events-none">
-                    <div
-                        class="bg-white/50 backdrop-blur-xs border-2 border-gray-200 rounded-lg shadow-sm w-full max-w-md mx-4 transition-all duration-300">
+                    class="fixed inset-0 z-49 flex items-center justify-center bg-white/10 backdrop-blur-sm bg-opacity-50 transition-all duration-300 ease-in-out opacity-0 scale-95 pointer-events-none">
+                    <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
                         <div class="p-6">
                             <div class="flex items-start">
                                 <div
@@ -258,6 +240,7 @@
                                         Konfirmasi Hapus
                                     </h3>
                                     <div class="mt-2">
+                                        {{-- PERUBAHAN DI SINI --}}
                                         <p class="text-sm text-gray-600">
                                             Apakah Anda yakin ingin menghapus konten
                                             <strong id="content-title-to-delete" class="text-gray-900"></strong>?
@@ -267,19 +250,20 @@
                                 </div>
                             </div>
                         </div>
-                        <div class=" px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse rounded-b-lg">
+                        <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse rounded-b-lg">
+                            {{-- Tombol tidak berubah --}}
                             <button type="button" id="confirmDeleteBtn"
-                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
+                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-md px-4 py-2 bg-red-600 text-base font-medium text-white hover:shadow-none hover:bg-red-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm transition-all duration-300 cursor-pointer">
                                 Ya, Hapus
                             </button>
                             <button type="button" id="cancelDeleteBtn"
-                                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:w-auto sm:text-sm">
+                                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700  hover:shadow-none hover:bg-gray-50 focus:outline-none sm:mt-0 sm:w-auto sm:text-sm transition-all duration-300 cursor-pointer">
                                 Batal
                             </button>
                         </div>
                     </div>
                 </div>
-                
+
 
             </div>
         </div>

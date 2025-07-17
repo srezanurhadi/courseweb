@@ -13,7 +13,8 @@
         <x-sidebar></x-sidebar>
         <div class="container mx-auto flex flex-col gap-4">
             <!-- Header -->
-            <div class="p-4 shadow-lg font-bold flex bg-gray-100 flex-row justify-between top-0 sticky z-10">
+            <div
+                class="p-4 shadow-[0px_0px_4px_1px_rgba(0,0,0,0.4)] font-bold flex bg-gray-100 flex-row justify-between top-0 sticky z-10">
                 <div class="text-3xl font-bold pl-4">Management Category</div>
                 <div class="profile flex items-center gap-2 pr-4">
                     <i class="fas fa-bell text-xl"></i>
@@ -121,9 +122,12 @@
                     </tbody>
                 </table>
             </div>
+            <div class="mt-4 mb-10">
+                {{ $categories->appends(request()->query())->links() }}
+            </div>
 
             <!-- Pagination -->
-            @if ($categories->hasPages())
+            {{-- @if ($categories->hasPages())
                 <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200">
                     <div class="flex-1 flex justify-between sm:hidden">
                         @if ($categories->onFirstPage())
@@ -158,12 +162,10 @@
                                 <span class="font-medium">{{ $categories->total() }}</span> results
                             </p>
                         </div>
-                        <div>
-                            {{ $categories->appends(request()->query())->links() }}
-                        </div>
+                        
                     </div>
                 </div>
-            @endif
+            @endif --}}
 
             @foreach (['success', 'error'] as $type)
                 @if (session($type))

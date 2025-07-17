@@ -15,8 +15,8 @@
     <div class="flex flex-1 ">
         <x-sidebar></x-sidebar>
         <div class="w-full bg-gray-50 flex flex-col p-4 overflow-hidden">
-            <form action="/{{ Auth::user()->role }}{{ Request::is('*/mycontent*') ? '/mycontent' : '/content' }}" method="POST"
-                id="contentForm">
+            <form action="/{{ Auth::user()->role }}{{ Request::is('*/mycontent*') ? '/mycontent' : '/content' }}"
+                method="POST" id="contentForm">
                 @csrf
                 <div
                     class="bg-gray-100 h-full p-4 pl-6 rounded-lg shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] flex flex-col gap-2">
@@ -37,7 +37,7 @@
 
                             <div id="editorjs-wrapper"
                                 class="bg-white border-2 border-gray-300 rounded-md flex-1 min-h-[300px]">
-                                <div id="editorjs" data-role="{{ Auth::user()->role }}"  class="px-10"></div>
+                                <div id="editorjs" data-role="{{ Auth::user()->role }}" class="px-10"></div>
                             </div>
                             <input type="hidden" name="content" id="editor_content">
                         </div>
@@ -56,9 +56,10 @@
                         <div class="mt-6">
                             <div class="flex flex-row justify-end gap-4">
                                 <button type="button" id="cancelButton"
-                                    class="py-2 px-6 text-indigo-700 bg-gray-50 border-2 border-indigo-700 rounded-lg text-center hover:bg-gray-100">Cancel</button>
+                                    class="py-2 px-6 text-indigo-700 bg-gray-50 border-2 border-indigo-700 shadow-sm rounded-lg text-center hover:shadow-none hover:bg-gray-100 transition-all duration-300 cursor-pointer">Cancel</button>
                                 <button type="submit"
-                                    class="py-2 px-6 text-gray-50 bg-indigo-700 border-2 border-indigo-700 rounded-lg text-center hover:bg-indigo-800">Save</button>
+                                    class="py-2 px-6 text-gray-50 bg-indigo-700 border-2 border-indigo-700  shadow-sm rounded-lg text-center hover:shadow-none hover:bg-indigo-800 transition-all duration-300 cursor-pointer">Add
+                                    Content</button>
                             </div>
                         </div>
                     </div>

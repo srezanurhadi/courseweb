@@ -60,9 +60,9 @@
                     <div class="mt-6">
                         <div class="flex flex-row justify-end gap-4">
                             <button type="button" id="cancelButton"
-                                class="py-2 px-6 text-indigo-700 bg-gray-50 border-2 border-indigo-700 rounded-lg text-center hover:bg-gray-100">Cancel</button>
+                                class="py-2 px-6 text-indigo-700 bg-gray-50 border-2 border-indigo-700 shadow-sm rounded-lg text-center hover:shadow-none hover:bg-gray-100 transition-all duration-300 cursor-pointer">Cancel</button>
                             <button type="submit"
-                                class="py-2 px-6 text-gray-50 bg-indigo-700 border-2 border-indigo-700 rounded-lg text-center hover:bg-indigo-800">Update
+                                class="py-2 px-6 text-gray-50 bg-indigo-700 border-2 border-indigo-700  shadow-sm rounded-lg text-center hover:shadow-none hover:bg-indigo-800 transition-all duration-300 cursor-pointer">Update
                                 Content</button>
                         </div>
                     </div>

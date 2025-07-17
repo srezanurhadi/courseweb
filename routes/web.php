@@ -64,6 +64,7 @@ Route::prefix('/author')->middleware(authorMiddleware::class)->group(function ()
     // route khusus image di editor
     Route::post('/upload-image', [ImageController::class, 'store'])->name('image.store');
     Route::resource('/mycourse', courseController::class);
+    Route::get('/mycourse/{course:slug}/content/{content}', [CourseController::class, 'showContent']);
     Route::resource('/mycontent', contentController::class);
     Route::resource('/myparticipant', myParticipantController::class);
 

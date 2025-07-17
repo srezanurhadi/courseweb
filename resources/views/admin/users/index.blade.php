@@ -15,7 +15,8 @@
         <div class="w-full bg-gray-50 relative h-full overflow-y-auto">
 
             {{-- Header yang Sticky --}}
-            <div class="p-4 shadow-lg font-bold flex bg-gray-100 flex-row justify-between top-0 sticky z-30">
+            <div
+                class="p-4 shadow-[0px_0px_4px_1px_rgba(0,0,0,0.4)] font-bold flex bg-gray-100 flex-row justify-between top-0 sticky z-30">
                 <div class="text-3xl font-bold pl-4">Management users</div>
                 <div class="profile flex items-center gap-2 pr-4">
                     <i class="fas fa-bell text-xl"></i>
@@ -46,7 +47,10 @@
                                     class="rounded-lg min-w-56 focus:outline-none px-2 placeholder:font-semibold placeholder:italic bg-transparent"
                                     placeholder="Search User...">
                             </div>
-
+                            <button type="submit"
+                                class="bg-sky-600 px-4 rounded-lg mr-4 hover:bg-sky-700 text-white font-semibold transition-all duration-300 cursor-pointer">
+                                <p class="font-medium text-base text-white">Search</p>
+                            </button>
                             {{-- Dropdown Kategori --}}
                             <div class="flex gap-1 items-center rounded-lg border-gray-400 border-2 px-2">
                                 <i class="fas fa-filter text-gray-500"></i> {{-- Mengganti ikon agar lebih sesuai --}}
@@ -63,16 +67,12 @@
                                         Participant</option>
                                 </select>
                             </div>
-
-                            {{-- Tombol Search --}}
-                            <button type="submit" class="bg-sky-600 px-4 rounded-lg">
-                                <p class="font-medium text-base text-white">Search</p>
-                            </button>
                         </div>
                     </form>
                 </div>
                 <div class="">
-                    <a href="users/create" class="px-2 py-1 bg-sky-500 rounded-lg text-white font-semibold"><i
+                    <a href="users/create"
+                        class="px-2 py-1 bg-sky-600 rounded-lg text-white font-semibold hover:bg-sky-700 transition-all duration-300"><i
                             class="fas fa-plus text-gray-50"></i> Add User</a>
                 </div>
             </div>
@@ -177,7 +177,7 @@
                                     <td class="px-6 py-4">
                                         <div class="flex space-x-2">
                                             <button id="show"
-                                                class="w-8 h-8 rounded-sm bg-indigo-400 hover:bg-indigo-500 text-white flex items-center justify-center"
+                                                class="w-8 h-8 rounded-sm bg-indigo-400 hover:bg-indigo-500 text-white flex items-center justify-center cursor-pointer transition-all duration-300"
                                                 aria-label="show">
                                                 <i class="fas fa-eye"></i>
                                             </button>
@@ -190,15 +190,15 @@
                                                 @method('delete')
                                                 @csrf
 
-                                                <button
-                                                    onclick="return confirm('anda yakin ingin menghapus {{ $user->name }}')"">
+                                                <button type="button"
+                                                    data-modal-target="delete-modal-{{ $user->id }}"
+                                                    class="open-delete-modal cursor-pointer">
                                                     <div
                                                         class="bg-red-500 p-1 rounded-sm w-8 h-8 flex items-center justify-center group hover:bg-white hover:border-2 hover:border-red-500">
                                                         <span
-                                                            class="fa-solid fa-trash cursor-pointer text-white group-hover:text-red-500">
-                                                        </span>
+                                                            class="fa-solid fa-trash text-white group-hover:text-red-500"></span>
                                                     </div>
-                                                </button>
+                                                </button>   
                                             </form>
                                         </div>
                                     </td>
