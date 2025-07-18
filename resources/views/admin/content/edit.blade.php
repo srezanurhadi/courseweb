@@ -37,7 +37,7 @@
                         <label class="text-sm font-medium text-gray-700 block mb-1">Content <span
                                 class="text-red-500">*</span></label>
                         <div id="" class="bg-white border-2 border-gray-300 rounded-md flex-1 ">
-                            <div id="editorjs" class="p-10"></div>
+                            <div id="editorjs" data-role="{{ Auth::user()->role }}" class="p-10"></div>
                         </div>
                         <input type="hidden" name="content" id="editor_content">
                     </div>
