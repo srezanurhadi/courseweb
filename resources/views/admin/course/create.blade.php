@@ -108,34 +108,45 @@
                     <div class="mb-4">
                         <label for="image" class="block text-sm font-medium text-gray-700 mb-1">Upload Gambar
                             Galeri <span class="text-red-500">*</span></label>
-                        <div
-                            class="mt-1 w-100 aspect-4/3 flex justify-center items-center px-6 pt-5 pb-6 border-2 bg-gray-50 border-gray-300 border-dashed rounded-md">
-                            <div class="space-y-1 text-center">
-                                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none"
-                                    viewBox="0 0 48 48" aria-hidden="true">
-                                    <path
-                                        d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                                <div class="flex text-sm text-gray-600">
-                                    <p class="pl-1 mr-2">drag and drop or</p>
-                                    <label for="image"
-                                        class="pl-2relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                        <span>click to upload</span>
-                                        <input id="image" name="image" type="file" class="sr-only"
-                                            accept="image/*" required>
-                                    </label>
+                        <div id="image-upload-container">
+                            <div id="drop-zone"
+                                class="mt-1 w-100 aspect-4/3 flex justify-center items-center px-6 pt-5 pb-6 border-2 bg-gray-50 border-gray-300 border-dashed rounded-md">
+                                <div class="space-y-1 text-center">
+                                    <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none"
+                                        viewBox="0 0 48 48" aria-hidden="true">
+                                        <path
+                                            d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    <div class="flex text-sm text-gray-600">
+                                        <p class="pl-1 mr-2">drag and drop or</p>
+                                        <label for="image"
+                                            class="pl-2relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                            <span>click to upload</span>
+                                            <input id="image" name="image" type="file" class="sr-only"
+                                                accept="image/*" required>
+                                        </label>
+                                    </div>
+                                    <p class="text-xs text-gray-500">
+                                        PNG, JPG, GIF hingga 2MB
+                                    </p>
                                 </div>
-                                <p class="text-xs text-gray-500">
-                                    PNG, JPG, GIF hingga 2MB
-                                </p>
                             </div>
                         </div>
-                        <div id="image-preview" class="mt-4 hidden">
+                        {{-- MODIFIKASI: Tambahkan tombol hapus di sini --}}
+                        <div id="image-preview" class="mt-4 hidden relative">
                             <p class="text-sm font-medium text-gray-700 mb-2">Preview Image:</p>
                             <img id="preview-img"
                                 class="w-100 aspect-4/3 object-cover object-center border-2 border-gray-400 rounded-md"
                                 alt="Image preview" />
+                            <button type="button" id="remove-image-btn"
+                                class="absolute top-2 left-105 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs focus:outline-none focus:ring-2 focus:ring-red-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
                         </div>
                         @error('image')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -184,7 +195,8 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="category" class="text-sm">Course Category<span class="text-red-500">*</span></label>
+                        <label for="category" class="text-sm">Course Category<span
+                                class="text-red-500">*</span></label>
                         <select name="category" id="category"
                             class="w-full bg-gray-50 border-2 border-gray-300 rounded-lg p-2 text-sm text-gray-700 @error('category') is-invalid @enderror">
                             <option value="" hidden {{ old('category') ? '' : 'selected' }}>Select Category
@@ -507,27 +519,90 @@
             const imagePreviewDiv = document.getElementById('image-preview');
             const previewImage = document.getElementById('preview-img');
 
-            if (imageInput) {
-                imageInput.addEventListener('change', function() {
-                    const file = this.files[0];
-                    if (file) {
-                        if (file.type.startsWith('image/')) {
-                            const reader = new FileReader();
-                            reader.onload = function(e) {
-                                previewImage.src = e.target.result;
-                                imagePreviewDiv.classList.remove('hidden');
-                            }
-                            reader.readAsDataURL(file);
-                        } else {
-                            previewImage.src = '#';
-                            imagePreviewDiv.classList.add('hidden');
-                            alert('Harap pilih file gambar (PNG, JPG, GIF).');
-                        }
-                    } else {
-                        previewImage.src = '#';
-                        imagePreviewDiv.classList.add('hidden');
+            // === AWAL KODE TAMBAHAN UNTUK DRAG & DROP ===
+            const dropZone = document.getElementById('drop-zone');
+            const imageUploadContainer = document.getElementById('image-upload-container');
+            const removeImageBtn = document.getElementById('remove-image-btn');
+
+            if (dropZone) {
+                // Mencegah browser membuka file secara default
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    document.body.addEventListener(eventName, e => e.preventDefault());
+                });
+
+                // Memberi efek visual saat file diseret di atas area drop
+                dropZone.addEventListener('dragover', () => {
+                    dropZone.classList.add('border-indigo-500', 'bg-indigo-50');
+                });
+
+                // Menghapus efek visual saat file meninggalkan area drop
+                dropZone.addEventListener('dragleave', () => {
+                    dropZone.classList.remove('border-indigo-500', 'bg-indigo-50');
+                });
+
+                // Menangani file saat dilepaskan (di-drop)
+                dropZone.addEventListener('drop', (e) => {
+                    dropZone.classList.remove('border-indigo-500', 'bg-indigo-50');
+
+                    // Ambil file yang di-drop dan masukkan ke dalam input file
+                    const droppedFiles = e.dataTransfer.files;
+                    if (droppedFiles.length > 0) {
+                        imageInput.files = droppedFiles;
+
+                        // Picu event 'change' agar fungsi preview berjalan
+                        const event = new Event('change', {
+                            bubbles: true
+                        });
+                        imageInput.dispatchEvent(event);
                     }
                 });
+            }
+            // === AKHIR KODE TAMBAHAN UNTUK DRAG & DROP ===
+
+            // MODIFIKASI pada logika preview Anda
+            // Blok ini sudah ada, tapi isinya diubah
+            if (imageInput) {
+                imageInput.addEventListener('change', function() {
+                    const file = this.files.length > 0 ? this.files[0] : null;
+
+                    if (file && file.type.startsWith('image/')) {
+                        // INI BAGIAN PENTING YANG HARUS ADA
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            previewImage.src = e.target.result;
+                            imagePreviewDiv.classList.remove('hidden');
+                            if (imageUploadContainer) {
+                                imageUploadContainer.classList.add('hidden');
+                            }
+                        }
+                        reader.readAsDataURL(file);
+
+                    } else {
+                        // Reset jika file tidak valid atau tidak ada file
+                        resetImagePreview();
+                        if (file) { // Hanya tampilkan alert jika ada file tapi tipe salah
+                            alert('Harap pilih file gambar (PNG, JPG, GIF).');
+                        }
+                    }
+                });
+            }
+
+            // Event listener baru untuk menangani klik pada tombol hapus
+            if (removeImageBtn) {
+                removeImageBtn.addEventListener('click', function() {
+                    resetImagePreview();
+                    // Mengosongkan value input file
+                    imageInput.value = '';
+                });
+            }
+
+            // Fungsi baru yang bisa dipakai ulang untuk mereset tampilan
+            function resetImagePreview() {
+                previewImage.src = '#';
+                imagePreviewDiv.classList.add('hidden');
+                if (imageUploadContainer) {
+                    imageUploadContainer.classList.remove('hidden');
+                }
             }
 
             // Content Selection Functionality

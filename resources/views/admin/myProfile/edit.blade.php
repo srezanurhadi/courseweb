@@ -71,7 +71,7 @@
                             <div class="p-4 lg:p-6 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
                                 <!-- Profile Form -->
                                 <div class="flex-1 w-full">
-                                    <form method="POST" action="/admin/myprofile/{{ $user->id }}"
+                                    <form method="POST" action="/{{ Auth::user()->role }}/myprofile/{{ $user->id }}"
                                         enctype="multipart/form-data" class="grid grid-cols-1 gap-4 w-full max-w-2xl">
                                         @csrf
                                         @method('PUT')

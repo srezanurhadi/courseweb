@@ -155,10 +155,10 @@
                                         class="js-dropdown-menu hidden origin-top-right absolute shadow-[0px_0px_2px_1px_rgba(0,0,0,0.4)] right-0 mt-2 w-56 rounded-md bg-gray-100 focus:outline-none"
                                         role="menu" aria-orientation="vertical" aria-labelledby="dropdown-button">
                                         <div class="" role="none">
-                                            <a href="/admin{{ Request::is('*/mycourse*') ? '/mycourse' : '/course' }}/{{ $course->slug }}/edit"
+                                            <a href="/{{ Auth::user()->role }}{{ Request::is('*/mycourse*') ? '/mycourse' : '/course' }}/{{ $course->slug }}/edit"
                                                 class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-300 transition-all duration-300"
                                                 role="menuitem" id="menu-item-0">Edit Course</a>
-                                            <a href="/admin{{ Request::is('*/mycourse*') ? '/mycourse' : '/course' }}/{{ $course->slug }}"
+                                            <a href="/{{ Auth::user()->role }}{{ Request::is('*/mycourse*') ? '/mycourse' : '/course' }}/{{ $course->slug }}"
                                                 class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-300 transition-all duration-300"
                                                 role="menuitem" id="menu-item-1">Show more</a>
                                             <form action="/{{ Auth::user()->role }}{{ Request::is('*/mycourse*') ? '/mycourse' : '/course' }}/{{ $course->slug }}" method="POST"

@@ -65,7 +65,7 @@
                             <div class="font-bold text-xl mb-6 px-2">
                                 {{ $content->title }}
                             </div>
-                            <div class="w-full max-w-3xl mx-auto ">
+                            <div class="prose max-w-none text-lg leading-relaxed text-justify">
                                 @if (isset($editorJsData) && is_array($editorJsData['blocks']))
                                     @foreach ($editorJsData['blocks'] as $block)
                                         @switch ($block['type'])
@@ -113,7 +113,7 @@
                                                             'rounded-lg',
                                                             'overflow-hidden',
                                                             'shadow-md',
-                                                            $isStretched ? 'w-full' : 'max-w-full lg:w-5/6',
+                                                            $isStretched ? 'w-5/6' : 'max-w-full lg:w-3/6',
                                                             $hasBorder ? 'border-2 border-slate-800' : 'border-none',
                                                             $hasBackground ? 'p-4 sm:p-6 bg-slate-100' : '',
                                                         ];

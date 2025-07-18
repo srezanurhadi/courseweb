@@ -86,31 +86,58 @@
                             @foreach ($editorJsData['blocks'] as $block)
                                 @switch ($block['type'])
                                     @case('paragraph')
-                                        <p class="mb-4">{!! $block['data']['text'] !!}</p>
+                                        @php
+                                            $alignment = $block['data']['alignment'] ?? 'left';
+                                            $alignmentClass =
+                                                [
+                                                    'left' => 'text-left',
+                                                    'center' => 'text-center',
+                                                    'right' => 'text-right',
+                                                    'justify' => 'text-justify',
+                                                ][$alignment] ?? 'text-left';
+                                        @endphp
+                                        <p class="mb-4 text-gray-700 leading-relaxed {{ $alignmentClass }}">
+                                            {!! $block['data']['text'] !!}</p>
                                     @break
 
                                     @case('header')
                                         @php
-                                            $level = $block['data']['level'];
+                                            $level = $block['data']['level'] ?? 2;
                                             $tag = 'h' . $level;
                                             $classes = [
-                                                'h1' => 'text-4xl font-bold mt-8 mb-4',
-                                                'h2' => 'text-3xl font-bold mt-8 mb-4 border-b pb-2',
-                                                'h3' => 'text-2xl font-bold mt-6 mb-3',
-                                                'h4' => 'text-xl font-bold mt-6 mb-3',
-                                                'h5' => 'text-lg font-bold mt-4 mb-2',
-                                                'h6' => 'text-base font-bold mt-4 mb-2',
+                                                1 => 'text-4xl font-bold mt-8 mb-4',
+                                                2 => 'text-3xl font-bold mt-8 mb-4 border-b pb-2',
+                                                3 => 'text-2xl font-bold mt-6 mb-3',
+                                                4 => 'text-xl font-bold mt-6 mb-3',
+                                                5 => 'text-lg font-bold mt-4 mb-2',
+                                                6 => 'text-base font-bold mt-4 mb-2',
                                             ];
                                         @endphp
-                                        <{!! $tag !!} class="{{ $classes[$tag] ?? '' }}">{!! $block['data']['text'] !!}
-                                            </{!! $tag !!}>
+                                        <{{ $tag }} class="{{ $classes[$level] ?? '' }}">
+                                            {!! $block['data']['text'] !!}
+                                            </{{ $tag }}>
                                         @break
 
                                         @case('image')
-                                            <figure class="my-8">
+                                            @php
+                                                $isStretched = $block['data']['stretched'] ?? false;
+                                                $hasBorder = $block['data']['withBorder'] ?? false;
+                                                $hasBackground = $block['data']['withBackground'] ?? false;
+                                                $figureClasses = [
+                                                    'my-8',
+                                                    'mx-auto',
+                                                    'rounded-lg',
+                                                    'overflow-hidden',
+                                                    'shadow-md',
+                                                    $isStretched ? 'w-5/6' : 'max-w-full lg:w-3/6',
+                                                    $hasBorder ? 'border-2 border-slate-800' : 'border-none',
+                                                    $hasBackground ? 'p-4 sm:p-6 bg-slate-100' : '',
+                                                ];
+                                            @endphp
+                                            <figure class="{{ implode(' ', array_filter($figureClasses)) }}">
                                                 <img src="{{ $block['data']['file']['url'] }}"
                                                     alt="{{ $block['data']['caption'] ?? 'Image' }}"
-                                                    class="w-full max-w-2xl mx-auto h-auto rounded-lg shadow-md">
+                                                    class="w-full h-full object-cover">
                                                 @if (!empty($block['data']['caption']))
                                                     <figcaption class="text-center text-sm text-gray-500 mt-2 italic">
                                                         {{ $block['data']['caption'] }}
@@ -119,48 +146,90 @@
                                             </figure>
                                         @break
 
+                                        {{-- BLOK LIST YANG SUDAH DIPERBAIKI --}}
                                         @case('list')
-                                            @if ($block['data']['style'] === 'unordered')
-                                                <ul class="list-disc pl-8 mb-4 space-y-2">
-                                                    @foreach ($block['data']['items'] as $item)
-                                                        <li>{!! $item !!}</li>
-                                                    @endforeach
-                                                </ul>
-                                            @else
-                                                <ol class="list-decimal pl-8 mb-4 space-y-2">
-                                                    @foreach ($block['data']['items'] as $item)
-                                                        <li>{!! $item !!}</li>
-                                                    @endforeach
-                                                </ol>
-                                            @endif
-                                        @break
+                                            @php
+                                                $listStyle = $block['data']['style'] ?? 'unordered';
+                                                $tag = $listStyle === 'ordered' ? 'ol' : 'ul';
+                                                $class = $listStyle === 'ordered' ? 'list-decimal' : 'list-disc';
 
-                                        @case('quote')
-                                            <blockquote class="my-6 p-4 border-l-4 border-gray-400 bg-gray-200 italic">
-                                                <p class="text-xl font-medium leading-relaxed text-gray-800">
-                                                    {!! $block['data']['text'] !!}</p>
-                                                @if (!empty($block['data']['caption']))
-                                                    <footer class="mt-2 text-base text-gray-600">—
-                                                        {{ $block['data']['caption'] }}</footer>
-                                                @endif
-                                            </blockquote>
-                                        @break
+                                                // ----> 1. TAMBAHKAN BARIS INI <----
+                                                // Ambil nomor awal, jika tidak ada, default ke 1
+                                                $startNumber = $block['data']['meta']['start'] ?? 1;
+                                            @endphp
 
-                                        @case('delimiter')
-                                            <hr class="my-8">
-                                        @break
+                                            {{-- ----> 2. MODIFIKASI BARIS INI <---- --}}
+                                            {{-- Tambahkan atribut 'start' HANYA jika ini adalah ordered list (<ol>) --}}
+                                            <{{ $tag }} class="{{ $class }} pl-5 mb-4 space-y-2"
+                                                @if ($tag === 'ol') start="{{ $startNumber }}" @endif>
+                                                @foreach ($block['data']['items'] as $item)
+                                                    @include('partials._list_item', [
+                                                        'item' => $item,
+                                                    ])
+                                                @endforeach
+                                                </{{ $tag }}>
+                                            @break
 
-                                        @case('code')
-                                            <pre class="bg-gray-800 text-white text-sm rounded-lg p-4 my-6 overflow-x-auto"><code class="font-mono">{!! htmlspecialchars($block['data']['code']) !!}</code></pre>
-                                        @break
-                                    @endswitch
+                                            {{-- AKHIR BLOK LIST --}}
+                                            @case('quote')
+                                                <blockquote class="my-6 p-4 border-l-4 border-gray-400 bg-gray-50 italic">
+                                                    <p class="text-xl font-medium leading-relaxed text-gray-800">
+                                                        {!! $block['data']['text'] !!}</p>
+                                                    @if (!empty($block['data']['caption']))
+                                                        <footer class="mt-2 text-base text-gray-600">—
+                                                            {{ $block['data']['caption'] }}</footer>
+                                                    @endif
+                                                </blockquote>
+                                            @break
+
+                                            @case('delimiter')
+                                                <hr class="my-8">
+                                            @break
+
+                                            @case('code')
+                                                <pre class="bg-gray-800 text-white text-sm rounded-lg p-4 my-6 overflow-x-auto"><code class="font-mono">{!! htmlspecialchars($block['data']['code']) !!}</code></pre>
+                                            @break
+
+                                            @case('table')
+                                                @php
+                                                    $withHeadings = $block['data']['withHeadings'] ?? false;
+                                                    $content = $block['data']['content'];
+                                                    $header =
+                                                        $withHeadings && count($content) > 0
+                                                            ? array_shift($content)
+                                                            : null;
+                                                    $body = $content;
+                                                @endphp
+                                                <div class="my-6 overflow-x-auto">
+                                                    <table class="min-w-full border border-gray-300">
+                                                        @if ($header)
+                                                            <thead class="bg-gray-100">
+                                                                <tr>
+                                                                    @foreach ($header as $cell)
+                                                                        <th
+                                                                            class="p-3 border-b border-gray-300 text-left text-sm font-semibold text-gray-700">
+                                                                            {!! $cell !!}</th>
+                                                                    @endforeach
+                                                                </tr>
+                                                            </thead>
+                                                        @endif
+                                                        <tbody>
+                                                            @foreach ($body as $row)
+                                                                <tr class="hover:bg-gray-50">
+                                                                    @foreach ($row as $cell)
+                                                                        <td class="p-3 border-b border-gray-300 text-gray-700">
+                                                                            {!! $cell !!}</td>
+                                                                    @endforeach
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            @break
+                                        @endswitch
                             @endforeach
                         @else
-                            <p class="text-gray-500 italic min-h-[300px]">Content
-                                unavailable <br>
-                                Please check back later or contact support
-                            </p>
-                            </p>
+                            <p class="text-gray-500 italic">Tidak ada konten yang tersedia.</p>
                         @endif
                     </div>
                 </div>
